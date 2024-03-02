@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Welcome!</title>
+    </head>
+    <body>
+    <h1>Rezept des Tages</h1>
+   {#  <pre>{{ dump(recipe) }}</pre> #}
+    <h2>{{ recipe.name }}</h2>
+    <p>{{ recipe.description }}</p>
+    <h3>Zutaten:</h3>
+    <ul>
+        {% for ingredient in recipe.ingredients %}
+            <li>{{ ingredient.name }}</li>
+        {% endfor %}
+    </ul>
+    {# <img src="{{ asset('images/' ~ recipe.image) }}" alt="Bild von {{ recipe.name }}"> #}
+    </body>
+</html>
