@@ -38,6 +38,7 @@ h2
     font-family: var(--headingfont);
     color: var(--tertiary);
     font-size: 32px;
+    margin: 0px 0px 20px 0px;
 }
 
 h3
@@ -45,6 +46,7 @@ h3
     font-family: var(--headingfont);
     color: var(--tertiary);
     font-size: 18px;
+    margin: 0px 0px 20px 0px;
 }
 .content
 {
@@ -92,3 +94,10 @@ nav .nav-wrapper
     margin: 0 auto;
 }
 
+.recipe-container
+{
+    background-color: var(--dark-grey);
+    padding: 20px;
+    margin: 16px 0px;
+    border-radius: 4px;
+}
