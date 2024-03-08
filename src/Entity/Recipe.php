@@ -22,6 +22,13 @@ class Recipe
     #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: "recipe")]
     private $ingredients;
 
+    #[ORM\Column(type: "string", length: 255)]
+    private string $image;
+
+    #[ORM\Column(type: "string", length: 255)]
+    private string $instructions;
+
+
     public function __construct()
     {
         
