@@ -2,14 +2,15 @@
 
 {% block body %}
     <h1>Rezept des Tages</h1>
-    {#  <pre>{{ dump(recipe) }}</pre> #}
-    <h2>{{ recipe.name }}</h2>
-    <p>{{ recipe.description }}</p>
-    <h3>Zutaten:</h3>
-    <ul>
-        {% for ingredient in recipe.ingredients %}
-            <li>{{ ingredient.name }}</li>
-        {% endfor %}
-    </ul>
+    <div class="recipe-container">
+        <h2>{{ recipe.name }}</h2>
+        <p>{{ recipe.description }}</p>
+        <h3>Zutaten:</h3>
+        <ul>
+            {% for ingredient in recipe.ingredients %}
+                <li>{{ ingredient.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
     {# <img src="{{ asset('images/' ~ recipe.image) }}" alt="Bild von {{ recipe.name }}"> #}
 {% endblock %}
