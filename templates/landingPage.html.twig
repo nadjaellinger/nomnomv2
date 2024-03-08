@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Welcome!</title>
-    </head>
-    <body>
+{% extends 'base.html.twig' %}
+
+{% block body %}
     <h1>Rezept des Tages</h1>
-   {#  <pre>{{ dump(recipe) }}</pre> #}
+    {#  <pre>{{ dump(recipe) }}</pre> #}
     <h2>{{ recipe.name }}</h2>
     <p>{{ recipe.description }}</p>
     <h3>Zutaten:</h3>
@@ -16,5 +12,4 @@
         {% endfor %}
     </ul>
     {# <img src="{{ asset('images/' ~ recipe.image) }}" alt="Bild von {{ recipe.name }}"> #}
-    </body>
-</html>
+{% endblock %}
