@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1> Rezept bearbeiten </h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="title" name="name" value="{{ recipe.name }}">
+        </div>
+        <div class="form-group">
+            <label for="description">Beschreibung</label>
+            <textarea class="form-control" id="description" name="description">{{ recipe.description }}</textarea>
+        </div>
+        <div class="form-group">
+            {# <label for="ingredients">Zutaten</label>
+            {% for ingredient in recipe.ingredients %}
+                <input type="text" class="form-control" id="ingredient" name="ingredients" value="{{ ingredient }}">
+            {% endfor %} #}
+        </div>
+        <div class="form-group">
+            <label for="instructions">Anleitung</label>
+            <textarea class="form-control" id="instructions" name="instructions">{{ recipe.instructions }}</textarea>
+        </div>
+    <button type="submit" class="btn btn-success">Rezept speichern</button>
+{% endblock %}

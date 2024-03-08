@@ -4,6 +4,7 @@
     <h1>Rezept des Tages</h1>
     <div class="recipe-container">
         <h2>{{ recipe.name }}</h2>
+        <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">Rezept bearbeiten</button>
         <p>{{ recipe.description }}</p>
         <h3>Zutaten:</h3>
         <ul>
@@ -14,3 +15,4 @@
     </div>
     {# <img src="{{ asset('images/' ~ recipe.image) }}" alt="Bild von {{ recipe.name }}"> #}
 {% endblock %}
+
