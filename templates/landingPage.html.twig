@@ -2,17 +2,25 @@
 
 {% block body %}
     <h1>Rezept des Tages</h1>
-    <div class="recipe-container">
-        <h2>{{ recipe.name }}</h2>
-        <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">Rezept bearbeiten</button>
-        <p>{{ recipe.description }}</p>
-        <h3>Zutaten:</h3>
-        <ul>
-            {% for ingredient in recipe.ingredients %}
-                <li>{{ ingredient.name }}</li>
-            {% endfor %}
-        </ul>
+    <div class="recipe-container tile">
+        <div class="header-area">
+            <h2>{{ recipe.name }}</h2>
+            <div class="buttons">
+                <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">Rezept bearbeiten</button>
+            </div>
+        </div>
+        <div class="recipe-ingredients">
+        <h3>Zutaten</h3>
+            <ul>
+                {% for ingredient in recipe.ingredients %}
+                    <li>{{ ingredient.amount }} {{ ingredient.amountType }} {{ ingredient.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="recipe-instructions">
+            <h3>Zubereitung</h3>
+            <p>{{ recipe.instructions }}</p>
+        </div>
     </div>
-    {# <img src="{{ asset('images/' ~ recipe.image) }}" alt="Bild von {{ recipe.name }}"> #}
 {% endblock %}
 
