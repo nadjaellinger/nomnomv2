@@ -1,0 +1,16 @@
+{# templates/components/base_tile.html.twig #}
+<div class="tile">
+    <div class="row">
+        <div >
+            <h2>{{ this.title }}</h2>
+        </div>
+        <div class="button-group">
+            {% for button in this.buttons %}
+                {{ button }}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        {{ this.content }}
+    </div>
+</div>
