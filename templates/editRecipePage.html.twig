@@ -32,7 +32,8 @@
                 <label for="instructions">Anleitung</label>
                 <textarea class="form-control" id="instructions" name="instructions">{{ recipe.instructions }}</textarea>
             </div>
-        <button type="submit" class="btn btn-success" action="saveRecipe" >Rezept speichern</button>
+        <button type="submit" class="btn btn-success" action="saveRecipe" id="saveRecipe">Rezept speichern</button>
         </form>
     </div>
+{{ encore_entry_script_tags('saveRecipe') }}
 {% endblock %}
