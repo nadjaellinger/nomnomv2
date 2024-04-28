@@ -10,6 +10,7 @@ use App\Entity\Rezept;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\Exception\ORMException;
 
 class editRecipePage extends AbstractController
 {
@@ -47,14 +48,19 @@ class editRecipePage extends AbstractController
                 throw $this->createNotFoundException('No recipe found for id '.$id);
             }
 
-            $recipe->setName($data['name']);
-            $recipe->setDescription($data['description']);
-            $recipe->setImage($data['image']);
-            $recipe->setInstructions($data['instructions']);
+            $recipe->setName($data['name'] ?? $recipe->getName());
+            $recipe->setDescription($data['description'] ?? $recipe->getDescription());
+            $recipe->setInstructions($data['instructions'] ?? $recipe->getInstructions());
             
-            $this->entityManager->flush();
+            try {
+                $this->entityManager->persist($recipe);
+                $this->entityManager->flush();
+            } catch (ORMException $e) {
+                return new JsonResponse(['error' => 'Failed to update recipe: ' . $e->getMessage()], 400);
+            }
+            
 
-            return new JsonResponse(['message' => 'Recipe updated successfully', 'id' => $id]);
+            return new JsonResponse(['message' => 'Recipe updated successfully', 'redirect' => '/rezept/'.$id]);
         }
 
         /**
