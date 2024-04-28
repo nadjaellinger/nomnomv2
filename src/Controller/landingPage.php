@@ -28,7 +28,7 @@ class landingPage extends AbstractController
         ]);
     }
 
-    #[Route('/rezept/{id}')]
+    /* #[Route('/rezept/{id}')]
     public function recipe($id): Response
     {
         $recipe = $this->entityManager->getRepository(Recipe::class)
@@ -43,6 +43,6 @@ class landingPage extends AbstractController
         return $this->render('rezept.html.twig', [
             'rezept' => $recipe
         ]);
-    }
+    } */
 
 }

@@ -1,12 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Rezept des Tages</h1>
+    <h1></h1>
     <div class="recipe-container tile">
         <div class="header-area">
-            <h2>{{ recipe.name }}</h2>
+        <h2>{{ recipe.name }}</h2>
             <div class="buttons">
-                <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/'">Zum Rezept</button>
                 <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">Rezept bearbeiten</button>
             </div>
         </div>
@@ -24,4 +23,3 @@
         </div>
     </div>
 {% endblock %}
-

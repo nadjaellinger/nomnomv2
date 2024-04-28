@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Rezept;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class editRecipePage extends AbstractController
 {
@@ -37,25 +38,23 @@ class editRecipePage extends AbstractController
         }
     
         #[Route('/rezept/{id}/bearbeiten', methods: ['POST'])]
-        public function updateRecipe($id): Response
+        public function updateRecipe(Request $request, $id): Response
         {
-            $recipe = $this->entityManager->getRepository(Recipe::class)
-                ->findRecipeById($id);
-            
+            $data = json_decode($request->getContent(), true);
+
+            $recipe = $this->entityManager->getRepository(Recipe::class)->findRecipeById($id);
             if (!$recipe) {
-                throw $this->createNotFoundException(
-                    'No recipe found for id '.$id
-                );
+                throw $this->createNotFoundException('No recipe found for id '.$id);
             }
-            
-            $recipe->setName($_POST['name']);
-            $recipe->setDescription($_POST['description']);
-            $recipe->setImage($_POST['image']);
-            $recipe->setInstructions($_POST['instructions']);
+
+            $recipe->setName($data['name']);
+            $recipe->setDescription($data['description']);
+            $recipe->setImage($data['image']);
+            $recipe->setInstructions($data['instructions']);
             
             $this->entityManager->flush();
-            
-            return $this->redirectToRoute('rezept', ['id' => $id]);
+
+            return new JsonResponse(['message' => 'Recipe updated successfully', 'id' => $id]);
         }
 
         /**
