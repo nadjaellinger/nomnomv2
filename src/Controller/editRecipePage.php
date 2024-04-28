@@ -21,7 +21,7 @@ class editRecipePage extends AbstractController
             $this->entityManager = $entityManager;
         }
     
-        #[Route('/rezept/{id}/bearbeiten')]
+        #[Route('/rezept/{id}/bearbeiten', methods: ['GET'])]
         public function editRecipe($id): Response
         {
             $recipe = $this->entityManager->getRepository(Recipe::class)
@@ -51,7 +51,7 @@ class editRecipePage extends AbstractController
             $recipe->setName($data['name'] ?? $recipe->getName());
             $recipe->setDescription($data['description'] ?? $recipe->getDescription());
             $recipe->setInstructions($data['instructions'] ?? $recipe->getInstructions());
-            
+
             try {
                 $this->entityManager->persist($recipe);
                 $this->entityManager->flush();
