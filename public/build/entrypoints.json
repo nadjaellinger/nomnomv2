@@ -8,6 +8,12 @@
       "css": [
         "/build/app.css"
       ]
+    },
+    "saveRecipe": {
+      "js": [
+        "/build/runtime.js",
+        "/build/saveRecipe.js"
+      ]
     }
   }
 }

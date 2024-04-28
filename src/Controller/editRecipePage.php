@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Rezept;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class editRecipePage extends AbstractController
 {
@@ -56,4 +57,17 @@ class editRecipePage extends AbstractController
             
             return $this->redirectToRoute('rezept', ['id' => $id]);
         }
+
+        /**
+     * @Route("/ajax/save", name="ajax_save")
+     */
+    public function saveAction(Request $request): Response
+    {
+        // This example assumes you're sending data as JSON
+        $data = json_decode($request->getContent(), true);
+
+        // Process your data here...
+
+        return new Response(json_encode(['status' => 'success']), 200, ['Content-Type' => 'application/json']);
+    }
 }
