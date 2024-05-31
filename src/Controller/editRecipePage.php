@@ -63,7 +63,7 @@ class editRecipePage extends AbstractController
             return new JsonResponse(['message' => 'Recipe updated successfully', 'redirect' => '/rezept/'.$id]);
         }
 
-        /**
+    /**
      * @Route("/ajax/save", name="ajax_save")
      */
     public function saveAction(Request $request): Response
@@ -74,5 +74,11 @@ class editRecipePage extends AbstractController
         // Process your data here...
 
         return new Response(json_encode(['status' => 'success']), 200, ['Content-Type' => 'application/json']);
+    }
+
+    #[Route('/ingredient/template', name: 'ingredient_template')]
+    public function ingredientTemplate(): Response
+    {
+        return $this->render('ingredient/template.html.twig');
     }
 }
