@@ -18,15 +18,20 @@
             </div>
             <div class="form-group">
                 <label for="ingredients">Zutaten</label>
-                {% for ingredient in recipe.ingredients %}
-                <div class="flex-row">
-                    <input type="text" class="form-control" id="ingredient" name="ingredient-name" value="{{ ingredient.name }}">
+                    <div id="ingredientList">
+                    {% for ingredient in recipe.ingredients %}
+                    <div class="flex-row">
+                        <input type="text" class="form-control" id="ingredient" name="ingredient-name" value="{{ ingredient.name }}">
 
-                    <input type="text" class="form-control" id="ingredient" name="ingredient-amount" value="{{ ingredient.amount }}">
+                        <input type="text" class="form-control" id="ingredient" name="ingredient-amount" value="{{ ingredient.amount }}">
 
-                    <input type="text" class="form-control" id="ingredient" name="ingredient-amount-type" value="{{ ingredient.amountType }}">
+                        <input type="text" class="form-control" id="ingredient" name="ingredient-amount-type" value="{{ ingredient.amountType }}">
+                    </div>
                 </div>
                 {% endfor %}
+                <div class="flex-row">                   
+                    <button type="button" class="btn btn-success secondary" id="addIngredient">Zutat hinzufügen</button>
+                </div>
             </div>
             <div class="form-group">
                 <label for="instructions">Anleitung</label>
@@ -36,4 +41,5 @@
         </form>
     </div>
 {{ encore_entry_script_tags('saveRecipe') }}
+{{ encore_entry_script_tags('newIngredient') }}
 {% endblock %}
