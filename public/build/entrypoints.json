@@ -13,16 +13,15 @@
     "saveRecipe": {
       "js": [
         "/build/runtime.0b03f9b2.js",
-        "/build/415.be29a729.js",
-        "/build/saveRecipe.96edb7d3.js"
+        "/build/561.601ce595.js",
+        "/build/saveRecipe.75e983bb.js"
       ]
     },
     "newIngredient": {
       "js": [
         "/build/runtime.0b03f9b2.js",
-        "/build/415.be29a729.js",
-        "/build/295.200967d4.js",
-        "/build/newIngredient.52d6db62.js"
+        "/build/561.601ce595.js",
+        "/build/newIngredient.b61cd320.js"
       ]
     }
   }

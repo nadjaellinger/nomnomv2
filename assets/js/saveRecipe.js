@@ -7,13 +7,31 @@ document.addEventListener('DOMContentLoaded', function () {
       var name = document.getElementById('title').value ?? '';
       var description = document.getElementById('description').value ?? '';
       var instructions = document.getElementById('instructions').value ?? '';
+      var ingredientList = document.getElementById('ingredientList');
+      console.log(ingredientList);
+      var ingredients = [];
+      ingredientList.querySelectorAll('.ingredient').forEach(function (ingredient) {
+        console.log(ingredient);
+        var ingredientName = ingredient.querySelector('.ingredient-name').value ?? '';
+        var ingredientAmount = ingredient.querySelector('.ingredient-amount').value ?? '';
+        var ingredientUnit = ingredient.querySelector('.ingredient-unit').value ?? '';
+        var id = ingredient.querySelector('.ingredient-id').value ?? 0;
+        ingredients.push({
+          name: ingredientName,
+          amount: ingredientAmount,
+          unit: ingredientUnit,
+          id: id
+        });
+      });
 
+      console.log(ingredients);
       var data = {
         name: name,
         description: description,
-        instructions: instructions
+        instructions: instructions,
+        ingredients: ingredients
       };
-      var recipeId = 1; // Replace this with the actual recipe ID
+      var recipeId = document.getElementById('recipeId').value;
       saveRecipe(data, recipeId);
       console.log('Save button clicked!');
     });
@@ -21,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function saveRecipe(data, recipeId) {
-  fetch(`/rezept/${recipeId}/bearbeiten`, {  // Using template literals to insert the recipeId
+  fetch(`/rezept/${recipeId}/bearbeiten`, {  
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -29,12 +47,12 @@ function saveRecipe(data, recipeId) {
     },
     body: JSON.stringify(data)
   })
-  .then(response => {
+  .then(response => { // Check if the response is ok
     if (!response.ok) {
       throw new Error('Network response was not ok: ' + response.statusText);
     }
     console.log(response);
-    return response;
+    return response; 
   })
   .then(data => {
     console.log('Success:', data);

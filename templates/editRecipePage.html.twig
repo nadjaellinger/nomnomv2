@@ -8,6 +8,7 @@
         </div>
         
         <form method="post">
+        <input type="hidden" id="recipeId" name="id" value="{{ recipe.id }}">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="title" name="name" value="{{ recipe.name }}">
@@ -20,12 +21,14 @@
                 <label for="ingredients">Zutaten</label>
                     <div id="ingredientList">
                     {% for ingredient in recipe.ingredients %}
-                    <div class="flex-row">
-                        <input type="text" class="form-control" id="ingredient" name="ingredient-name" value="{{ ingredient.name }}">
+                    <div class="flex-row ingredient">
+                        <input type="text" class="form-control ingredient-name"  name="ingredient-name" value="{{ ingredient.name }}">
 
-                        <input type="text" class="form-control" id="ingredient" name="ingredient-amount" value="{{ ingredient.amount }}">
+                        <input type="text" class="form-control ingredient-amount"  name="ingredient-amount" value="{{ ingredient.amount }}">
 
-                        <input type="text" class="form-control" id="ingredient" name="ingredient-amount-type" value="{{ ingredient.amountType }}">
+                        <input type="text" class="form-control ingredient-unit" name="ingredient-amount-type" value="{{ ingredient.amountType }}">
+
+                        <input type="hidden" class="form-control ingredient-id" name="ingredient-id" value="{{ ingredient.id }}">
                     </div>
                 </div>
                 {% endfor %}

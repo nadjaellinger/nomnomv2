@@ -72,6 +72,12 @@ class Recipe
         return $this;
     }
 
+    public function addIngredient(Ingredient $ingredient): self
+    {
+        $this->ingredients[] = $ingredient;
+        return $this;
+    }
+
     public function getImage(): ?string
     {
         return $this->image;
