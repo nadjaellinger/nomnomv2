@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Recipe;
+use App\Entity\Ingredient;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Rezept;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -51,6 +51,24 @@ class editRecipePage extends AbstractController
             $recipe->setName($data['name'] ?? $recipe->getName());
             $recipe->setDescription($data['description'] ?? $recipe->getDescription());
             $recipe->setInstructions($data['instructions'] ?? $recipe->getInstructions());
+            $ingredients = [];
+            foreach ($data['ingredients'] as $ingredientData) {
+                $id = intval($ingredientData['id']);
+                if ($id === 0) 
+                {
+                    $ingredient = new Ingredient();
+                    $ingredient->setRecipe($recipe);
+                } 
+                else 
+                {
+                    $ingredient = $this->entityManager->getRepository(Ingredient::class)->find($id);
+                }
+                $ingredient->setName($ingredientData['name']);
+                $ingredient->setAmountType($ingredientData['unit']);
+                $ingredient->setAmount(intval($ingredientData['amount']));
+                $ingredients[] = $ingredient;
+            }
+            $recipe->setIngredients($ingredients);
 
             try {
                 $this->entityManager->persist($recipe);
@@ -58,8 +76,6 @@ class editRecipePage extends AbstractController
             } catch (ORMException $e) {
                 return new JsonResponse(['error' => 'Failed to update recipe: ' . $e->getMessage()], 400);
             }
-            
-
             return new JsonResponse(['message' => 'Recipe updated successfully', 'redirect' => '/rezept/'.$id]);
         }
 
