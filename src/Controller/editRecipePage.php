@@ -43,7 +43,7 @@ class editRecipePage extends AbstractController
         {
             $data = json_decode($request->getContent(), true);
 
-            $recipe = $this->entityManager->getRepository(Recipe::class)->findRecipeById($id);
+            $recipe = $this->entityManager->getRepository(Recipe::class)->find($id);
             if (!$recipe) {
                 throw $this->createNotFoundException('No recipe found for id '.$id);
             }
@@ -51,24 +51,36 @@ class editRecipePage extends AbstractController
             $recipe->setName($data['name'] ?? $recipe->getName());
             $recipe->setDescription($data['description'] ?? $recipe->getDescription());
             $recipe->setInstructions($data['instructions'] ?? $recipe->getInstructions());
-            $ingredients = [];
+            
+            $existingIngredients = $recipe->getIngredients();
+            $updatedIngredients = new \Doctrine\Common\Collections\ArrayCollection();
+
             foreach ($data['ingredients'] as $ingredientData) {
-                $id = intval($ingredientData['id']);
-                if ($id === 0) 
-                {
+                $ingredientId = intval($ingredientData['id']);
+                if ($ingredientId === 0) {
                     $ingredient = new Ingredient();
                     $ingredient->setRecipe($recipe);
-                } 
-                else 
-                {
-                    $ingredient = $this->entityManager->getRepository(Ingredient::class)->find($id);
+                } else {
+                    $ingredient = $this->entityManager->getRepository(Ingredient::class)->find($ingredientId);
+                    if (!$ingredient) {
+                        $ingredient = new Ingredient();
+                        $ingredient->setRecipe($recipe);
+                    }
                 }
                 $ingredient->setName($ingredientData['name']);
                 $ingredient->setAmountType($ingredientData['unit']);
                 $ingredient->setAmount(intval($ingredientData['amount']));
-                $ingredients[] = $ingredient;
+                $updatedIngredients->add($ingredient);
+                $this->entityManager->persist($ingredient);
             }
-            $recipe->setIngredients($ingredients);
+
+            // Remove ingredients that are no longer present in the updated data
+            foreach ($existingIngredients as $existingIngredient) {
+                if (!$updatedIngredients->contains($existingIngredient)) {
+                    $recipe->removeIngredient($existingIngredient);
+                    $this->entityManager->remove($existingIngredient);
+                }
+            }
 
             try {
                 $this->entityManager->persist($recipe);

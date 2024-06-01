@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: "App\Repository\RecipeRepository")]
 #[ORM\Table(name: "recipes")]
@@ -20,7 +22,7 @@ class Recipe
     private string $description;
 
     #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: "recipe")]
-    private $ingredients;
+    private Collection $ingredients;
 
     #[ORM\Column(type: "string", length: 255)]
     private string $image;
@@ -31,7 +33,7 @@ class Recipe
 
     public function __construct()
     {
-        
+        $this->ingredients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -75,6 +77,18 @@ class Recipe
     public function addIngredient(Ingredient $ingredient): self
     {
         $this->ingredients[] = $ingredient;
+        return $this;
+    }
+
+    public function removeIngredient(Ingredient $ingredient): self
+    {
+        if ($this->ingredients->contains($ingredient)) {
+            $this->ingredients->removeElement($ingredient);
+            // Set the owning side to null (unless already changed)
+            if ($ingredient->getRecipe() === $this) {
+                $ingredient->setRecipe(null);
+            }
+        }
         return $this;
     }
 

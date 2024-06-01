@@ -8,10 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
       var description = document.getElementById('description').value ?? '';
       var instructions = document.getElementById('instructions').value ?? '';
       var ingredientList = document.getElementById('ingredientList');
-      console.log(ingredientList);
       var ingredients = [];
       ingredientList.querySelectorAll('.ingredient').forEach(function (ingredient) {
-        console.log(ingredient);
         var ingredientName = ingredient.querySelector('.ingredient-name').value ?? '';
         var ingredientAmount = ingredient.querySelector('.ingredient-amount').value ?? '';
         var ingredientUnit = ingredient.querySelector('.ingredient-unit').value ?? '';
@@ -24,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       });
 
-      console.log(ingredients);
       var data = {
         name: name,
         description: description,
@@ -33,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
       };
       var recipeId = document.getElementById('recipeId').value;
       saveRecipe(data, recipeId);
-      console.log('Save button clicked!');
     });
   }
 });
