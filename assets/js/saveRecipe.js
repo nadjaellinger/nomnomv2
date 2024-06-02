@@ -9,6 +9,14 @@ document.addEventListener('DOMContentLoaded', function () {
         checkField(target);
       }
     }, true); // Use capture phase for event delegation
+
+    form.addEventListener('click', function (event) {
+      var target = event.target;
+
+      if (target.matches('.removeIngredient')) {
+        removeIngredient(event);
+      }
+    });
   }
 
   var saveButton = document.getElementById('saveRecipe');
@@ -99,4 +107,9 @@ function checkField(field) {
     field.classList.remove('is-invalid');
     }
   }
+}
+
+function removeIngredient(event) {
+  var ingredient = event.target.closest('.ingredient');
+  ingredient.remove();
 }

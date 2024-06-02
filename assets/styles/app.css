@@ -198,3 +198,23 @@ form
 {
     justify-content: flex-end;
 }
+
+.flex-row.align-center
+{
+    align-items: center;
+}
+
+.btn-minus, .btn-plus
+{
+    background-color: var(--secondary);
+    color: var(--white);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    width: 32px;
+    height: 32px;
+}
