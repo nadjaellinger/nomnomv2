@@ -19,16 +19,16 @@ class Recipe
     private string $name;
 
     #[ORM\Column(type: "text")]
-    private string $description;
+    private ?string $description;
 
     #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: "recipe")]
     private Collection $ingredients;
 
     #[ORM\Column(type: "string", length: 255)]
-    private string $image;
+    private ?string $image;
 
     #[ORM\Column(type: "string", length: 255)]
-    private string $instructions;
+    private ?string $instructions;
 
 
     public function __construct()

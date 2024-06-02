@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1> Neues Rezept erstellen </h1>
+<div class="tile recipe-edit">
+    <div class="tile-header">
+        <h2>Neues Rezept</h2>
+    </div>
+    
+    <form method="post" id="recipeForm">
+        <input type="hidden" id="recipeId" name="id" value="">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="title" name="name" value="">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Beschreibung</label>
+                <textarea class="form-control" id="description" name="description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="ingredients">Zutaten</label>
+                <div id="ingredientList">
+                    <div class="flex-row ingredient align-center">
+                        <input type="text" class="form-control ingredient-name"  name="ingredient-name" value="">
+                        <input type="number" class="form-control ingredient-amount"  name="ingredient-amount" value="">
+                        <input type="text" class="form-control ingredient-unit" name="ingredient-unit" value="">
+                        <input type="hidden" class="form-control ingredient-id" name="ingredient-id" value="">
+                        <button type="button" class="btn btn-minus removeIngredient">X</button>
+                    </div>
+                </div>
+                <div class="flex-row end">                   
+                    <button type="button" class="btn btn-success secondary" id="addIngredient">Zutat hinzufügen</button>
+                </div>
+                <div class="form-group">
+                    <label for="instructions">Anleitung</label>
+                    <textarea class="form-control" id="instructions" name="instructions"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success" action="createRecipe" id="createRecipe">Rezept speichern</button>
+            </form>
+        </div>
+</div>
+{{ encore_entry_script_tags('saveRecipe') }}
+{{ encore_entry_script_tags('newIngredient') }}
+{% endblock %}

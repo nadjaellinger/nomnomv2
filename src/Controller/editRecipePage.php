@@ -15,54 +15,56 @@ use Doctrine\ORM\Exception\ORMException;
 class editRecipePage extends AbstractController
 {
     
-        private $entityManager;
-        public function __construct(EntityManagerInterface $entityManager)
-        {
-            $this->entityManager = $entityManager;
+    private $entityManager;
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    #[Route('/rezept/{id}/bearbeiten', methods: ['GET'])]
+    public function editRecipe($id): Response
+    {
+        $recipe = $this->entityManager->getRepository(Recipe::class)
+            ->findRecipeById($id);
+        
+        if (!$recipe) {
+            throw $this->createNotFoundException(
+                'No rezept found for id '.$id
+            );
         }
+        
+        return $this->render('editRecipePage.html.twig', [
+            'recipe' => $recipe
+        ]);
+    }
     
-        #[Route('/rezept/{id}/bearbeiten', methods: ['GET'])]
-        public function editRecipe($id): Response
-        {
-            $recipe = $this->entityManager->getRepository(Recipe::class)
-                ->findRecipeById($id);
-            
-            if (!$recipe) {
-                throw $this->createNotFoundException(
-                    'No rezept found for id '.$id
-                );
-            }
-            
-            return $this->render('editRecipePage.html.twig', [
-                'recipe' => $recipe
-            ]);
+    #[Route('/rezept/{id}/bearbeiten', methods: ['POST'])]
+    public function updateRecipe(Request $request, $id): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!$this->isDataComplete($data)) 
+            return new JsonResponse(['error' => 'Missing required fields'], 400);
+        if (!is_numeric($id)) 
+            return new JsonResponse(['error' => 'Invalid recipe ID'], 400);
+
+        $recipe = $this->entityManager->getRepository(Recipe::class)->find($id);
+        
+        if (!$recipe)
+            return new JsonResponse(['error' => 'Recipe not found'], 404);
+        
+
+        $this->setCoreAttributes($recipe, $data);
+        $this->setIngredients($recipe, $data, $id);
+
+        try {
+            $this->entityManager->persist($recipe);
+            $this->entityManager->flush();
+        } catch (ORMException $e) {
+            return new JsonResponse(['error' => 'Failed to update recipe: ' . $e->getMessage()], 400);
         }
-    
-        #[Route('/rezept/{id}/bearbeiten', methods: ['POST'])]
-        public function updateRecipe(Request $request, $id): Response
-        {
-            $data = json_decode($request->getContent(), true);
-
-            if (!$this->isDataComplete($data)) 
-                return new JsonResponse(['error' => 'Missing required fields'], 400);
-
-            $recipe = $this->entityManager->getRepository(Recipe::class)->find($id);
-            
-            if (!$recipe)
-                return new JsonResponse(['error' => 'Recipe not found'], 404);
-            
-
-            $this->setCoreAttributes($recipe, $data);
-            $this->setIngredients($recipe, $data, $id);
-
-            try {
-                $this->entityManager->persist($recipe);
-                $this->entityManager->flush();
-            } catch (ORMException $e) {
-                return new JsonResponse(['error' => 'Failed to update recipe: ' . $e->getMessage()], 400);
-            }
-            return new JsonResponse(['message' => 'Recipe updated successfully', 'redirect' => '/rezept/'.$id]);
-        }
+        return new JsonResponse(['message' => 'Recipe updated successfully', 'redirect' => '/rezept/'.$id]);
+    }
 
     public function isDataComplete($data): bool
     {
@@ -90,7 +92,6 @@ class editRecipePage extends AbstractController
 
     public function setIngredients($recipe, $data, $id): void
     {
-        
         $existingIngredients = $recipe->getIngredients();
         $updatedIngredients = new \Doctrine\Common\Collections\ArrayCollection();
         foreach ($data['ingredients'] as $ingredientData) {
@@ -125,5 +126,38 @@ class editRecipePage extends AbstractController
     public function ingredientTemplate(): Response
     {
         return $this->render('ingredient/template.html.twig');
+    }
+
+    #[Route('/rezept/neu', methods: ['GET'])]
+    public function newRecipe(): Response
+    {
+        return $this->render('newRecipePage.html.twig');
+    }
+
+    #[Route('/rezept/neu', methods: ['POST'])]
+    public function createRecipe(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!$this->isDataComplete($data)) 
+            return new JsonResponse(['error' => 'Missing required fields'], 400);
+
+        $recipe = new Recipe();
+        if (!isset($data['image']))
+            $recipe->setImage('default.jpg');
+        $this->setCoreAttributes($recipe, $data);
+        $this->setIngredients($recipe, $data, 0);
+
+        try {
+            $this->entityManager->persist($recipe);
+            $this->entityManager->flush();
+        } catch (ORMException $e) {
+            return new JsonResponse(['error' => 'Failed to create recipe: ' . $e->getMessage()], 400);
+        }
+        $recipeId = strval($recipe->getId()); 
+        if (!$recipeId) {
+            return new JsonResponse(['error' => 'Failed to retrieve recipe ID after creation'], 500);
+        }
+        return new JsonResponse(['message' => 'Recipe created successfully', 'redirect' => '/rezept/'.$recipeId]);
     }
 }
