@@ -10,6 +10,7 @@
     --tertiary: #a9cdc5;
     --tertiary-50: #a9cdc550;
     --tertiary-25: #a9cdc525;
+    --error: #e74f4e;
 
     --bodyfont: 'Nunito', sans-serif;
     --headingfont: 'Montserrat', sans-serif;
@@ -165,6 +166,11 @@ input, textarea
     font-size: 16px;
 }
 
+input.is-invalid, textarea.is-invalid
+{
+    border: 1px solid var(--error);
+}
+
 input:not(:last-child),
 textarea:not(:last-child)
 {
@@ -185,6 +191,10 @@ form
 .flex-row
 {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+/*     justify-content: space-between;
+    align-items: center; */
+}
+.flex-row.end
+{
+    justify-content: flex-end;
 }

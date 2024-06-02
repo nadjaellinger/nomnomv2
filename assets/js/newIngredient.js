@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     let button = document.getElementById('addIngredient');
-    let ingredientList = document.getElementById('ingredientList');
+    
 
     if (button) {
         button.addEventListener('click', function (event) {
             event.preventDefault();
+            let ingredientList = document.getElementById('ingredientList');
             fetchIngredientTemplate().then(template => {
                 ingredientList.insertAdjacentHTML('beforeend', template);
             });

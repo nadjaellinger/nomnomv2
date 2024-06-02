@@ -1,48 +1,47 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1> Rezept bearbeiten </h1>
-    <div class="tile recipe-edit">
-        <div class="tile-header">
-            <h2>{{ recipe.name }}</h2>
-        </div>
-        
-        <form method="post">
+<h1> Rezept bearbeiten </h1>
+<div class="tile recipe-edit">
+    <div class="tile-header">
+        <h2>{{ recipe.name }}</h2>
+    </div>
+    
+    <form method="post" id="recipeForm">
         <input type="hidden" id="recipeId" name="id" value="{{ recipe.id }}">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="title" name="name" value="{{ recipe.name }}">
             </div>
+
             <div class="form-group">
                 <label for="description">Beschreibung</label>
                 <textarea class="form-control" id="description" name="description">{{ recipe.description }}</textarea>
             </div>
+
             <div class="form-group">
                 <label for="ingredients">Zutaten</label>
-                    <div id="ingredientList">
+                <div id="ingredientList">
                     {% for ingredient in recipe.ingredients %}
                     <div class="flex-row ingredient">
                         <input type="text" class="form-control ingredient-name"  name="ingredient-name" value="{{ ingredient.name }}">
-
-                        <input type="text" class="form-control ingredient-amount"  name="ingredient-amount" value="{{ ingredient.amount }}">
-
-                        <input type="text" class="form-control ingredient-unit" name="ingredient-amount-type" value="{{ ingredient.amountType }}">
-
+                        <input type="number" class="form-control ingredient-amount"  name="ingredient-amount" value="{{ ingredient.amount }}">
+                        <input type="text" class="form-control ingredient-unit" name="ingredient-unit" value="{{ ingredient.unit }}" >
                         <input type="hidden" class="form-control ingredient-id" name="ingredient-id" value="{{ ingredient.id }}">
                     </div>
-                </div>
                 {% endfor %}
-                <div class="flex-row">                   
+                </div>
+                <div class="flex-row end">                   
                     <button type="button" class="btn btn-success secondary" id="addIngredient">Zutat hinzufügen</button>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="instructions">Anleitung</label>
-                <textarea class="form-control" id="instructions" name="instructions">{{ recipe.instructions }}</textarea>
-            </div>
-        <button type="submit" class="btn btn-success" action="saveRecipe" id="saveRecipe">Rezept speichern</button>
-        </form>
-    </div>
+                <div class="form-group">
+                    <label for="instructions">Anleitung</label>
+                    <textarea class="form-control" id="instructions" name="instructions">{{ recipe.instructions }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-success" action="saveRecipe" id="saveRecipe">Rezept speichern</button>
+            </form>
+        </div>
+</div>
 {{ encore_entry_script_tags('saveRecipe') }}
 {{ encore_entry_script_tags('newIngredient') }}
 {% endblock %}

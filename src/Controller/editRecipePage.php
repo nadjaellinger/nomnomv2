@@ -48,6 +48,19 @@ class editRecipePage extends AbstractController
                 throw $this->createNotFoundException('No recipe found for id '.$id);
             }
 
+            if (!isset($data['name']) || !isset($data['description']) || !isset($data['instructions']) || !isset($data['ingredients'])) {
+                return new JsonResponse(['error' => 'Missing required fields'], 400);
+            }
+
+            foreach($data['ingredients'] as $ingredientData) {
+                if (!isset($ingredientData['name']) || !isset($ingredientData['unit']) || !isset($ingredientData['amount'])) {
+                    return new JsonResponse(['error' => 'Missing required fields for ingredient'], 400);
+                }
+                elseif (!is_numeric($ingredientData['amount'])) {
+                    return new JsonResponse(['error' => 'Amount must be a number'], 400);
+                }
+            }
+
             $recipe->setName($data['name'] ?? $recipe->getName());
             $recipe->setDescription($data['description'] ?? $recipe->getDescription());
             $recipe->setInstructions($data['instructions'] ?? $recipe->getInstructions());
@@ -68,7 +81,7 @@ class editRecipePage extends AbstractController
                     }
                 }
                 $ingredient->setName($ingredientData['name']);
-                $ingredient->setAmountType($ingredientData['unit']);
+                $ingredient->setUnit($ingredientData['unit']);
                 $ingredient->setAmount(intval($ingredientData['amount']));
                 $updatedIngredients->add($ingredient);
                 $this->entityManager->persist($ingredient);
