@@ -14,16 +14,16 @@ class Ingredient
     private ?int $id = null;
 
     #[ORM\Column(type: "string", length: 255)]
-    private string $name;
+    private ?string $name;
 
     #[ORM\Column(type: "text")]
-    private string $amount_type;
+    private ?string $unit;
 
     #[ORM\Column(type: "integer")]
-    private int $amount;
+    private ?int $amount;
 
     #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: "ingredients")]
-    private Recipe $recipe;
+    private ?Recipe $recipe;
 
     public function getId(): ?int
     {
@@ -41,14 +41,14 @@ class Ingredient
         return $this;
     }
 
-    public function getAmountType(): ?string
+    public function getUnit(): ?string
     {
-        return $this->amount_type;
+        return $this->unit;
     }
 
-    public function setAmountType(string $amount_type): self
+    public function setunit(?string $unit): self
     {
-        $this->amount_type = $amount_type;
+        $this->unit = $unit;
         return $this;
     }
 
@@ -57,7 +57,7 @@ class Ingredient
         return $this->amount;
     }
 
-    public function setAmount(int $amount): self
+    public function setAmount(?int $amount): self
     {
         $this->amount = $amount;
         return $this;

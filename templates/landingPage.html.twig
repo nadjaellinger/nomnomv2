@@ -14,7 +14,7 @@
         <h3>Zutaten</h3>
             <ul>
                 {% for ingredient in recipe.ingredients %}
-                    <li>{{ ingredient.amount }} {{ ingredient.amountType }} {{ ingredient.name }}</li>
+                    <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.name }}</li>
                 {% endfor %}
             </ul>
         </div>

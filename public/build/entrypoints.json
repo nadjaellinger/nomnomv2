@@ -7,21 +7,21 @@
         "/build/app.67087bf7.js"
       ],
       "css": [
-        "/build/app.7d189beb.css"
+        "/build/app.227cdece.css"
       ]
     },
     "saveRecipe": {
       "js": [
         "/build/runtime.0b03f9b2.js",
         "/build/561.601ce595.js",
-        "/build/saveRecipe.7e20b53b.js"
+        "/build/saveRecipe.c355334b.js"
       ]
     },
     "newIngredient": {
       "js": [
         "/build/runtime.0b03f9b2.js",
         "/build/561.601ce595.js",
-        "/build/newIngredient.b61cd320.js"
+        "/build/newIngredient.478140f9.js"
       ]
     }
   }
