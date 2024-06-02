@@ -1,7 +1,8 @@
 {# templates/ingredient/template.html.twig #}
-<div class="flex-row ingredient">
+<div class="flex-row ingredient align-center">
     <input type="text" class="form-control ingredient-name"  name="ingredient-name" value="{{ ingredient.name|default('') }}" placeholder="Zutat">
     <input type="number" class="form-control ingredient-amount"  name="ingredient-amount" value="{{ ingredient.amount|default('') }}" placeholder="Menge">
     <input type="text" class="form-control ingredient-unit" name="ingredient-unit" value="{{ ingredient.unit|default('') }}" placeholder="Einheit">
     <input type="hidden" class="form-control ingredient-id" name="ingredient-id" value="{{ ingredient.id|default(null) }}">
+    <button type="button" class="btn btn-minus removeIngredient">X</button>
 </div>

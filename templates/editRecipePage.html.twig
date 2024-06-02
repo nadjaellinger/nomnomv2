@@ -23,11 +23,12 @@
                 <label for="ingredients">Zutaten</label>
                 <div id="ingredientList">
                     {% for ingredient in recipe.ingredients %}
-                    <div class="flex-row ingredient">
+                    <div class="flex-row ingredient align-center">
                         <input type="text" class="form-control ingredient-name"  name="ingredient-name" value="{{ ingredient.name }}">
                         <input type="number" class="form-control ingredient-amount"  name="ingredient-amount" value="{{ ingredient.amount }}">
                         <input type="text" class="form-control ingredient-unit" name="ingredient-unit" value="{{ ingredient.unit }}" >
                         <input type="hidden" class="form-control ingredient-id" name="ingredient-id" value="{{ ingredient.id }}">
+                        <button type="button" class="btn btn-minus removeIngredient">X</button>
                     </div>
                 {% endfor %}
                 </div>
