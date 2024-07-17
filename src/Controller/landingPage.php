@@ -28,21 +28,4 @@ class landingPage extends AbstractController
         ]);
     }
 
-    /* #[Route('/rezept/{id}')]
-    public function recipe($id): Response
-    {
-        $recipe = $this->entityManager->getRepository(Recipe::class)
-            ->findRecipeById($id);
-        
-        if (!$recipe) {
-            throw $this->createNotFoundException(
-                'No rezept found for id '.$id
-            );
-        }
-        
-        return $this->render('rezept.html.twig', [
-            'rezept' => $recipe
-        ]);
-    } */
-
 }
