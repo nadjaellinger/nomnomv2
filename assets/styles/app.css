@@ -5,15 +5,48 @@
     --dark-grey: #101729;
     --light-grey: #3f424b;
     --white: #ffffff;
-    --primary: #e74f4e;
-    --secondary: #589b9b;
-    --tertiary: #a9cdc5;
+    
+    /* Dracula */
+    /* --primary: #ff79c6;
+    --secondary: #f1fa8c;
+    --tertiary: #50fa7b;
+    --background: #282a36;
+    --bodyfont-color: #f8f8f2; */
+
+    /* 
+    Blue and yellow
+    --primary: #fda821;
+    --secondary: #76c9f1;
+    --tertiary: #006ab1;
+    --background: #07122e; */
+
+    /* 
+    Old one
+    --primary: #e74f4e; 
+    --secondary: #589b9b; 
+     --tertiary: #a9cdc5; */
+
+    /* Colourful */
+    /* --primary: #e67626;
+    --secondary: #cf1bce;
+    --tertiary: #4e32ae;
+    --background: #040211;
+    --bodyfont-color: #e67626; */
+
+    /** Red and cyan */
+    --primary: #1fc5a3;
+    --secondary: #f8713b;
+    --tertiary: #407688;
+    --background: #060322;
+    --bodyfont-color: #f7f7f7;
+
+
     --tertiary-50: #a9cdc550;
     --tertiary-25: #a9cdc525;
     --error: #e74f4e;
 
+    --headingfont: 'Gluten', sans-serif;
     --bodyfont: 'Nunito', sans-serif;
-    --headingfont: 'Montserrat', sans-serif;
 
     --content-width: 1200px;
 
@@ -21,8 +54,8 @@
 
 body
 {
-    background-color: var(--black);
-    color: var(--tertiary);
+    background-color: var(--background);
+    color: var(--bodyfont-color);
     font-family: var(--bodyfont);
     margin: 0px;
     padding: 0px;
@@ -31,7 +64,7 @@ body
 h1
 {
     font-family: var(--headingfont);
-    color: var(--secondary);
+    color: var(--primary);
     font-size: 36px;
     margin: 0px 0px 20px 0px;
 }
@@ -39,7 +72,7 @@ h1
 h2
 {
     font-family: var(--headingfont);
-    color: var(--tertiary);
+    color: var(--bodyfont-color);
     font-size: 24px;
     margin: 0px 0px 20px 0px;
 }
@@ -47,7 +80,7 @@ h2
 h3
 {
     font-family: var(--headingfont);
-    color: var(--tertiary);
+    color: var(--bodyfont-color);
     font-size: 16px;
     margin: 0px 0px 20px 0px;
 }
@@ -67,7 +100,7 @@ nav a
 
 nav a:hover
 {
-    color: var(--secondary);
+    color: var(--primary);
 }
 
 nav li
@@ -80,7 +113,7 @@ nav ul
     list-style-type: none;
     padding: 0;
     font-size: 20px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--headingfont);
     font-weight: 600;
 }
 
@@ -99,21 +132,21 @@ nav .nav-wrapper
 
 .tile
 {
-    background-color: var(--tertiary-25);
-    padding: 20px;
+    /* background-color: var(--tertiary-25); */
+    /* padding: 20px; */
     margin: 16px 0px;
     border-radius: 4px;
 }
 
 button
 {
-    background-color: var(--primary);
-    color: var(--white);
+    background-color: var(--secondary);
+    color: var(--black);
     border: none;
-    padding: 12px 16px;
+    padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--headingfont);
     font-weight: 600;
     font-size: 16px;
 }
