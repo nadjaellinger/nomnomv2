@@ -2,26 +2,27 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.0b03f9b2.js",
-        "/build/554.40d0531f.js",
-        "/build/app.67087bf7.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js.js",
+        "/build/app.js"
       ],
       "css": [
-        "/build/app.f07b4baa.css"
+        "/build/app.css"
       ]
     },
     "saveRecipe": {
       "js": [
-        "/build/runtime.0b03f9b2.js",
-        "/build/561.601ce595.js",
-        "/build/saveRecipe.0f965b5f.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-c6c0e1.js",
+        "/build/saveRecipe.js"
       ]
     },
     "newIngredient": {
       "js": [
-        "/build/runtime.0b03f9b2.js",
-        "/build/561.601ce595.js",
-        "/build/newIngredient.478140f9.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-c6c0e1.js",
+        "/build/vendors-node_modules_core-js_modules_es_array_reverse_js-node_modules_core-js_modules_es_arra-be128c.js",
+        "/build/newIngredient.js"
       ]
     }
   }

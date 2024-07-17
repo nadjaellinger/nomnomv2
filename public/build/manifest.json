@@ -1,9 +1,10 @@
 {
-  "build/app.css": "/build/app.f07b4baa.css",
-  "build/app.js": "/build/app.67087bf7.js",
-  "build/saveRecipe.js": "/build/saveRecipe.0f965b5f.js",
-  "build/newIngredient.js": "/build/newIngredient.478140f9.js",
-  "build/runtime.js": "/build/runtime.0b03f9b2.js",
-  "build/561.601ce595.js": "/build/561.601ce595.js",
-  "build/554.40d0531f.js": "/build/554.40d0531f.js"
+  "build/app.css": "/build/app.css",
+  "build/app.js": "/build/app.js",
+  "build/saveRecipe.js": "/build/saveRecipe.js",
+  "build/newIngredient.js": "/build/newIngredient.js",
+  "build/runtime.js": "/build/runtime.js",
+  "build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-c6c0e1.js": "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-c6c0e1.js",
+  "build/vendors-node_modules_core-js_modules_es_array_reverse_js-node_modules_core-js_modules_es_arra-be128c.js": "/build/vendors-node_modules_core-js_modules_es_array_reverse_js-node_modules_core-js_modules_es_arra-be128c.js",
+  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js.js"
 }
