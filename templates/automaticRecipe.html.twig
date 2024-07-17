@@ -3,8 +3,19 @@
 {% block body %}
 
     <div class="content">
-        <p>Das ist ein automatisches Rezept</p>
-        {{output}}
+        <h1>{{recipe.name}}</h1>
+        <p>{{recipe.description}}</p>
+        <h2>Zutaten</h2>
+
+        <ul>
+            {% for ingredient in recipe.ingredients %}
+                <li>{{ingredient.name}}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Zuberetung</h2>
+        <p>{{recipe.instructions}}</p>
+            
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
