@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>
+    Fehler
+</h1>
+<p>
+{% if (error.message) %}
+    {{ error.message }}
+{% else %}
+    Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.
+{% endif %}
+{% endblock %}
