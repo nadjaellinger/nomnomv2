@@ -30,9 +30,9 @@ class automaticRecipe extends AbstractController
     public function openAI(): Response
     {
         $body = null;
-        //$html = file_get_contents('https://www.chefkoch.de/rezepte/1299041235031624/Rigatoni-al-forno.html');
+        $html = file_get_contents('https://www.chefkoch.de/rezepte/1692201277528566/Die-schnellsten-und-besten-Muffins-ueberhaupt.html');
         //$html = file_get_contents('https://google.com');
-        $html = file_get_contents('https://www.allrecipes.com/recipe/141169/easy-indian-butter-chicken/');
+        //$html = file_get_contents('https://www.allrecipes.com/recipe/141169/easy-indian-butter-chicken/');
 
         $dom = new \DOMDocument();
         @$dom->loadHTML($html);
@@ -77,11 +77,25 @@ class automaticRecipe extends AbstractController
             $recipe->setName($output['name']) ?? '';
             $recipe->setDescription($output['description']) ?? '';
             $recipe->setInstructions($output['instructions']) ?? '';
+            try
+            {
+                foreach ($output['ingredients'] as $ingredient) {
+                    $newIngredient = new Ingredient();
+                    $newIngredient->setName($ingredient['name']);
+                    $newIngredient->setAmount($ingredient['quantity']);
+                    $newIngredient->setUnit($ingredient['unit']);
+                    $this->entityManager->persist($newIngredient);
+                    $recipe->addIngredient($newIngredient);
+                }
+            } catch (Throwable $e) {
+                $recipe->setIngredients([]);
+            }
+            $this->entityManager->persist($recipe);
         } catch (Throwable $e) {
             $output = 'Caught exception: ' .  $e->getMessage() . "\n";
         }
 
-        return $this->render('automaticRecipe.html.twig', [
+        return $this->render('editRecipePage.html.twig', [
             'recipe' => $recipe,
         ]);
     }
