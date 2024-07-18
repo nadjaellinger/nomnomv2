@@ -20,6 +20,12 @@
             </div>
 
             <div class="form-group">
+                <label for="image">Bild</label>
+                <input type="text" class="form-control" id="image" name="image" value="{{ recipe.image }}">
+                <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
+            </div>
+
+            <div class="form-group">
                 <label for="ingredients">Zutaten</label>
                 <div id="ingredientList">
                     {% for ingredient in recipe.ingredients %}
@@ -37,7 +43,7 @@
                 </div>
                 <div class="form-group">
                     <label for="instructions">Anleitung</label>
-                    <textarea class="form-control" id="instructions" name="instructions">{{ recipe.instructions }}</textarea>
+                    <textarea class="form-control" id="instructions" name="instructions" class="xl">{{ recipe.instructions }}</textarea>
                 </div>
                 <button type="submit" class="btn btn-success" action="saveRecipe" id="saveRecipe">Rezept speichern</button>
             </form>
