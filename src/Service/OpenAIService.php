@@ -41,6 +41,7 @@ class OpenAIService
 
     public function createJSON(string $prompt): string
     {
+        $instructions = $this->getInstructions();
         $result = $this->client->chat()->create([
             'model' => 'gpt-4o',
             'response_format' => [
@@ -49,7 +50,7 @@ class OpenAIService
             'messages' => [
                 [
                     'role' => 'system', 
-                    'content' => 'You will recieve the content of a website containing a cooking recipe. Please identify the name, the description, the ingredients and the instructions and create a JSON with these keys. If you can\'t find the name, please guess it. If there is no description, invent a short one. If there are no ingredients or instructions, please leave the value empty. Please have the instructions as a string. Please keep everything in German, if the recipe is in German.'
+                    'content' => $instructions
                 ],
                 [
                     'role' => 'user', 
@@ -58,5 +59,10 @@ class OpenAIService
             ],
         ]);
         return $result['choices'][0]['message']['content'];
+    }
+
+    private function getInstructions(): string
+    {
+        return 'You will recieve the content of a website containing a cooking recipe. Please identify the name, the description, the ingredients and the instructions and create a JSON with these keys. If you can\'t find the name, please guess it. If there is no description, invent a short one. If there are no ingredients or instructions, please leave the value empty. Please have the instructions as a string. Please keep everything in German, if the recipe is in German.  For the ingredients, please use the following format: "ingredients": ["ingredient1" ["name": "ingredient2", "quantity": "quantity, "unit": "unit"], ...]. If you cant find the value, set it to 0, if you cant find the unit, set it to "".';
     }
 }
