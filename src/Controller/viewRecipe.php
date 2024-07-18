@@ -26,9 +26,12 @@ class viewRecipe extends AbstractController
                 ->findRecipeById($id);
             
             if (!$recipe) {
-                throw $this->createNotFoundException(
-                    'No rezept found for id '.$id
-                );
+                return $this->render('error.html.twig', [
+                    'error' => [
+                        'message' => 'Rezept nicht gefunden',
+                        'code' => 404
+                    ]
+                ]);
             }
             
             return $this->render('viewRecipe.html.twig', [
