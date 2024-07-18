@@ -5,13 +5,14 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Rezept;
 use Doctrine\ORM\EntityManagerInterface;
-use OpenAI;
 use App\Service\OpenAIService;
 use Throwable;
 use App\Entity\Recipe;
 use App\Entity\Ingredient;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Exception;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
@@ -26,13 +27,42 @@ class automaticRecipe extends AbstractController
         $this->openAIService = $openAIService;
     }
 
-    #[Route('/automaticRecipe')]
-    public function openAI(): Response
+    #[Route('/rezept/neuAI')]
+    public function automaticRecipe()
+    {
+        return $this->render('automaticRecipe.html.twig');
+    }
+    
+    #[Route('/AIadd', methods: ['POST'])]
+    public function AIadd(Request $request): Response
+    {
+        $data = $request->getContent();
+        $data = json_decode($data, true);
+        //we check first if there is anything in the textfile
+        if ($data['text'] && $data['text'] !== '') {
+            $input = $data['text'];
+        }
+        //otherwise, we need to use the url
+        else {
+            $input = $this->extractSchemaFromWebsite($data['url']);
+        }
+        try{
+            //we use the OpenAI API to create a json
+            $json = $this->openAIService->createJSON($input);
+            //we create a recipe from the json 
+            $recipe = $this->createRecipe($json);
+            $this->entityManager->flush();
+        }
+        catch (Throwable $e) {
+            return new JsonResponse(['error' => 'Error creating recipe', 'message' => $e->getMessage()], 400);
+        }
+        return new JsonResponse(['message' => 'Recipe created', 'redirect' => '/rezept/'.$recipe->getId() . '/bearbeiten'], 200);
+    }
+
+    private function extractSchemaFromWebsite(string $url): string
     {
         $body = null;
-        $html = file_get_contents('https://www.chefkoch.de/rezepte/1692201277528566/Die-schnellsten-und-besten-Muffins-ueberhaupt.html');
-        //$html = file_get_contents('https://google.com');
-        //$html = file_get_contents('https://www.allrecipes.com/recipe/141169/easy-indian-butter-chicken/');
+        $html = file_get_contents($url);
 
         $dom = new \DOMDocument();
         @$dom->loadHTML($html);
@@ -63,40 +93,41 @@ class automaticRecipe extends AbstractController
         }
         //strip to recipe
         if (!$body) {
-            return $this->render('error.html.twig', [
-                'error' => [
-                    'message' => 'Es konnte kein Rezept gefunden werden',
-                    'code' => 404,
-                ],
-            ]);
+            throw new Exception('No recipe found');
         }
+        return $body;
+    }
+
+    private function createRecipe(string $content): Recipe
+    {    
         try {
-            $output = $this->openAIService->createJSON($body);
             $recipe = new Recipe();
-            $output = json_decode($output, true);
+            $output = json_decode($content, true);
             $recipe->setName($output['name']) ?? '';
             $recipe->setDescription($output['description']) ?? '';
             $recipe->setInstructions($output['instructions']) ?? '';
+            $recipe->setImage($output['image']) ?? '';
             try
             {
                 foreach ($output['ingredients'] as $ingredient) {
                     $newIngredient = new Ingredient();
-                    $newIngredient->setName($ingredient['name']);
-                    $newIngredient->setAmount($ingredient['quantity']);
-                    $newIngredient->setUnit($ingredient['unit']);
+                    $newIngredient->setName($ingredient['name']) ?? '';
+                    $newIngredient->setAmount($ingredient['quantity']) ?? 0;
+                    $newIngredient->setUnit($ingredient['unit']) ?? '';
+                    $newIngredient->setRecipe($recipe);
                     $this->entityManager->persist($newIngredient);
+                    $this->entityManager->flush();
                     $recipe->addIngredient($newIngredient);
                 }
             } catch (Throwable $e) {
                 $recipe->setIngredients([]);
             }
-            $this->entityManager->persist($recipe);
-        } catch (Throwable $e) {
+        } 
+        catch (Throwable $e) {
             $output = 'Caught exception: ' .  $e->getMessage() . "\n";
         }
-
-        return $this->render('editRecipePage.html.twig', [
-            'recipe' => $recipe,
-        ]);
+        $this->entityManager->persist($recipe);
+        $this->entityManager->flush();
+        return $recipe;
     }
 }

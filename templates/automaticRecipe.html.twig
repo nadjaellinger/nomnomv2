@@ -3,23 +3,15 @@
 {% block body %}
 
     <div class="content">
-        <h1>{{recipe.name}}</h1>
-        <p>{{recipe.description}}</p>
-        <h2>Zutaten</h2>
-
-        <ul>
-            {% for ingredient in recipe.ingredients %}
-                <li>{{ingredient.name}}</li>
-            {% endfor %}
-        </ul>
-
-        <h2>Zuberetung</h2>
-        <p>{{recipe.instructions}}</p>
-            
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+        <h1>Neues Rezept per Link oder Text hinzufügen</h1>
+        <form method="post" id="AIaddForm">
+            <label for="url">Mittels URL</label>
+            <input type="text" name="url" id="url" placeholder="https://url.com">
+            <br>
+            <label for="text">Oder Text</label>
+            <textarea name="text" id="text" cols="30" rows="10" placeholder="Dein rezept"></textarea>
+            <button class="btn primary" id="addButton" type="submit">Rezept hinzufügen</button>
+        </form>
     </div>
-
+{{ encore_entry_script_tags('AIadd') }}
 {% endblock %}
