@@ -32,19 +32,33 @@ class automaticRecipe extends AbstractController
         $body = null;
         //$html = file_get_contents('https://www.chefkoch.de/rezepte/1299041235031624/Rigatoni-al-forno.html');
         //$html = file_get_contents('https://google.com');
-        $html = file_get_contents('https://www.recipetineats.com/asian-chilli-garlic-prawns-shrimp/');
+        $html = file_get_contents('https://www.allrecipes.com/recipe/141169/easy-indian-butter-chicken/');
 
         $dom = new \DOMDocument();
         @$dom->loadHTML($html);
         //find the script with the content "@type": "Recipe"
         $xpath = new \DOMXPath($dom);
         $scripts = $xpath->query('//script[@type="application/ld+json"]');
+        $content = '';
         foreach ($scripts as $script) {
-            $content = $script->nodeValue;
-            if (strpos($content, '"@type": "Recipe"') !== false) {
+            $content .= strtolower(preg_replace('/\s+/', '', $script->nodeValue));
+        }
+        
+        // Array of possible recipe types
+        $recipeTypes = [
+            '"@type":"recipe"',
+            '"@type":["recipe","newsarticle"]',
+            '"@type":["recipe","howto"]',
+            '"@type":["howto","recipe"]',
+            '"@type":"howto"',
+        ];
+
+        // Check if the content contains any of the recipe types
+        foreach ($recipeTypes as $type) {
+            if (strpos($content, $type) !== false)
+            {
                 $body = $content;
                 $body = strip_tags($body);
-                break;
             }
         }
         //strip to recipe
