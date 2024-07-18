@@ -115,12 +115,13 @@ class automaticRecipe extends AbstractController
                     $newIngredient->setAmount($ingredient['quantity']) ?? 0;
                     $newIngredient->setUnit($ingredient['unit']) ?? '';
                     $newIngredient->setRecipe($recipe);
-                    $this->entityManager->persist($newIngredient);
-                    $this->entityManager->flush();
                     $recipe->addIngredient($newIngredient);
+                    $this->entityManager->persist($newIngredient);
+                    $this->entityManager->persist($recipe);
+                    $this->entityManager->flush();
                 }
             } catch (Throwable $e) {
-                $recipe->setIngredients([]);
+                
             }
         } 
         catch (Throwable $e) {

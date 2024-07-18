@@ -27,7 +27,7 @@ class Recipe
     #[ORM\Column(type: "string", length: 255)]
     private ?string $image;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "string", length: 10000)]
     private ?string $instructions;
 
 

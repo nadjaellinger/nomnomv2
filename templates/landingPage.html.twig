@@ -10,6 +10,15 @@
                 <button class="btn secondary" onclick="window.location.href='/rezept/{{ recipe.id }}/'">Zum Rezept</button>
             </div>
         </div>
+
+        <div class="recipe-description">
+            <p>{{ recipe.description }}</p>
+        </div>
+
+        <div class="recipe-image">
+            <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
+        </div>
+        
         <div class="recipe-ingredients">
         <h3>Zutaten</h3>
             <ul>
