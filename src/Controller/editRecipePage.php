@@ -24,6 +24,7 @@ class editRecipePage extends AbstractController
     #[Route('/rezept/{id}/bearbeiten', methods: ['GET'])]
     public function editRecipe($id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $recipe = $this->entityManager->getRepository(Recipe::class)
             ->findRecipeById($id);
         
