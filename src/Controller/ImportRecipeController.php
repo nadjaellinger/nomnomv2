@@ -13,8 +13,8 @@ use App\Entity\Ingredient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Exception;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\UploadService;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 class ImportRecipeController extends AbstractController
@@ -51,10 +51,11 @@ class ImportRecipeController extends AbstractController
         }
         $files = $request->files->all();
         if (file_exists($files['image'])) {
-            $image_input = $this->uploadService->upload($files['image']);
+            $image_name = $this->uploadService->upload($files['image']);
+            $image_input = new UploadedFile($this->uploadService->getTargetDirectory() . '/' . $image_name, $image_name);
         }
 
-        if ($text_input) {
+        if ($text_input || $image_input) {
             try{
                 //we use the OpenAI API to create a json
                 $json = $this->openAIService->createJSON($text_input, $image_input);
@@ -66,6 +67,9 @@ class ImportRecipeController extends AbstractController
                 return new JsonResponse(['error' => 'Error creating recipe', 'message' => $e->getMessage()], 400);
             }
         }
+        else 
+            return new JsonResponse(['error' => 'No input provided'], 400);
+
         return new JsonResponse(['message' => 'Recipe created', 'redirect' => '/rezept/'.$recipe->getId() . '/bearbeiten'], 200);
     }
 
@@ -145,17 +149,5 @@ class ImportRecipeController extends AbstractController
         $this->entityManager->persist($recipe);
         $this->entityManager->flush();
         return $recipe;
-    }
-
-    function getDataFromImage(UploadedFile $file, SluggerInterface $slugger): string
-    {
-        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename = $slugger->slug($originalFilename);
-        $fileName = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
-        try {
-            $file->move($this->getTargetDirectory(), $fileName);
-        } catch (FileException $e) {
-            throw new FileException('An error occurred while uploading the file');
-        }
     }
 }
