@@ -13,18 +13,21 @@ use App\Entity\Ingredient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Exception;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Service\UploadService;
 
-use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 class ImportRecipeController extends AbstractController
 {
 
     private $entityManager;
     private $openAIService;
-    public function __construct(EntityManagerInterface $entityManager, OpenAIService $openAIService)
+    private $uploadService;
+    public function __construct(EntityManagerInterface $entityManager, OpenAIService $openAIService, UploadService $uploadService)
     {
         $this->entityManager = $entityManager;
         $this->openAIService = $openAIService;
+        $this->uploadService = $uploadService;
     }
 
     #[Route('/rezept/import')]
@@ -35,20 +38,20 @@ class ImportRecipeController extends AbstractController
     }
     
     #[Route('/importRecipe', methods: ['POST'])]
-    public function AIadd(Request $request): Response
+    public function ImportRecipe(Request $request): Response
     {
-        $data = $request->getContent();
-        $data = json_decode($data, true);
-        //we check first if there is anything in the textfile
-        if ($data['text'] && $data['text'] !== '') {
-            $text_input = $this->getDataFromText($data['text']);
+        $text_input = null;
+        $image_input = null;
+        $strings = $request->request->all();
+        if (array_key_exists('url', $strings) && $strings['url'] !== '') {
+            $text_input = $this->extractSchemaFromWebsite($strings['url']);
         }
-        //otherwise, we need to use the url
-        elseif ($data['url'] && $data['url'] !== '') {
-            $text_input = $this->extractSchemaFromWebsite($data['url']);
+        elseif (array_key_exists('text', $strings) && $strings['text'] !== '') {
+            $text_input = $this->getDataFromText($strings['text']);
         }
-        elseif ($data['file'] && $data['file'] !== '') {
-            $image_input = $this->getDataFromImage($data['file']);
+        $files = $request->files->all();
+        if (file_exists($files['image'])) {
+            $image_input = $this->uploadService->upload($files['image']);
         }
 
         if ($text_input) {
@@ -144,14 +147,15 @@ class ImportRecipeController extends AbstractController
         return $recipe;
     }
 
-    function getDataFromImage(string $file): string
+    function getDataFromImage(UploadedFile $file, SluggerInterface $slugger): string
     {
-        $image = file_get_contents($file);
-        //upload the image to the server
-        $upload_folder = 'uploads/';
-        $filename = $upload_folder . basename($file);
-        file_put_contents($filename, $image);
-        return $filename;
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = $slugger->slug($originalFilename);
+        $fileName = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+        try {
+            $file->move($this->getTargetDirectory(), $fileName);
+        } catch (FileException $e) {
+            throw new FileException('An error occurred while uploading the file');
+        }
     }
-
 }

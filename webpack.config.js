@@ -23,7 +23,7 @@ Encore
     .addEntry('app',            './assets/app.js')
     .addEntry('saveRecipe',     './assets/js/saveRecipe.js')
     .addEntry('newIngredient',  './assets/js/newIngredient.js')
-    .addEntry('AIadd',          './assets/js/AIadd.js')
+    .addEntry('ImportRecipe',          './assets/js/ImportRecipe.js')
     .enableStimulusBridge('./assets/controllers.json')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
