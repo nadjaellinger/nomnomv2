@@ -22,6 +22,7 @@ class viewRecipe extends AbstractController
         #[Route('/rezept/{id}')]
         public function viewRecipe($id): Response
         {
+            $this->denyAccessUnlessGranted('ROLE_USER');
             $recipe = $this->entityManager->getRepository(Recipe::class)
                 ->findRecipeById($id);
             

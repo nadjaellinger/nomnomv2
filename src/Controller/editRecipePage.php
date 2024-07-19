@@ -42,6 +42,7 @@ class editRecipePage extends AbstractController
     #[Route('/rezept/{id}/bearbeiten', methods: ['POST'])]
     public function updateRecipe(Request $request, $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $data = json_decode($request->getContent(), true);
 
         if (!$this->isDataComplete($data)) 
@@ -132,12 +133,14 @@ class editRecipePage extends AbstractController
     #[Route('/rezept/neu', methods: ['GET'])]
     public function newRecipe(): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         return $this->render('newRecipePage.html.twig');
     }
 
     #[Route('/rezept/neu', methods: ['POST'])]
     public function createRecipe(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         $data = json_decode($request->getContent(), true);
 
         if (!$this->isDataComplete($data)) 
