@@ -1,31 +1,28 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var form = document.getElementById('AIaddForm');
+    var form = document.getElementById('ImportRecipeForm');
     if (form) {
         var saveButton = document.getElementById('addButton');
         var textField = document.getElementById('text');
-        var UrlField = document.getElementById('url');
+        var urlField = document.getElementById('url');
+        var imageField = document.getElementById('image');
         if (saveButton) {
             saveButton.addEventListener('click', function (event) {
                 event.preventDefault();
-                var data = {
-                    text: textField.value,
-                    url: UrlField.value
-                };
-                importRecipe(data);
+                let formData = new FormData(form);
+                formData.append('text', textField.value);
+                formData.append('url', urlField.value);
+                formData.append('image', imageField.files[0]);
+                importRecipe(formData);
             });
         }
     }
 });
 
-function importRecipe(data) {
-    console.log(data);
+function importRecipe(formData) {
+    console.log(formData);
     fetch('/importRecipe', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(data)
+        body: formData
     })
     .then(response => { // Check if the response is ok
         if (!response.ok) {

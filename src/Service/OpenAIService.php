@@ -5,6 +5,7 @@ namespace App\Service;
 
 use OpenAI;
 use Symfony\Component\HttpFoundation\Response;
+use Exception;
 
 
 class OpenAIService
@@ -55,6 +56,7 @@ class OpenAIService
     private function createJsonFromText(string $text_input): string
     {
         $instructions = $this->getInstructions();
+        $prompt = 'abd';
         $result = $this->client->chat()->create([
             'model' => 'gpt-4o',
             'response_format' => [
@@ -80,6 +82,7 @@ class OpenAIService
             $image_input            
         ]
         );
+        return 'abc';
     }
 
     private function getInstructions(): string
