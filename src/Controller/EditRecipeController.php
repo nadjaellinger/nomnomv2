@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\Exception\ORMException;
 
-class editRecipePage extends AbstractController
+class EditRecipeController extends AbstractController
 {
     
     private $entityManager;
@@ -124,9 +124,12 @@ class editRecipePage extends AbstractController
         }
     }
 
-    #[Route('/ingredient/template', name: 'ingredient_template')]
-    public function ingredientTemplate(): Response
+    #[Route('/ingredient/template', name: 'ingredient_template')] 
+    public function ingredientTemplate(Request $request): Response
     {
+        if (!$request->isXmlHttpRequest()) {
+            throw new \Exception('This is not an AJAX request');
+        }
         return $this->render('ingredient/template.html.twig');
     }
 

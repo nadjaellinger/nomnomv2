@@ -11,15 +11,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     text: textField.value,
                     url: UrlField.value
                 };
-                addAI(data);
+                importRecipe(data);
             });
         }
     }
 });
 
-function addAI(data) {
+function importRecipe(data) {
     console.log(data);
-    fetch('/AIadd', {
+    fetch('/importRecipe', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

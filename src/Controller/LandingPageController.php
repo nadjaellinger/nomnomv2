@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Rezept;
 use Doctrine\ORM\EntityManagerInterface;
 
-class landingPage extends AbstractController
+class LandingPageController extends AbstractController
 {
 
     private $entityManager;

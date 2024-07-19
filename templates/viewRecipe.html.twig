@@ -1,10 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1></h1>
     <div class="recipe-container tile">
         <div class="header-area">
-        <h2>{{ recipe.name }}</h2>
+        <h1>{{ recipe.name }}</h1>
             <div class="buttons">
                 <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">Rezept bearbeiten</button>
             </div>

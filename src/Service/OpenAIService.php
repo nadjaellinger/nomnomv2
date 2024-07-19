@@ -40,7 +40,19 @@ class OpenAIService
         return $result['choices'][0]['message']['content'];
     }
 
-    public function createJSON(string $prompt): string
+    public function createJSON(string $text_input = null, string $image_input = null): string
+    {
+        if ($text_input) 
+            $JSON = $this->createJsonFromText($text_input);
+        elseif ($image_input)
+            $JSON = $this->createJsonFromImage($image_input);
+        else
+            throw new Exception('No input provided');
+
+        return $JSON;
+    }
+
+    private function createJsonFromText(string $text_input): string
     {
         $instructions = $this->getInstructions();
         $result = $this->client->chat()->create([
@@ -60,6 +72,14 @@ class OpenAIService
             ],
         ]);
         return $result['choices'][0]['message']['content'];
+    }
+
+    private function createJsonFromImage($image_input) 
+    {
+        $upload_file = $this->client->files()->upload([
+            $image_input            
+        ]
+        );
     }
 
     private function getInstructions(): string

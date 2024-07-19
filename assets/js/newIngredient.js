@@ -14,7 +14,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchIngredientTemplate() {
         try {
-            let response = await fetch('/ingredient/template');
+            let response = await fetch('/ingredient/template', {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
             if (response.ok) {
                 return await response.text();
             } else {

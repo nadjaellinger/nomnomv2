@@ -16,7 +16,7 @@ use Exception;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
-class automaticRecipe extends AbstractController
+class ImportRecipeController extends AbstractController
 {
 
     private $entityManager;
@@ -27,36 +27,48 @@ class automaticRecipe extends AbstractController
         $this->openAIService = $openAIService;
     }
 
-    #[Route('/rezept/neuAI')]
+    #[Route('/rezept/import')]
     public function automaticRecipe()
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
         return $this->render('automaticRecipe.html.twig');
     }
     
-    #[Route('/AIadd', methods: ['POST'])]
+    #[Route('/importRecipe', methods: ['POST'])]
     public function AIadd(Request $request): Response
     {
         $data = $request->getContent();
         $data = json_decode($data, true);
         //we check first if there is anything in the textfile
         if ($data['text'] && $data['text'] !== '') {
-            $input = $data['text'];
+            $text_input = $this->getDataFromText($data['text']);
         }
         //otherwise, we need to use the url
-        else {
-            $input = $this->extractSchemaFromWebsite($data['url']);
+        elseif ($data['url'] && $data['url'] !== '') {
+            $text_input = $this->extractSchemaFromWebsite($data['url']);
         }
-        try{
-            //we use the OpenAI API to create a json
-            $json = $this->openAIService->createJSON($input);
-            //we create a recipe from the json 
-            $recipe = $this->createRecipe($json);
-            $this->entityManager->flush();
+        elseif ($data['file'] && $data['file'] !== '') {
+            $image_input = $this->getDataFromImage($data['file']);
         }
-        catch (Throwable $e) {
-            return new JsonResponse(['error' => 'Error creating recipe', 'message' => $e->getMessage()], 400);
+
+        if ($text_input) {
+            try{
+                //we use the OpenAI API to create a json
+                $json = $this->openAIService->createJSON($text_input, $image_input);
+                //we create a recipe from the json 
+                $recipe = $this->createRecipe($json);
+                $this->entityManager->flush();
+            }
+            catch (Throwable $e) {
+                return new JsonResponse(['error' => 'Error creating recipe', 'message' => $e->getMessage()], 400);
+            }
         }
         return new JsonResponse(['message' => 'Recipe created', 'redirect' => '/rezept/'.$recipe->getId() . '/bearbeiten'], 200);
+    }
+
+    private function getDataFromText(string $text): string
+    {
+        return $text;
     }
 
     private function extractSchemaFromWebsite(string $url): string
@@ -131,4 +143,15 @@ class automaticRecipe extends AbstractController
         $this->entityManager->flush();
         return $recipe;
     }
+
+    function getDataFromImage(string $file): string
+    {
+        $image = file_get_contents($file);
+        //upload the image to the server
+        $upload_folder = 'uploads/';
+        $filename = $upload_folder . basename($file);
+        file_put_contents($filename, $image);
+        return $filename;
+    }
+
 }
