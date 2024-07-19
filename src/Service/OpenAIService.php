@@ -6,7 +6,7 @@ namespace App\Service;
 use OpenAI;
 use Symfony\Component\HttpFoundation\Response;
 use Exception;
-
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class OpenAIService
 {
@@ -41,7 +41,7 @@ class OpenAIService
         return $result['choices'][0]['message']['content'];
     }
 
-    public function createJSON(string $text_input = null, string $image_input = null): string
+    public function createJSON(string $text_input = null, UploadedFile $image_input = null): string
     {
         if ($text_input) 
             $JSON = $this->createJsonFromText($text_input);
@@ -76,13 +76,15 @@ class OpenAIService
         return $result['choices'][0]['message']['content'];
     }
 
-    private function createJsonFromImage($image_input) 
+    private function createJsonFromImage(UploadedFile $image_input) 
     {
-        $upload_file = $this->client->files()->upload([
-            $image_input            
-        ]
-        );
-        return 'abc';
+        $stringFile = fopen($image_input->getPathname(), 'r');
+        $uploadedFile = $this->client->files()->upload([
+            'purpose' => 'assistants',
+            'file' => $stringFile
+        ]);
+        $fileInfo = $this->client->files()->retrieve(strval($uploadedFile['id']));
+        return $fileInfo;
     }
 
     private function getInstructions(): string

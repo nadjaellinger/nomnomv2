@@ -30,7 +30,6 @@ class UploadService
         } catch (FileException $e) {
             throw new FileException('An error occurred while uploading the file');
         }
-
         return $fileName;
     }
 
