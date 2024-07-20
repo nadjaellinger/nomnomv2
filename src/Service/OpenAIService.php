@@ -56,7 +56,6 @@ class OpenAIService
     private function createJsonFromText(string $text_input): string
     {
         $instructions = $this->getInstructions();
-        $prompt = 'abd';
         $result = $this->client->chat()->create([
             'model' => 'gpt-4o',
             'response_format' => [
@@ -69,7 +68,7 @@ class OpenAIService
                 ],
                 [
                     'role' => 'user', 
-                    'content' => $prompt
+                    'content' => $text_input
                 ],
             ],
         ]);
@@ -83,12 +82,69 @@ class OpenAIService
             'purpose' => 'assistants',
             'file' => $stringFile
         ]);
-        $fileInfo = $this->client->files()->retrieve(strval($uploadedFile['id']));
-        return $fileInfo;
+
+        $image_assistant = $this->getImageAssistant();
+        $assistant_id = $image_assistant->id;
+
+        $thread = $this->client->threads()->create([
+        ]);
+
+        $this->client->threads()->messages()->create(
+            $thread->id,
+            [
+                'role' => 'user',
+                'content' => [
+                    [
+                        'type' => 'image_file',
+                        'image_file' => [
+                            'file_id' => $uploadedFile->id,
+                        ],
+                    ]
+                ]
+            ]
+        );
+        $run = $this->client->threads()->runs()->create(
+            $thread->id,
+            [
+                'assistant_id' => $assistant_id,
+            ]
+        );
+            
+
+        return $run['choices'][0]['message']['content'];
+    }
+
+    private function getImageAssistant()
+    {
+        $assistants = $this->client->assistants()->list()->data;
+        $image_assistant = null;
+        foreach ($assistants as $assistant) {
+            if ($assistant['name'] === 'image_assistant') {
+                $image_assistant = $assistant;
+                return $image_assistant;
+            }
+        }
+        if (!$image_assistant) {
+        $assistant = $this->client->assistants()->create([
+            'instructions' => $this->getImageInstructions(),
+            'name' => 'image_assistant',
+            'model' => 'gpt-4o',
+            'response_format' => [
+                'type' => 'json_object',
+            ],
+        ]
+        );
+        return $assistant;
+        }
     }
 
     private function getInstructions(): string
     {
         return 'You will recieve the content of a website containing a cooking recipe. Please identify the name, the description, the ingredients and the instructions and create a JSON with these keys. If you can\'t find the name, please guess it. If there is no description, invent a short one. If there are no ingredients or instructions, please leave the value empty. Please have the instructions as a string. Please keep everything in German, if the recipe is in German.  For the ingredients, please use the following format: "ingredients": ["ingredient1" ["name": "ingredient2", "quantity": "quantity, "unit": "unit"], ...]. If you cant find the value, set it to 0, if you cant find the unit, set it to "". For the image, please use the URL of the image. If there is no image, set it to ""';
+    }
+
+    private function getImageInstructions(): string
+    {
+        return 'You will recieve an image of a cooking recipe. Please identify the name, the description, the ingredients and the instructions and create a JSON with these keys. If you can\'t find the name, please guess it. If there is no description, invent a short one. If there are no ingredients or instructions, please leave the value empty. Please have the instructions as a string. Please keep everything in German, if the recipe is in German.  For the ingredients, please use the following format: "ingredients": ["ingredient1" ["name": "ingredient2", "quantity": "quantity, "unit": "unit"], ...]. If you cant find the value, set it to 0, if you cant find the unit, set it to "". For the image, please use the URL of the image. If there is no image, set it to ""';
     }
 }
