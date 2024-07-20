@@ -18,29 +18,6 @@ class OpenAIService
         $this->client = OpenAI::client($apiKey);
     }
 
-    public function createCompletion(string $prompt): string
-    {
-        $result = $this->client->completions()->create([
-            'model' => 'gpt-3.5-turbo',
-            'prompt' => $prompt,
-        ]);
-
-        return $result['choices'][0]['text'];
-    }
-
-    public function createChat(string $prompt): string
-    {
-        $result = $this->client->chat()->create([
-            'model' => 'gpt-4o',
-            'messages' => [
-                ['role' => 'system', 'content' => 'You are annoyed by the task, but you have to do it. You have a dark sense of humor. Keep it short'],
-                ['role' => 'user', 'content' => $prompt],
-            ],
-        ]);
-
-        return $result['choices'][0]['message']['content'];
-    }
-
     public function createJSON(string $text_input = null, UploadedFile $image_input = null): string
     {
         if ($text_input) 
@@ -103,13 +80,39 @@ class OpenAIService
                 ]
             ]
         );
-        $run = $this->client->threads()->runs()->create(
-            $thread->id,
-            [
+        $stream = $this->client->threads()->runs()->createStreamed(
+            threadId: $thread->id,
+            parameters: [
                 'assistant_id' => $assistant_id,
-            ]
+            ],
         );
-        //wait for the assistant to finish
+
+        do{
+            foreach($stream as $response){
+                switch($response->event){
+                    case 'thread.run.created':
+                    case 'thread.run.queued':
+                    case 'thread.run.completed':
+                    case 'thread.run.cancelling':
+                        $run = $response->response;
+                        break;
+                    case 'thread.run.expired':
+                    case 'thread.run.cancelled':
+                    case 'thread.run.failed':
+                        $run = $response->response;
+                        break 3;
+                    default:
+                        break;
+                }
+            }
+        } 
+        while ($run->status != "completed");
+
+        $firstMessageId = $this->client->threads()->messages()->list($thread->id)->firstId;
+        $firstMessage = $this->client->threads()->messages()->retrieve($thread->id, $firstMessageId)->content;
+
+        $json = $firstMessage[0]['text']['value'];
+        return $json;
     }
 
     private function getImageAssistant()
