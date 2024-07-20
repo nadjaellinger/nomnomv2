@@ -109,10 +109,8 @@ class OpenAIService
                 'assistant_id' => $assistant_id,
             ]
         );
-            
-
-        return $run['choices'][0]['message']['content'];
-    }
+        //wait for the assistant to finish
+        $run = $this->client->threads()->runs()->
 
     private function getImageAssistant()
     {
