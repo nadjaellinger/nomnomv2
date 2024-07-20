@@ -110,7 +110,7 @@ class OpenAIService
             ]
         );
         //wait for the assistant to finish
-        $run = $this->client->threads()->runs()->
+    }
 
     private function getImageAssistant()
     {
