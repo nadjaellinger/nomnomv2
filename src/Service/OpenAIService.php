@@ -100,7 +100,8 @@ class OpenAIService
                     case 'thread.run.cancelled':
                     case 'thread.run.failed':
                         $run = $response->response;
-                        break 3;
+                        $this->client->files()->delete($uploadedFile->id);
+                        throw new Exception('Run failed');
                     default:
                         break;
                 }
@@ -108,6 +109,7 @@ class OpenAIService
         } 
         while ($run->status != "completed");
 
+        $this->client->files()->delete($uploadedFile->id);
         $firstMessageId = $this->client->threads()->messages()->list($thread->id)->firstId;
         $firstMessage = $this->client->threads()->messages()->retrieve($thread->id, $firstMessageId)->content;
 
