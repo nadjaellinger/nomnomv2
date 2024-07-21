@@ -9,15 +9,19 @@
             </div>
         </div>
         
-        <div class="recipe-description">
+        <<div class="recipe-description">
+            <h3>Beschreibung</h3>
             <p>{{ recipe.description }}</p>
+        
         </div>
-
+        {% if recipe.image %}
         <div class="recipe-image">
             <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
         </div>
+        {% endif %}
+
         <div class="recipe-ingredients">
-        <h3>Zutaten</h3>
+            <h3>Zutaten</h3>
             <ul>
                 {% for ingredient in recipe.ingredients %}
                     <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.name }}</li>
