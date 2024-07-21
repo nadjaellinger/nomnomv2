@@ -150,7 +150,7 @@ button
     font-family: var(--headingfont);
     font-weight: 600;
     font-size: 16px;
-    margin: 8px 0px;
+    margin: 8px 4px;
 }
 
 button:last-child
@@ -315,4 +315,55 @@ form
 .btn-minus:hover, .btn-plus:hover
 {
     box-shadow: 0px 0px 8px 0px var(--secondary);
+}
+
+
+/* Admin Dashboard */
+
+.admin-table
+{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th, .admin-table td
+{
+    padding: 16px;
+}
+
+.admin-table th
+{
+    background-color: var(--tertiary);
+    color: var(--black);
+}
+
+.admin-table tr:nth-child(even)
+{
+    background-color: var(--tertiary-25);
+}
+
+.admin-table tr:hover
+{
+    background-color: var(--tertiary-50);
+}
+
+.admin-table tr
+{
+    text-align: left;
+}
+
+.admin-table .recipe-image
+{
+    width: 200px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.admin-table .button-area
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
 }

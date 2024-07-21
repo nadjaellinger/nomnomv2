@@ -8,6 +8,10 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Entity(repositoryClass: "App\Repository\UserGroupRepository")]
 #[ORM\Table(name: "user_groups")]
 
+/**
+ * Groups of users so they can share recipes
+ * 
+ */
 class UserGroup
 {
     #[ORM\Id]
