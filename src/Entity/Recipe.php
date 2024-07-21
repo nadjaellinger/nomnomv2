@@ -30,6 +30,8 @@ class Recipe
     #[ORM\Column(type: "string", length: 10000)]
     private ?string $instructions;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "recipes")]
+    private ?User $user;
 
     public function __construct()
     {
@@ -111,6 +113,17 @@ class Recipe
     public function setInstructions(string $instructions): self
     {
         $this->instructions = $instructions;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
         return $this;
     }
 }
