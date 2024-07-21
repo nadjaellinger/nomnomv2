@@ -21,7 +21,7 @@ class Recipe
     #[ORM\Column(type: "text")]
     private ?string $description;
 
-    #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: "recipe")]
+    #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: "recipe", cascade: ["persist", "remove"])]
     private Collection $ingredients;
 
     #[ORM\Column(type: "string", length: 255)]

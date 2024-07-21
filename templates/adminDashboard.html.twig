@@ -5,7 +5,7 @@
     <div class="content">
         <h1>Admin Dashboard</h1>
         <div class="admin-dashboard">
-            <table class="admin-table">
+            <table class="admin-table" id="admin-table">
                 <thead>
                     <tr>
                         <th>Rezept</th>
@@ -40,4 +40,8 @@
             </table>
         </div>
     </div>
+    {{ encore_entry_script_tags('deleteRecipeAdminDashboard') }}
+    {# {{ encore_entry_script_tags('editRecipeAdminDashboard') }}
+    {{ encore_entry_script_tags('showRecipeAdminDashboard') }}
+    {{ encore_entry_script_tags('adminDashboard') }} #}
 {% endblock %}

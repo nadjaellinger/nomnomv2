@@ -33,15 +33,29 @@ class AdminDashboardController extends AbstractController
     }
     
     #[Route('/admin/dashboard', methods: ['POST'])]
-    public function deleteRecipe(Request $request): Response
+    public function action(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['id']) || !is_numeric($data['id'])) 
+        if (!isset($data['action']) || !isset($data['recipeId']) || !is_numeric($data['recipeId'])) 
+            return new JsonResponse(['error' => 'Invalid request'], 400);
+
+        if ($data['action'] === 'delete') {
+            return $this->deleteRecipe($request);
+        }
+        return new JsonResponse(['error' => 'Invalid action'], 400);
+    }
+
+    private function deleteRecipe(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['recipeId']) || !is_numeric($data['recipeId'])) 
             return new JsonResponse(['error' => 'Invalid recipe ID'], 400);
 
-        $recipe = $this->entityManager->getRepository(Recipe::class)->find($data['id']);
+        $recipe = $this->entityManager->getRepository(Recipe::class)->find($data['recipeId']);
         
         if (!$recipe)
             return new JsonResponse(['error' => 'Recipe not found'], 404);
