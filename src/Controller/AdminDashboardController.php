@@ -41,10 +41,12 @@ class AdminDashboardController extends AbstractController
         if (!isset($data['action']) || !isset($data['recipeId']) || !is_numeric($data['recipeId'])) 
             return new JsonResponse(['error' => 'Invalid request'], 400);
 
-        if ($data['action'] === 'delete') {
-            return $this->deleteRecipe($request);
+        switch ($data['action']) {
+            case 'delete':
+                return $this->deleteRecipe($request);
+            default:
+                return new JsonResponse(['error' => 'Invalid action'], 400);
         }
-        return new JsonResponse(['error' => 'Invalid action'], 400);
     }
 
     private function deleteRecipe(Request $request): Response
@@ -65,4 +67,5 @@ class AdminDashboardController extends AbstractController
         
         return new JsonResponse(['message' => 'Recipe deleted'], 200);
     }
+
 }
