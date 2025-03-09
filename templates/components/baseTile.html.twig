@@ -1,8 +1,8 @@
 {# templates/components/base_tile.html.twig #}
 <div class="tile">
-    <div class="row">
-        <div >
-            <h2>{{ this.title }}</h2>
+    <div class="row header-area">
+        <div>
+            <h2 class="heading-font">{{ this.title }}</h2>
         </div>
         <div class="button-group">
             {% for button in this.buttons %}
@@ -10,7 +10,7 @@
             {% endfor %}
         </div>
     </div>
-    <div class="row">
+    <div class="row content-area">
         {{ this.content }}
     </div>
 </div>

@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Rezept des Tages</h1>
+    <h1 class="heading-font">Rezept des Tages</h1>
     <div class="recipe-container tile">
         <div class="header-area">
-            <h2>{{ recipe.name }}</h2>
+            <h2 class="heading-font">{{ recipe.name }}</h2>
             <div class="buttons">
                 <button class="btn secondary ghost" onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">Rezept bearbeiten</button>
                 <button class="btn secondary" onclick="window.location.href='/rezept/{{ recipe.id }}/'">Zum Rezept</button>
@@ -12,8 +12,8 @@
         </div>
 
         <div class="recipe-description">
-            <h3>Beschreibung</h3>
-            <p>{{ recipe.description }}</p>
+            <h3 class="heading-font">Beschreibung</h3>
+            <p class="body-font">{{ recipe.description }}</p>
         
         </div>
         {% if recipe.image %}
@@ -23,8 +23,8 @@
         {% endif %}
 
         <div class="recipe-ingredients">
-            <h3>Zutaten</h3>
-            <ul>
+            <h3 class="heading-font">Zutaten</h3>
+            <ul class="body-font">
                 {% for ingredient in recipe.ingredients %}
                     <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.name }}</li>
                 {% endfor %}
@@ -32,9 +32,8 @@
         </div>
         
         <div class="recipe-instructions">
-            <h3>Zubereitung</h3>
-            <p>{{ recipe.instructions }}</p>
+            <h3 class="heading-font">Zubereitung</h3>
+            <p class="body-font">{{ recipe.instructions }}</p>
         </div>
     </div>
 {% endblock %}
-

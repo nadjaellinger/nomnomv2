@@ -2,21 +2,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Gluten:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@100..900&display=swap" rel="stylesheet">
 
-<nav>
+<nav class="main-nav">
     <div class="nav-wrapper">
-        <ul>
-            <li><a href="/">Home</a></li>
+        <ul class="nav-list">
+            <li class="nav-item"><a href="/">Home</a></li>
             {% if is_granted('ROLE_USER') %}
-                <li><a href="/rezept/neu">Neues Rezept</a></li>
-                <li><a href="/rezept/import">Import</a></li>
+                <li class="nav-item"><a href="/rezept/neu">Neues Rezept</a></li>
+                <li class="nav-item"><a href="/rezept/import">Import</a></li>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <li><a href="/admin/dashboard">Admin Dashboard</a></li>
+                    <li class="nav-item"><a href="/admin/dashboard">Admin Dashboard</a></li>
                 {% endif %}
-                <li><a href="/logout">Logout</a></li>
+                <li class="nav-item"><a href="/logout">Logout</a></li>
             {% else %}
-                <li><a href="/login">Login</a></li>
+                <li class="nav-item"><a href="/login">Login</a></li>
             {% endif %}
-
         </ul>
     </div>
 </nav>

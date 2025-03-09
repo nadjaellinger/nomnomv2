@@ -41,6 +41,10 @@
     --background: #060322;
     --bodyfont-color: #adced9;
 
+    /* New color schemes */
+    --accent: #ffcc00;
+    --highlight: #ff5733;
+    --muted: #cccccc;
 
     --tertiary-50: #a9cdc550;
     --tertiary-25: #a9cdc525;
@@ -366,4 +370,15 @@ form
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+}
+
+/* New font styles */
+.heading-font {
+    font-family: 'Gluten', sans-serif;
+    color: var(--highlight);
+}
+
+.body-font {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--muted);
 }
