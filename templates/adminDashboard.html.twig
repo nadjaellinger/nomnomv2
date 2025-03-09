@@ -1,44 +1,41 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-    <div class="content">
-        <h1>Admin Dashboard</h1>
-        <div class="admin-dashboard">
-            <table class="admin-table" id="admin-table">
-                <thead>
+    <h1>Admin Dashboard</h1>
+    <div class="admin-dashboard">
+        <table class="admin-table" id="admin-table">
+            <thead>
+                <tr>
+                    <th>Rezept</th>
+                    <th>Ersteller</th>
+                    <th>Beschreibung</th>
+                    <th>Bild</th>
+                    <th>Optionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recipe in recipes %}
                     <tr>
-                        <th>Rezept</th>
-                        <th>Ersteller</th>
-                        <th>Beschreibung</th>
-                        <th>Bild</th>
-                        <th>Optionen</th>
+                        <td>{{ recipe.name }}</td>
+                        <td>{{ recipe.user.username | default("")}}</td>
+                        <td>{{ recipe.description }}</td>
+                        <td>
+                        {% if recipe.image %}
+                            <div class="recipe-image">
+                                <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
+                            </div>
+                        {% endif %}
+                        <td>
+                            <div class="button-area">
+                                <button class="btn secondary ghost" id="showRecipe" data-id="{{ recipe.id }}">Anzeigen</button>
+                                <button class="btn secondary ghost" id="editRecipe" data-id="{{ recipe.id }}">Bearbeiten</button>
+                                <button class="btn secondary ghost" id="deleteRecipe" data-id="{{ recipe.id }}">Löschen</button>
+                            </div>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for recipe in recipes %}
-                        <tr>
-                            <td>{{ recipe.name }}</td>
-                            <td>{{ recipe.user.username | default("")}}</td>
-                            <td>{{ recipe.description }}</td>
-                            <td>
-                            {% if recipe.image %}
-                                <div class="recipe-image">
-                                    <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
-                                </div>
-                            {% endif %}
-                            <td>
-                                <div class="button-area">
-                                    <button class="btn secondary ghost" id="showRecipe" data-id="{{ recipe.id }}">Anzeigen</button>
-                                    <button class="btn secondary ghost" id="editRecipe" data-id="{{ recipe.id }}">Bearbeiten</button>
-                                    <button class="btn secondary ghost" id="deleteRecipe" data-id="{{ recipe.id }}">Löschen</button>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     {{ encore_entry_script_tags('adminDashboard') }}
 {% endblock %}

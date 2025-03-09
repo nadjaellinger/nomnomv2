@@ -45,7 +45,7 @@
     /* orange and blue */
     --primary: #d7782b;
     --secondary: #2c3341;
-    --tertiary: #d6554d;
+    --tertiary: #c74d44;
     --background: #f6f4e4;
     --bodyfont-color: #2c3341;
 
@@ -53,9 +53,9 @@
     --secondary-25: #2c334125;
     --secondary-10: #2c334110;
 
-    --tertiary-50: #d6554d50;
-    --tertiary-25: #d6554d25;
-    --tertiary-10: #d6554d10;
+    --tertiary-50: #c74d4450;
+    --tertiary-25: #c74d4425;
+    --tertiary-10: #c74d4410;
     --error: #e74f4e;
 
     /*--headingfont:  "Red Hat Display", sans-serif; */
@@ -238,7 +238,7 @@ button.secondary.ghost
 button.secondary.ghost:hover
 {
     color: var(--secondary);
-    border: 1px solid var(--secondary);
+    border: 2px solid var(--secondary);
     box-shadow: 0px 0px 0px 0px var(--secondary);
 }
 
@@ -379,13 +379,13 @@ form
 
 .admin-table th
 {
-    background-color: var(--secondary);
+    background-color: var(--tertiary);
     color: var(--background);
 }
 
 .admin-table tr:nth-child(even)
 {
-    background-color: var(--secondary-10);
+    background-color: var(--tertiary-10);
 }
 
 
