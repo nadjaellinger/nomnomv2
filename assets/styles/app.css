@@ -142,7 +142,7 @@ nav .nav-wrapper
 {
     width: var(--content-width);
     margin: 0 auto;
-    padding: 20px 0px;
+    padding: 0px 20px;
     display: flex;
 }
 
@@ -152,6 +152,35 @@ nav .nav-wrapper
     /* padding: 20px; */
     margin: 16px 0px;
     border-radius: 4px;
+}
+
+.flex-container
+{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 32px;
+}
+
+.col-66
+{
+    flex-basis: calc(66% - 16px);
+}
+
+.col-33
+{
+    flex-basis: calc(33% - 16px);
+}
+
+ul
+{
+    padding: 12px;
+}
+
+.recipe-ingredients
+{
+    position: sticky;
+    top: 16px;
 }
 
 button
@@ -385,6 +414,31 @@ form
 
 @media only screen and (max-width: 600px)
 {
+    .content
+    {
+        padding: 20px 0px;
+    }
+
+    h1
+    {
+        font-size: 24px;
+    }
+
+    h2
+    {
+        font-size: 20px;
+    }
+
+    h3
+    {
+        font-size: 16px;
+    }
+
+    nav ul
+    {
+        font-size: 16px;
+    }
+
     nav .nav-wrapper
     {
         width: 100%;
@@ -399,6 +453,28 @@ form
     table
     {
         overflow: auto;
+    }
+
+    .flex-container
+    {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .col-66, .col-33
+    {
+        flex-basis: 100%;
+    }
+
+    .flex-container.reverse
+    {
+        flex-direction: column-reverse;
+    }
+
+    .tile .header-area
+    {
+        align-items: flex-start;
+        gap: 4px;
     }
 
 }
