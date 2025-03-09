@@ -4,7 +4,7 @@
   "build/saveRecipe.js": "/build/saveRecipe.js",
   "build/newIngredient.js": "/build/newIngredient.js",
   "build/ImportRecipe.js": "/build/ImportRecipe.js",
-  "build/deleteRecipeAdminDashboard.js": "/build/deleteRecipeAdminDashboard.js",
+  "build/adminDashboard.js": "/build/adminDashboard.js",
   "build/runtime.js": "/build/runtime.js",
   "build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-1fc45e.js": "/build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-1fc45e.js",
   "build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-4243f8.js": "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-4243f8.js",

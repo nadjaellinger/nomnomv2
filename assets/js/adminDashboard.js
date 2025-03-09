@@ -8,6 +8,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 let recipeId = event.target.getAttribute('data-id');
                 deleteRecipe(recipeId);
             }
+            if (event.target.id === 'editRecipe') {
+                event.preventDefault();
+                let recipeId = event.target.getAttribute('data-id');
+                window.location.href = '/rezept/' + recipeId + '/bearbeiten';
+            }
         });
     }
 }
