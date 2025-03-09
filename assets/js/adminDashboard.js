@@ -2,16 +2,23 @@ document.addEventListener('DOMContentLoaded', function () {
     var form = document.getElementById('admin-table');
     if (form) {
         form.addEventListener('click', function (event) {
-            //if the id is deleteRecipe
-            if (event.target.id === 'deleteRecipe') {
-                event.preventDefault();
-                let recipeId = event.target.getAttribute('data-id');
-                deleteRecipe(recipeId);
-            }
-            if (event.target.id === 'editRecipe') {
-                event.preventDefault();
-                let recipeId = event.target.getAttribute('data-id');
-                window.location.href = '/rezept/' + recipeId + '/bearbeiten';
+            event.preventDefault();
+            let recipeId = event.target.getAttribute('data-id');
+            switch (event.target.id) {
+                case 'deleteRecipe':
+                    event.preventDefault();
+                    deleteRecipe(recipeId);
+                    break;
+                case 'editRecipe':
+                    event.preventDefault();
+                    window.location.href = '/rezept/' + recipeId + '/bearbeiten';
+                    break;
+                case 'showRecipe':
+                    event.preventDefault();
+                    window.location.href = '/rezept/' + recipeId;
+                    break;
+                default:
+                    break;
             }
         });
     }

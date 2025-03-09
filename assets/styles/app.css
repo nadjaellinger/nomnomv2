@@ -1,7 +1,7 @@
 /* define colours */
 :root
 {
-    --black: #000920;
+    --black: #000000;
     --dark-grey: #101729;
     --light-grey: #3f424b;
     --white: #ffffff;
@@ -13,12 +13,13 @@
     --background: #282a36;
     --bodyfont-color: #f8f8f2; */
 
-    /* 
-    Blue and yellow
-    --primary: #fda821;
+    /* Blue and yellow */
+    
+    /* --primary: #fda821;
     --secondary: #76c9f1;
     --tertiary: #006ab1;
-    --background: #07122e; */
+    --background: #07122e;
+    --bodyfont-color: #fda821; */
 
     /* 
     Old one
@@ -35,18 +36,30 @@
 
     /** Red and cyan */
     
-    --primary: #f8713b;
+    /* --primary: #f8713b;
     --secondary: #1fc5a3;
     --tertiary: #407688;
     --background: #060322;
-    --bodyfont-color: #adced9;
+    --bodyfont-color: #adced9; */
 
+    /* orange and blue */
+    --primary: #d7782b;
+    --secondary: #2c3341;
+    --tertiary: #d6554d;
+    --background: #f6f4e4;
+    --bodyfont-color: #2c3341;
 
-    --tertiary-50: #a9cdc550;
-    --tertiary-25: #a9cdc525;
+    --secondary-50: #2c334150;
+    --secondary-25: #2c334125;
+    --secondary-10: #2c334110;
+
+    --tertiary-50: #d6554d50;
+    --tertiary-25: #d6554d25;
+    --tertiary-10: #d6554d10;
     --error: #e74f4e;
 
-    --headingfont:  "Red Hat Display", sans-serif;
+    /*--headingfont:  "Red Hat Display", sans-serif; */
+    --headingfont: 'Montserrat', sans-serif;
     --bodyfont: 'Nunito', sans-serif;
 
     --content-width: 1200px;
@@ -129,6 +142,8 @@ nav .nav-wrapper
 {
     width: var(--content-width);
     margin: 0 auto;
+    padding: 20px 0px;
+    display: flex;
 }
 
 .tile
@@ -164,17 +179,18 @@ button:hover
 }
 button.ghost{
     background-color: transparent;
-    color: var(--tertiary);
-    border: 1px solid var(--primary);
+    color: var(--primary);
+    border: 2px solid var(--primary);
 }
 
 button.ghost:hover
 {
-    box-shadow: 0px 0px 8px 0px var(--primary);
+    box-shadow: 0px 0px 0px 0px var(--primary);
 }
 
 button.secondary
 {
+    color: var(--background);
     background-color: var(--secondary);
 }
 
@@ -186,15 +202,15 @@ button.secondary:hover
 button.secondary.ghost
 {
     background-color: transparent;
-    color: var(--tertiary);
-    border: 1px solid var(--tertiary);
+    color: var(--secondary);
+    border: 2px solid var(--secondary);
 }
 
 button.secondary.ghost:hover
 {
     color: var(--secondary);
     border: 1px solid var(--secondary);
-    box-shadow: 0px 0px 8px 0px var(--secondary);
+    box-shadow: 0px 0px 0px 0px var(--secondary);
 }
 
 .tile .header-area
@@ -334,19 +350,15 @@ form
 
 .admin-table th
 {
-    background-color: var(--tertiary);
-    color: var(--black);
+    background-color: var(--secondary);
+    color: var(--background);
 }
 
 .admin-table tr:nth-child(even)
 {
-    background-color: var(--tertiary-25);
+    background-color: var(--secondary-10);
 }
 
-.admin-table tr:hover
-{
-    background-color: var(--tertiary-50);
-}
 
 .admin-table tr
 {
@@ -367,4 +379,26 @@ form
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+}
+
+/* Mobile */
+
+@media only screen and (max-width: 600px)
+{
+    nav .nav-wrapper
+    {
+        width: 100%;
+        padding: 0px 20px;
+    }
+
+    table th, table td
+    {
+        padding: 8px;
+    }
+
+    table
+    {
+        overflow: auto;
+    }
+
 }
