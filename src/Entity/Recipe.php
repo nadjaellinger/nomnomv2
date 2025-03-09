@@ -70,7 +70,7 @@ class Recipe
         return $this->ingredients;
     }
 
-    public function setIngredients(array $ingredients): self
+    public function setIngredients(Collection $ingredients): self
     {
         $this->ingredients = $ingredients;
         return $this;

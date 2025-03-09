@@ -246,6 +246,7 @@ input, textarea
     height: 300px;
     border-radius: 4px;
     object-fit: cover;
+    margin-bottom: 32px;
 }
 
 textarea
