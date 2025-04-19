@@ -18,7 +18,7 @@ class OpenAIService
         $this->client = OpenAI::client($apiKey);
     }
 
-    public function createJSON(string $text_input = null, UploadedFile $image_input = null): string
+    public function createJSON(?string $text_input = null, ?UploadedFile $image_input = null): string
     {
         if ($text_input) 
             $JSON = $this->createJsonFromText($text_input);
