@@ -256,6 +256,7 @@ button.secondary.ghost:hover
 
 .tile .header-area .button-area
 {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -414,11 +415,6 @@ form
 
 @media only screen and (max-width: 600px)
 {
-    .content
-    {
-        padding: 20px 0px;
-    }
-
     h1
     {
         font-size: 24px;

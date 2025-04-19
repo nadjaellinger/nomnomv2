@@ -4,36 +4,46 @@
     <h1>Rezept des Tages</h1>
     <div class="recipe-container tile">
         <div class="header-area">
-            <h2>{{ recipe.name }}</h2>
-            <div class="buttons">
-                <button class="btn secondary ghost" onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">Rezept bearbeiten</button>
-                <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/'">Zum Rezept</button>
+            <div class="col-66">
+                <h2>{{ recipe.name }}</h2>
+                <p>Erstellt von {{ recipe.user.username | default("Unbekannt") }}</p>
+            </div>
+            <div class="col-33">
+                <div class="buttons">
+                    <button class="btn secondary ghost" onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">Rezept bearbeiten</button>
+                    <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/'">Zum Rezept</button>
+                </div>
             </div>
         </div>
 
-        <div class="recipe-description">
-            <h3>Beschreibung</h3>
-            <p>{{ recipe.description }}</p>
-        
-        </div>
-        {% if recipe.image %}
-        <div class="recipe-image">
-            <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
-        </div>
-        {% endif %}
+        <div class="flex-container reverse">
+            <div class="col-66">
+                <div class="recipe-description">
+                    <p>{{ recipe.description }}</p>
+                </div>
 
-        <div class="recipe-ingredients">
-            <h3>Zutaten</h3>
-            <ul>
-                {% for ingredient in recipe.ingredients %}
-                    <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.name }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        
-        <div class="recipe-instructions">
-            <h3>Zubereitung</h3>
-            <p>{{ recipe.instructions }}</p>
+                {% if recipe.image %}
+                <div class="recipe-image">
+                    <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
+                </div>
+                {% endif %}    
+                    
+                <div class="recipe-instructions">
+                    <h3>Zubereitung</h3>
+                    <p>{{ recipe.instructions }}</p>
+                </div>
+            </div>
+
+            <div class="col-33">    
+                <div class="recipe-ingredients">
+                    <h3>Zutaten</h3>
+                    <ul>
+                        {% for ingredient in recipe.ingredients %}
+                            <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
