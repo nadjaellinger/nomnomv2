@@ -36,6 +36,27 @@
                 {% endfor %}
             </tbody>
         </table>
+        <h2>Pending Users</h2>
+        <table class="admin-table" id="pending-users-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Optionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in pendingUsers %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>
+                            <div class="button-area">
+                                <button class="btn secondary ghost" id="approveUser" data-id="{{ user.id }}">Approve</button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     {{ encore_entry_script_tags('adminDashboard') }}
 {% endblock %}
