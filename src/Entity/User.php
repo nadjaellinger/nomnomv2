@@ -35,8 +35,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(type: 'boolean')]
-    private bool $isApproved = false;
 
     #[ORM\ManyToMany(targetEntity: UserGroup::class)]
     private Collection $userGroups;
@@ -81,9 +79,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-        if (!$this->isApproved) {
-            $roles = ['ROLE_PENDING'];
-        }
         return array_unique($roles);
     }
 
@@ -162,17 +157,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $recipe->setUser(null);
             }
         }
-        return $this;
-    }
-
-    public function isApproved(): bool
-    {
-        return $this->isApproved;
-    }
-
-    public function setIsApproved(bool $isApproved): self
-    {
-        $this->isApproved = $isApproved;
         return $this;
     }
 }
