@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Recipe;
 use App\Entity\Ingredient;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,6 +45,8 @@ class AdminDashboardController extends AbstractController
         switch ($data['action']) {
             case 'delete':
                 return $this->deleteRecipe($request);
+            case 'approve':
+                return $this->approveUser($request);
             default:
                 return new JsonResponse(['error' => 'Invalid action'], 400);
         }
@@ -66,6 +69,25 @@ class AdminDashboardController extends AbstractController
         $this->entityManager->flush();
         
         return new JsonResponse(['message' => 'Recipe deleted'], 200);
+    }
+
+    private function approveUser(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['userId']) || !is_numeric($data['userId'])) 
+            return new JsonResponse(['error' => 'Invalid user ID'], 400);
+
+        $user = $this->entityManager->getRepository(User::class)->find($data['userId']);
+        
+        if (!$user)
+            return new JsonResponse(['error' => 'User not found'], 404);
+        
+        $user->setIsApproved(true);
+        $this->entityManager->flush();
+        
+        return new JsonResponse(['message' => 'User approved'], 200);
     }
 
 }

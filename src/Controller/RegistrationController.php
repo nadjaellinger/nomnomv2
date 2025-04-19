@@ -29,6 +29,9 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            // Set isApproved to false upon registration
+            $user->setIsApproved(false);
+
             $entityManager->persist($user);
             $entityManager->flush();
 
