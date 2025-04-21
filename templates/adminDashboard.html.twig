@@ -2,6 +2,7 @@
 
 {% block body %}
     <h1>Admin Dashboard</h1>
+    <h2>Rezeptverwaltung</h2>
     <div class="admin-dashboard">
         <table class="admin-table" id="admin-table">
             <thead>
@@ -41,7 +42,7 @@
             <thead>
                 <tr>
                     <th>Username</th>
-                    <th>Optionen</th>
+                    <th class="button-col">Optionen</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,6 +52,7 @@
                         <td>
                             <div class="button-area">
                                 <button class="btn secondary ghost" id="approveUser" data-id="{{ user.id }}">Approve</button>
+                                <button class="btn secondary ghost" id="deleteUser" data-id="{{ user.id }}">Delete</button>
                             </div>
                         </td>
                     </tr>

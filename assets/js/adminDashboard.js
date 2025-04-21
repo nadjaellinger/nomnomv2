@@ -33,9 +33,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     event.preventDefault();
                     approveUser(userId);
                     break;
-                case 'deleteUser':
+                case 'deleteRecipe':
                     event.preventDefault();
                     deleteRecipe(userId);
+                    break;
+                case 'deleteUser':
+                    event.preventDefault();
+                    deleteUser(userId);
                     break;
                 default:
                     break;
@@ -51,7 +55,7 @@ function deleteRecipe(recipeId) {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
-        body: JSON.stringify({ recipeId: recipeId, action: 'delete' }),
+        body: JSON.stringify({ recipeId: recipeId, action: 'deleteRecipe' }),
     })
         .then(response => { // Check if the response is ok
             if (!response.ok) {
@@ -80,7 +84,32 @@ function approveUser(userId) {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
-        body: JSON.stringify({ userId: userId, action: 'approve' }),
+        body: JSON.stringify({ userId: userId, action: 'approveUser' }),
+    })
+        .then(response => { // Check if the response is ok
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            console.log(response);
+            return response.json(); // Return the response as JSON
+        })
+        .then(data => {
+            console.log('Success:', data.message);
+            window.location.reload();  // Reload the page to see the changes
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+function deleteUser(userId) {
+    fetch('/admin/dashboard', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ userId: userId, action: 'deleteUser' }),
     })
         .then(response => { // Check if the response is ok
             if (!response.ok) {
