@@ -183,6 +183,18 @@ ul
     top: 16px;
 }
 
+table
+{
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+}
+
+th.button-col{
+    width: 100px;
+    text-align: center;
+}
+
 button
 {
     background-color: var(--primary);

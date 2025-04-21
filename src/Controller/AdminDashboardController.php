@@ -53,10 +53,12 @@ class AdminDashboardController extends AbstractController
             return new JsonResponse(['error' => 'Invalid request'], 400);
 
         switch ($data['action']) {
-            case 'delete':
+            case 'deleteRecipe':
                 return $this->deleteRecipe($request);
-            case 'approve':
+            case 'approveUser':
                 return $this->approveUser($request);
+            case 'deleteUser':
+                return $this->deleteUser($request);
             default:
                 return new JsonResponse(['error' => 'Invalid action'], 400);
         }
@@ -98,6 +100,25 @@ class AdminDashboardController extends AbstractController
         $this->entityManager->flush();
         
         return new JsonResponse(['message' => 'User approved'], 200);
+    }
+
+    private function deleteUser(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['userId']) || !is_numeric($data['userId'])) 
+            return new JsonResponse(['error' => 'Invalid user ID'], 400);
+
+        $user = $this->entityManager->getRepository(User::class)->find($data['userId']);
+        
+        if (!$user)
+            return new JsonResponse(['error' => 'User not found'], 404);
+        
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
+        
+        return new JsonResponse(['message' => 'User deleted'], 200);
     }
 
 }
