@@ -81,7 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-        if (!$this->isApproved) {
+        if (!$this->isApproved && !in_array('ROLE_ADMIN', $roles)) {
             $roles = ['ROLE_PENDING'];
         }
         return array_unique($roles);
