@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     var form = document.getElementById('admin-table');
+    var user_form = document.getElementById('pending-users-table');
     if (form) {
         form.addEventListener('click', function (event) {
             event.preventDefault();
@@ -22,6 +23,24 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    if(user_form)
+        user_form.addEventListener('click', function (event) {
+            event.preventDefault();
+            let userId = event.target.getAttribute('data-id');
+            switch (event.target.id) {
+                case 'approveUser':
+                    event.preventDefault();
+                    approveUser(userId);
+                    break;
+                case 'deleteUser':
+                    event.preventDefault();
+                    deleteRecipe(userId);
+                    break;
+                default:
+                    break;
+            }
+        });
 }
 );
 
@@ -48,6 +67,31 @@ function deleteRecipe(recipeId) {
             else
                 window.location.reload();
             console.log(data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+function approveUser(userId) {
+    fetch('/admin/dashboard', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ userId: userId, action: 'approve' }),
+    })
+        .then(response => { // Check if the response is ok
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            console.log(response);
+            return response.json(); // Return the response as JSON
+        })
+        .then(data => {
+            console.log('Success:', data.message);
+            window.location.reload();  // Reload the page to see the changes
         })
         .catch((error) => {
             console.error('Error:', error);

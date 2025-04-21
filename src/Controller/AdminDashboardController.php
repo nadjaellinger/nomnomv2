@@ -27,9 +27,19 @@ class AdminDashboardController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $recipes = $this->entityManager->getRepository(Recipe::class)
             ->findAll();
+        $users = $this->entityManager->getRepository(User::class)
+            ->findAll();    
+        
+        $pendingUsers = [];
+        foreach ($users as $user) {
+            if (!$user->isApproved()) {
+                $pendingUsers[] = $user;
+            }
+        }
         
         return $this->render('adminDashboard.html.twig', [
             'recipes' => $recipes,
+            'pendingUsers' => $pendingUsers,
         ]);
     }
     
@@ -39,7 +49,7 @@ class AdminDashboardController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['action']) || !isset($data['recipeId']) || !is_numeric($data['recipeId'])) 
+        if (!isset($data['action'])) 
             return new JsonResponse(['error' => 'Invalid request'], 400);
 
         switch ($data['action']) {
