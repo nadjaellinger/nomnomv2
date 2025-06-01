@@ -75,12 +75,11 @@ class EditRecipeController extends AbstractController
         }
 
         foreach($data['ingredients'] as $ingredientData) {
-            if (!isset($ingredientData['name']) || !isset($ingredientData['unit']) || !isset($ingredientData['amount'])) {
+            if (!isset($ingredientData['name'])) 
                 return false;
-            }
-            elseif (!is_numeric($ingredientData['amount'])) {
+            
+            if (($ingredientData['amount'] !== null && $ingredientData['amount'] !== '') && !is_numeric($ingredientData['amount'])) 
                 return false;
-            }
         }
         return true;
     }
@@ -109,8 +108,14 @@ class EditRecipeController extends AbstractController
                 }
             }
             $ingredient->setName($ingredientData['name']);
-            $ingredient->setUnit($ingredientData['unit']);
-            $ingredient->setAmount(intval($ingredientData['amount']));
+            if (!isset($ingredientData['unit']) || $ingredientData['unit'] == '') 
+                $ingredient->setUnit(null);
+            else
+                $ingredient->setUnit($ingredientData['unit']);
+            if (!isset($ingredientData['amount']) || $ingredientData['amount'] == '') 
+                $ingredient->setAmount(null);
+            else
+                $ingredient->setAmount(intval($ingredientData['amount']));
             $updatedIngredients->add($ingredient);
             $this->entityManager->persist($ingredient);
         }
