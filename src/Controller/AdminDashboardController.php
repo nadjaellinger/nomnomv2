@@ -36,10 +36,26 @@ class AdminDashboardController extends AbstractController
                 $pendingUsers[] = $user;
             }
         }
+
+        $currentUsers = [];
+        foreach ($users as $user) {
+            if ($user->isApproved()) {
+                $currentUsers[] = $user;
+            }
+        }
+
+        $adminUsers = [];   
+        foreach ($users as $user) {
+            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                $adminUsers[] = $user;
+            }
+        }
         
         return $this->render('adminDashboard.html.twig', [
             'recipes' => $recipes,
             'pendingUsers' => $pendingUsers,
+            'currentUsers' => $currentUsers,
+            'adminUsers' => $adminUsers, // List of users with admin role, so we wont display option to approve/delete them
         ]);
     }
     
