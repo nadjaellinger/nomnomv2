@@ -145,14 +145,28 @@ function checkAllFieldsFilled() {
 }
 
 function checkField(field) {
-  if (field.value.trim() === '') {
-    field.classList.add('is-invalid');
-  } else {
-    if (field.classList.contains('ingredient-amount') && isNaN(field.value)) {
-      field.classList.add('is-invalid');
-    } else {
-    field.classList.remove('is-invalid');
-    }
+  switch (field.name) {
+    case 'title':
+    case 'description':
+    case 'instructions':
+    case 'ingredient-name':
+      if (field.value.trim() === '') 
+        field.classList.add('is-invalid');
+      else 
+        field.classList.remove('is-invalid');
+      break;
+    case 'recipeId':
+      // Ignore recipeId field
+    case 'ingredient-amount':
+      if (field.value.trim() !== '' || isNaN(field.value)) 
+        field.classList.add('is-invalid');
+      else
+        field.classList.remove('is-invalid');
+
+    case 'ingredient-unit':
+      // can be empty, so no validation needed
+      field.classList.remove('is-invalid');
+    break;
   }
 }
 

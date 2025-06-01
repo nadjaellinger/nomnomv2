@@ -11,16 +11,16 @@ class Ingredient
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private ?int $id = null;
+    private $id;
 
     #[ORM\Column(type: "string", length: 255)]
-    private ?string $name;
+    private string $name;
 
-    #[ORM\Column(type: "text")]
-    private ?string $unit;
+    #[ORM\Column(type: "text", nullable: true)]
+    private ?string $unit = null;
 
-    #[ORM\Column(type: "integer")]
-    private ?int $amount;
+    #[ORM\Column(type: "integer", nullable: true)]
+    private ?int $amount = null;
 
     #[ORM\ManyToOne(targetEntity: Recipe::class, inversedBy: "ingredients")]
     private ?Recipe $recipe;

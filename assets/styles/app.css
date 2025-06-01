@@ -66,6 +66,11 @@
 
 }
 
+*, *::before, *::after
+{
+    box-sizing: border-box;
+}
+
 body
 {
     background-color: var(--background);
@@ -289,7 +294,7 @@ input, textarea
 {
     padding: 8px;
     border-radius: 4px;
-    border: 1px solid var(--tertiary);
+    border: 1px solid var(--bodyfont-color);
     margin: 4px 4px;
     background: none;
     width: -moz-available;
@@ -326,8 +331,15 @@ textarea.xl
 
 input.is-invalid, textarea.is-invalid
 {
-    border: 1px solid var(--error);
+    border: 2px solid var(--error);
 }
+
+input:focus, textarea:focus
+{
+    outline: none;
+    border: 2px solid var(--secondary);
+}
+
 
 input:not(:last-child),
 textarea:not(:last-child)
