@@ -51,8 +51,34 @@
                         <td>{{ user.username }}</td>
                         <td>
                             <div class="button-area">
-                                <button class="btn secondary ghost" id="approveUser" data-id="{{ user.id }}">Approve</button>
-                                <button class="btn secondary ghost" id="deleteUser" data-id="{{ user.id }}">Delete</button>
+                                <button class="btn secondary ghost" id="approveUser" data-id="{{ user.id }}">Akzeptieren</button>
+                                <button class="btn secondary ghost" id="deleteUser" data-id="{{ user.id }}">Löschen</button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Current Users</h2>
+        <table class="admin-table" id="current-users-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th class="button-col">Optionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in currentUsers %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>
+                            <div class="button-area">
+                                {% if user not in adminUsers %}
+                                    <button class="btn secondary ghost" id="deleteUser" data-id="{{ user.id }}">Löschen</button>
+                                {% else %}
+                                    <button class="btn secondary ghost" disabled>Admin</button>
+                                {% endif %}
                             </div>
                         </td>
                     </tr>

@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     var form = document.getElementById('admin-table');
-    var user_form = document.getElementById('pending-users-table');
+    var pending_user_form = document.getElementById('pending-users-table');
+    var current_user_form = document.getElementById('current-users-table');
     if (form) {
         form.addEventListener('click', function (event) {
             event.preventDefault();
@@ -24,18 +25,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if(user_form)
-        user_form.addEventListener('click', function (event) {
+    if(pending_user_form) {
+        pending_user_form.addEventListener('click', function (event) {
             event.preventDefault();
             let userId = event.target.getAttribute('data-id');
             switch (event.target.id) {
                 case 'approveUser':
                     event.preventDefault();
                     approveUser(userId);
-                    break;
-                case 'deleteRecipe':
-                    event.preventDefault();
-                    deleteRecipe(userId);
                     break;
                 case 'deleteUser':
                     event.preventDefault();
@@ -45,8 +42,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
             }
         });
-}
-);
+    }
+
+    if (current_user_form){
+        current_user_form.addEventListener('click', function (event) {
+            event.preventDefault();
+            let userId = event.target.getAttribute('data-id');
+            switch (event.target.id) {
+                case 'deleteUser':
+                    event.preventDefault();
+                    deleteUser(userId);
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
+});
 
 function deleteRecipe(recipeId) {
     fetch('/admin/dashboard', {

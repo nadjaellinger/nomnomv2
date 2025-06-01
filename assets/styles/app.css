@@ -394,6 +394,18 @@ form
     box-shadow: 0px 0px 8px 0px var(--secondary);
 }
 
+button.secondary.ghost[disabled],
+button.secondary[disabled],
+button.ghost[disabled],
+button[disabled]
+{
+    background-color: var(--secondary-10);
+    color: var(--secondary-50);
+    cursor: not-allowed;
+    border: 2px solid var(--secondary-50);
+    box-shadow: none;
+}
+
 
 /* Admin Dashboard */
 
