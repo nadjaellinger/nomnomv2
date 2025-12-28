@@ -23,6 +23,10 @@ class LandingPageController extends AbstractController
     {
         $recipe = $this->entityManager->getRepository(Recipe::class)
             ->findRandomRecipe();
+        if (!$recipe) {
+            return $this->render('newRecipePage.html.twig', [
+            ]);
+        }
         return $this->render('landingPage.html.twig', [
             'recipe' => $recipe
         ]);
