@@ -21,6 +21,10 @@ class LandingPageController extends AbstractController
     #[Route('/')]
     public function landingPage(): Response
     {
+        if (!$this->getUser()) {
+            return $this->render('landingPageAnon.html.twig', [
+            ]);
+        }
         $recipe = $this->entityManager->getRepository(Recipe::class)
             ->findRandomRecipe();
         if (!$recipe) {

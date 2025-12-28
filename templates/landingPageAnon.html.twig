@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Willkommen bei NomNom!</h1>
+    <p>Hallo lieber Gast! Wenn du zur Ellinger Familie gehörst, registriere dich bitte, um alle Funktionen zu nutzen, oder melde dich an.</p>
+
+    <div class="buttons">
+        <button class="btn primary" onclick="window.location.href='/register'">Registrieren</button>
+        <button class="btn secondary ghost" onclick="window.location.href='/login'">Login</button>
+    </div>
+{% endblock %}
