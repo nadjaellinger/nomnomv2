@@ -5,7 +5,7 @@ namespace App\Twig\Extension;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-final class FileExist extends AbstractExtension
+final class fileExist extends AbstractExtension
 {
     public function getFunctions(): array
     {
