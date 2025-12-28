@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Willkommen bei NomNom!</h1>
-    <p>Hallo lieber Gast! Wenn du zur Ellinger Familie gehörst, registriere dich bitte, um alle Funktionen zu nutzen, oder melde dich an.</p>
+    <div class="container tile landing-page-anon">
+        <h1>Willkommen bei NomNom!</h1>
+        <p>Liebe Brudis, Schwestis, Eltern und sonstige Verwandtschaft, willkommen auf unserer Rezeptplattform NomNom! Vieles funktioniert noch nicht perfekt, aber ich arbeite dran. Manchmal. Meldet euch an, ich schalte euch frei, dann könnt ihr loslegen. Gebt gerne Feedback.</p>
 
-    <div class="buttons">
-        <button class="btn primary" onclick="window.location.href='/register'">Registrieren</button>
-        <button class="btn secondary ghost" onclick="window.location.href='/login'">Login</button>
+        <div class="buttons">
+            <button class="btn primary" onclick="window.location.href='/register'">Registrieren</button>
+            <button class="btn secondary ghost" onclick="window.location.href='/login'">Anmelden</button>
+        </div>
     </div>
 {% endblock %}

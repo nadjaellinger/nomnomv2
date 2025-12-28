@@ -1,24 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <h1>Neues Rezept per Link oder Text hinzufügen</h1>
+    <form method="post" id="ImportRecipeForm" enctype="multipart/form-data">
+        <label for="url">Mittels URL</label>
+        <input type="text" name="url" id="url" placeholder="https://url.com">
+        <br>
 
-    <div class="content">
-        <h1>Neues Rezept per Link oder Text hinzufügen</h1>
-        <form method="post" id="ImportRecipeForm" enctype="multipart/form-data">
-            <label for="url">Mittels URL</label>
-            <input type="text" name="url" id="url" placeholder="https://url.com">
-            <br>
+        <label for="text">Oder Text</label>
+        <textarea name="text" id="text" cols="30" rows="10" placeholder="Dein Rezept"></textarea>
+        <br>
 
-            <label for="text">Oder Text</label>
-            <textarea name="text" id="text" cols="30" rows="10" placeholder="Dein Rezept"></textarea>
-            <br>
+        <label for="Oder Bild">Oder Bild</label>
+        <input type="file" name="image" id="image" accept="image/jpg, image/png, image/jpeg">
+        <br>
 
-            <label for="Oder Bild">Oder Bild</label>
-            <input type="file" name="image" id="image" accept="image/jpg, image/png, image/jpeg">
-            <br>
-
-            <button class="btn primary" id="addButton" type="submit">Rezept hinzufügen</button>
-        </form>
-    </div>
+        <button class="btn primary" id="addButton" type="submit">Rezept hinzufügen</button>
+    </form>
 {{ encore_entry_script_tags('ImportRecipe') }}
 {% endblock %}

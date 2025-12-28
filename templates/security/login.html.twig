@@ -4,10 +4,6 @@
 
 {% block body %}
     <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
-
         {% if app.user %}
             <div class="mb-3">
                 Du bist eingeloggt als {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
@@ -28,6 +24,9 @@
                 <input type="checkbox" name="_remember_me" id="_remember_me">
                 <label for="_remember_me">Angemeldet bleiben</label>
             </div>
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
 
         <button class="btn btn-lg btn-primary" type="submit">
             Anmelden

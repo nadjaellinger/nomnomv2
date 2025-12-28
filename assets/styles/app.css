@@ -6,48 +6,13 @@
     --light-grey: #3f424b;
     --white: #ffffff;
     
-    /* Dracula */
-    /* --primary: #ff79c6;
-    --secondary: #f1fa8c;
-    --tertiary: #50fa7b;
-    --background: #282a36;
-    --bodyfont-color: #f8f8f2; */
-
-    /* Blue and yellow */
-    
-    /* --primary: #fda821;
-    --secondary: #76c9f1;
-    --tertiary: #006ab1;
-    --background: #07122e;
-    --bodyfont-color: #fda821; */
-
-    /* 
-    Old one
-    --primary: #e74f4e; 
-    --secondary: #589b9b; 
-     --tertiary: #a9cdc5; */
-
-    /* Colourful */
-    /* --primary: #e67626;
-    --secondary: #cf1bce;
-    --tertiary: #4e32ae;
-    --background: #040211;
-    --bodyfont-color: #e67626; */
-
-    /** Red and cyan */
-    
-    /* --primary: #f8713b;
-    --secondary: #1fc5a3;
-    --tertiary: #407688;
-    --background: #060322;
-    --bodyfont-color: #adced9; */
-
     /* orange and blue */
     --primary: #d7782b;
     --secondary: #2c3341;
     --tertiary: #c74d44;
     --background: #f6f4e4;
     --bodyfont-color: #2c3341;
+    --tile: #fff0ccf0;
 
     --secondary-50: #2c334150;
     --secondary-25: #2c334125;
@@ -74,6 +39,11 @@
 body
 {
     background-color: var(--background);
+    background-image: url('https://cdn.midjourney.com/cb95b896-c2ab-448a-b1f5-c2e0ec774f2f/0_0.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: var(--bodyfont-color);
     font-family: var(--bodyfont);
     margin: 0px;
@@ -141,6 +111,7 @@ nav
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: var(--tile);
 }
 
 nav .nav-wrapper
@@ -153,10 +124,18 @@ nav .nav-wrapper
 
 .tile
 {
-    /* background-color: var(--tertiary-25); */
-    /* padding: 20px; */
-    margin: 16px 0px;
+    /* margin: 16px 0px;
     border-radius: 4px;
+    padding: 20px;
+    border-radius: 12px; */
+}
+
+.content
+{
+    background-color: var(--tile);
+    border-radius: 16px;
+    margin-top: 64px;
+    padding: 32px;
 }
 
 .flex-container
@@ -514,5 +493,4 @@ button[disabled]
         align-items: flex-start;
         gap: 4px;
     }
-
 }
