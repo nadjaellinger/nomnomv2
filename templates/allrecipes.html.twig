@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Alle Rezepte</h1>
+        <div class="recipe-summary-container">
+        {% for recipe in recipes %}
+            <div class="recipe-summary-tile">
+                <div class="recipe-summary-content">
+                    <h2>{{ recipe.name }}</h2>
+                    {% if recipe.image and remote_file_exists(recipe.image) %}
+                        <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-summary-image">
+                    {% else %}
+                        <img src="https://cdn.midjourney.com/3991d0bf-e010-41a8-a6e0-2e37375c2914/0_1.png" alt="Platzhalter Bild" class="recipe-summary-image">
+                    {% endif %}
+                    <p class="small">Erstellt von {{ recipe.user.username | default("Unbekannt") }}</p>
+
+                    {% set description = recipe.description|length > 240 ? recipe.description|slice(0, 240) ~ '...' : recipe.description %}
+                    <p>{{ description }}</p>
+                </div>
+                <div class="recipe-summary-buttons">
+                    <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/'">Zum Rezept</button>
+                </div>
+            </div>
+        {% else %}
+            <p>Keine Rezepte gefunden.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
