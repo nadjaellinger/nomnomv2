@@ -80,8 +80,19 @@ class ImportRecipeController extends AbstractController
 
     private function extractSchemaFromWebsite(string $url): string
     {
+        // get cacert
+        $perm_cacert =  __DIR__ . '/../../certs/cacert-2025-12-02.pem';
+        // Set stream context options to use the cacert file
+        $options = [
+            "ssl" => [
+                "verify_peer" => true,
+                "verify_peer_name" => true,
+                "cafile" => $perm_cacert,
+            ],
+        ];
+
         $body = null;
-        $html = file_get_contents($url);
+        $html = file_get_contents(filename: $url, use_include_path: false, context: stream_context_create(options: $options));
 
         $dom = new \DOMDocument();
         @$dom->loadHTML($html);

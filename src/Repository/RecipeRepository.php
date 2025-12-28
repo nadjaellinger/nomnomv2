@@ -44,6 +44,9 @@ class RecipeRepository extends ServiceEntityRepository
         # get all recipes
         $recipes = $this->findAllRecipes();
 
+        if (empty($recipes)) {
+            return null; // or throw an exception if you prefer
+        }
         # get a random recipe
         return $recipes[array_rand($recipes)];
     }
