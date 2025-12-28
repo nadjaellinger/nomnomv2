@@ -35,3 +35,9 @@ yarn-error.log
 /config/secrets/*
 
 /public/uploads/*
+
+###env###
+.env.local
+.env.*.local
+.env
+.htpasswd
