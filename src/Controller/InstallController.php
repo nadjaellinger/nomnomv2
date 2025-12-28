@@ -56,7 +56,7 @@ final class InstallController extends AbstractController
   <h1>Create initial admin</h1>
   <form method="post">
     <input type="hidden" name="token" value="{$this->escapeHtml($token)}">
-    <label>Email <input name="email" type="email" required></label><br><br>
+    <label>Username <input name="username" type="text" required></label><br><br>
     <label>Password <input name="password" type="password" required></label><br><br>
     <button type="submit">Create admin</button>
   </form>
