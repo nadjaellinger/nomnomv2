@@ -1,11 +1,4 @@
 # Protect the installer route
-<!-- SetEnvIf Request_URI "^/__install(?:/|$)" REQUIRE_AUTH=1
-SetEnvIf Request_URI "!^/__install(?:/|$)" NO_AUTH=1
-
-AuthType Basic
-AuthName "Installer"
-AuthUserFile "/nomnomv2/.htpasswd" -->
-
 <!-- <RequireAny>
     Require env NO_AUTH
     Require valid-user
