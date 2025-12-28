@@ -137,6 +137,8 @@ class ImportRecipeController extends AbstractController
             $recipe->setDescription($output['description']) ?? '';
             $recipe->setInstructions($output['instructions']) ?? '';
             $recipe->setImage($output['image']) ?? '';
+            $user = $this->getUser();
+            $recipe->setUser($user);
             try
             {
                 foreach ($output['ingredients'] as $ingredient) {

@@ -55,7 +55,8 @@ class EditRecipeController extends AbstractController
         if (!$recipe)
             return new JsonResponse(['error' => 'Recipe not found'], 404);
         
-
+        $user = $this->getUser();
+        $recipe->setUser($user);
         $this->setCoreAttributes($recipe, $data);
         $this->setIngredients($recipe, $data, $id);
 
@@ -159,6 +160,9 @@ class EditRecipeController extends AbstractController
             $recipe->setImage('default.jpg');
         $this->setCoreAttributes($recipe, $data);
         $this->setIngredients($recipe, $data, 0);
+
+        $user = $this->getUser();
+        $recipe->setUser($user);
 
         try {
             $this->entityManager->persist($recipe);
