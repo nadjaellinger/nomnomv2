@@ -28,19 +28,23 @@ final class InstallController extends AbstractController
 
         // Already installed? Disappear.
         if (is_file($flagFile)) {
-            throw $this->createNotFoundException();
+            return new Response('Already installed. Flag file exists', 400);
         }
 
         // Users exist? Disappear (and optionally lock permanently).
         if ($users->count([]) > 0) {
             @file_put_contents($flagFile, 'users-exist '.date('c'));
-            throw $this->createNotFoundException();
+            return new Response('Already installed. Users exist', 400);
         }
 
         // Token check (GET or POST)
         $token = $request->query->get('token') ?? $request->request->get('token');
-        if (!$token || !hash_equals($installToken, $token)) {
-            throw $this->createNotFoundException();
+        if (!$token) {
+            return new Response('Missing install token', 400);
+        }
+
+        if ($token !== $installToken) {
+            return new Response('Invalid install token', 403);
         }
 
         if ($request->isMethod('GET')) {
