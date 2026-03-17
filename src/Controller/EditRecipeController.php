@@ -11,14 +11,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\Exception\ORMException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Service\UploadService;
 
 class EditRecipeController extends AbstractController
 {
     
     private $entityManager;
-    public function __construct(EntityManagerInterface $entityManager)
+    private UploadService $uploadService;
+
+    public function __construct(EntityManagerInterface $entityManager, UploadService $uploadService)
     {
         $this->entityManager = $entityManager;
+        $this->uploadService = $uploadService;
     }
 
     #[Route('/rezept/{id}/bearbeiten', methods: ['GET'])]
@@ -43,7 +48,7 @@ class EditRecipeController extends AbstractController
     public function updateRecipe(Request $request, $id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        $data = json_decode($request->getContent(), true);
+        $data = $this->getRecipeDataFromRequest($request);
 
         if (!$this->isDataComplete($data)) 
             return new JsonResponse(['error' => 'Missing required fields'], 400);
@@ -57,6 +62,12 @@ class EditRecipeController extends AbstractController
         
         $user = $this->getUser();
         $recipe->setUser($user);
+
+        $imageErrorResponse = $this->handleImageUpload($request, $recipe);
+        if ($imageErrorResponse !== null) {
+            return $imageErrorResponse;
+        }
+
         $this->setCoreAttributes($recipe, $data);
         $this->setIngredients($recipe, $data, $id);
 
@@ -150,14 +161,22 @@ class EditRecipeController extends AbstractController
     public function createRecipe(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        $data = json_decode($request->getContent(), true);
+        $data = $this->getRecipeDataFromRequest($request);
 
         if (!$this->isDataComplete($data)) 
             return new JsonResponse(['error' => 'Missing required fields'], 400);
 
         $recipe = new Recipe();
-        if (!isset($data['image']))
-            $recipe->setImage('default.jpg');
+
+        $imageErrorResponse = $this->handleImageUpload($request, $recipe);
+        if ($imageErrorResponse !== null) {
+            return $imageErrorResponse;
+        }
+
+        if (!$recipe->getImage()) {
+            $recipe->setImage('https://cdn.midjourney.com/3991d0bf-e010-41a8-a6e0-2e37375c2914/0_1.png');
+        }
+
         $this->setCoreAttributes($recipe, $data);
         $this->setIngredients($recipe, $data, 0);
 
@@ -175,5 +194,64 @@ class EditRecipeController extends AbstractController
             return new JsonResponse(['error' => 'Failed to retrieve recipe ID after creation'], 500);
         }
         return new JsonResponse(['message' => 'Recipe created successfully', 'redirect' => '/rezept/'.$recipeId]);
+    }
+
+    /**
+     * Retrieves recipe data from the request, supporting both form-encoded and raw JSON payloads.
+     * 
+     * @param Request $request
+     * @return array
+     */
+    private function getRecipeDataFromRequest(Request $request): array
+    {
+        $rawJson = $request->request->get('recipeData');
+        if (is_string($rawJson) && $rawJson !== '') {
+            $decoded = json_decode($rawJson, true);
+            return is_array($decoded) ? $decoded : []; # Fallback to empty array if JSON is invalid
+        }
+
+        $decoded = json_decode($request->getContent(), true);
+        return is_array($decoded) ? $decoded : []; # Fallback to empty array if JSON is invalid
+    }
+
+    /**
+     * Handles image upload for a recipe, including validation and storage.
+     * 
+     * @param Request $request
+     * @param Recipe $recipe
+     * @return JsonResponse|null Returns a JsonResponse on error, or null on success.
+     */
+    private function handleImageUpload(Request $request, Recipe $recipe): ?JsonResponse
+    {
+        $imageFile = $request->files->get('image');
+        if (!$imageFile instanceof UploadedFile) {
+            return null;
+        }
+
+        if (!$imageFile->isValid()) {
+            return new JsonResponse(['error' => 'Image upload failed'], 400);
+        }
+
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+        if (!in_array($imageFile->getMimeType(), $allowedMimeTypes, true)) {
+            return new JsonResponse(['error' => 'Invalid image type. Allowed: JPG, PNG, WEBP, GIF'], 400);
+        }
+
+        if ($imageFile->getSize() > 5 * 1024 * 1024) {
+            return new JsonResponse(['error' => 'Image is too large (max 5MB)'], 400);
+        }
+
+        $previousImage = $recipe->getImage();
+        $storedFileName = $this->uploadService->upload($imageFile);
+        $recipe->setImage('/uploads/' . $storedFileName);
+
+        if (is_string($previousImage) && str_starts_with($previousImage, '/uploads/')) {
+            $oldFilePath = $this->getParameter('kernel.project_dir') . '/public' . $previousImage;
+            if (is_file($oldFilePath)) {
+                @unlink($oldFilePath); #delete old image file
+            }
+        }
+
+        return null;
     }
 }

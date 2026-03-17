@@ -52,13 +52,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function createRecipe(data) {
+  var formData = buildFormData(data);
   fetch('/rezept/neu', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(data)
+    body: formData
   })
   .then(response => { // Check if the response is ok
     if (!response.ok) {
@@ -81,13 +78,10 @@ function createRecipe(data) {
 }
 
 function saveRecipe(data, recipeId) {
+  var formData = buildFormData(data);
   fetch(`/rezept/${recipeId}/bearbeiten`, {  
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(data)
+    body: formData
   })
   .then(response => { // Check if the response is ok
     if (!response.ok) {
@@ -130,6 +124,19 @@ function getFormData() {
   };
   var recipeId = document.getElementById('recipeId').value || 0;
   return {data, recipeId};
+}
+
+function buildFormData(data) {
+  var formData = new FormData();
+  var imageInput = document.getElementById('image');
+
+  formData.append('recipeData', JSON.stringify(data));
+
+  if (imageInput && imageInput.files && imageInput.files.length > 0) {
+    formData.append('image', imageInput.files[0]);
+  }
+
+  return formData;
 }
 
 function checkAllFieldsFilled() {

@@ -7,7 +7,7 @@
         <h2>{{ recipe.name }}</h2>
     </div>
     
-    <form method="post" id="recipeForm">
+    <form method="post" id="recipeForm" enctype="multipart/form-data">
         <input type="hidden" id="recipeId" name="id" value="{{ recipe.id }}">
             <div class="form-group">
                 <label for="name">Name</label>
@@ -20,9 +20,11 @@
             </div>
 
             <div class="form-group">
-                <label for="image">Bild</label>
-                <input type="text" class="form-control" id="image" name="image" value="{{ recipe.image }}">
-                <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
+                <label for="image">Bild hochladen (optional)</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/jpeg,image/png,image/webp,image/gif">
+                {% if recipe.image %}
+                    <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
+                {% endif %}
             </div>
 
             <div class="form-group">
