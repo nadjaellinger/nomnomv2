@@ -13,11 +13,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\UploadService;
+use Container20aKGCc\getDoctrine_Orm_Messenger_EventSubscriber_DoctrineClearEntityManagerService;
 
 class EditRecipeController extends AbstractController
 {
     
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
     private UploadService $uploadService;
 
     public function __construct(EntityManagerInterface $entityManager, UploadService $uploadService)
@@ -27,7 +28,7 @@ class EditRecipeController extends AbstractController
     }
 
     #[Route('/rezept/{id}/bearbeiten', methods: ['GET'])]
-    public function editRecipe($id): Response
+    public function editRecipe(int $id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $recipe = $this->entityManager->getRepository(Recipe::class)
@@ -38,6 +39,9 @@ class EditRecipeController extends AbstractController
                 'No rezept found for id '.$id
             );
         }
+        if (!$this->isUserOwner($recipe)) {
+            throw $this->createAccessDeniedException('You are not the owner of this recipe');
+        }
         
         return $this->render('editRecipePage.html.twig', [
             'recipe' => $recipe
@@ -45,7 +49,7 @@ class EditRecipeController extends AbstractController
     }
     
     #[Route('/rezept/{id}/bearbeiten', methods: ['POST'])]
-    public function updateRecipe(Request $request, $id): Response
+    public function updateRecipe(Request $request, int $id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $data = $this->getRecipeDataFromRequest($request);
@@ -60,8 +64,9 @@ class EditRecipeController extends AbstractController
         if (!$recipe)
             return new JsonResponse(['error' => 'Recipe not found'], 404);
         
-        $user = $this->getUser();
-        $recipe->setUser($user);
+        if (!$this->isUserOwner($recipe)) {
+            return new JsonResponse(['error' => 'You are not the owner of this recipe'], 403);
+        }
 
         $imageErrorResponse = $this->handleImageUpload($request, $recipe);
         if ($imageErrorResponse !== null) {
@@ -69,7 +74,7 @@ class EditRecipeController extends AbstractController
         }
 
         $this->setCoreAttributes($recipe, $data);
-        $this->setIngredients($recipe, $data, $id);
+        $this->setIngredients($recipe, $data);
 
         try {
             $this->entityManager->persist($recipe);
@@ -80,7 +85,7 @@ class EditRecipeController extends AbstractController
         return new JsonResponse(['message' => 'Recipe updated successfully', 'redirect' => '/rezept/'.$id]);
     }
 
-    public function isDataComplete($data): bool
+    public function isDataComplete(array $data): bool
     {
         if (!isset($data['name']) || !isset($data['description']) || !isset($data['instructions']) || !isset($data['ingredients'])) {
             return false;
@@ -96,14 +101,14 @@ class EditRecipeController extends AbstractController
         return true;
     }
 
-    public function setCoreAttributes($recipe, $data): void
+    public function setCoreAttributes(Recipe $recipe, array $data): void
     {
         $recipe->setName($data['name'] ?? $recipe->getName());
             $recipe->setDescription($data['description'] ?? $recipe->getDescription());
             $recipe->setInstructions($data['instructions'] ?? $recipe->getInstructions());
     }
 
-    public function setIngredients($recipe, $data, $id): void
+    private function setIngredients(Recipe $recipe, array $data): void
     {
         $existingIngredients = $recipe->getIngredients();
         $updatedIngredients = new \Doctrine\Common\Collections\ArrayCollection();
@@ -178,7 +183,7 @@ class EditRecipeController extends AbstractController
         }
 
         $this->setCoreAttributes($recipe, $data);
-        $this->setIngredients($recipe, $data, 0);
+        $this->setIngredients($recipe, $data);
 
         $user = $this->getUser();
         $recipe->setUser($user);
@@ -253,5 +258,17 @@ class EditRecipeController extends AbstractController
         }
 
         return null;
+    }
+
+    /**
+     * Checks if the current user is the owner of the given recipe.
+     * 
+     * @param Recipe $recipe
+     * @return bool
+     */
+    private function isUserOwner(Recipe $recipe): bool
+    {
+        $user = $this->getUser();
+        return $user && $recipe->getUser();
     }
 }
