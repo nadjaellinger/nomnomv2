@@ -20,9 +20,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class ImportRecipeController extends AbstractController
 {
 
-    private $entityManager;
-    private $openAIService;
-    private $uploadService;
+    private EntityManagerInterface $entityManager;
+    private OpenAIService $openAIService;
+    private UploadService $uploadService;
     public function __construct(EntityManagerInterface $entityManager, OpenAIService $openAIService, UploadService $uploadService)
     {
         $this->entityManager = $entityManager;
@@ -78,8 +78,40 @@ class ImportRecipeController extends AbstractController
         return $text;
     }
 
+    private function validateUrl(string $url): void
+    {
+        // Only allow http and https schemes
+        $parsed = parse_url($url);
+        if (!$parsed || !isset($parsed['scheme']) || !in_array(strtolower($parsed['scheme']), ['http', 'https'], true)) {
+            throw new Exception('Invalid URL: only http and https are allowed');
+        }
+
+        $host = $parsed['host'] ?? '';
+        if ($host === '') {
+            throw new Exception('Invalid URL: missing host');
+        }
+
+        // Resolve hostname to IP
+        $ip = gethostbyname($host);
+        if ($ip === $host && !filter_var($host, FILTER_VALIDATE_IP)) {
+            throw new Exception('Invalid URL: could not resolve host');
+        }
+
+        // Block private, loopback, link-local, and reserved IP ranges
+        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+            throw new Exception('Invalid URL: requests to internal or reserved addresses are not allowed');
+        }
+
+        // Explicitly block cloud metadata endpoints
+        if ($ip === '169.254.169.254' || $ip === '100.100.100.200') {
+            throw new Exception('Invalid URL: requests to metadata endpoints are not allowed');
+        }
+    }
+
     private function extractSchemaFromWebsite(string $url): string
     {
+        $this->validateUrl($url);
+
         // get cacert
         $perm_cacert =  __DIR__ . '/../../certs/cacert-2025-12-02.pem';
         // Set stream context options to use the cacert file
@@ -128,7 +160,7 @@ class ImportRecipeController extends AbstractController
         return $body;
     }
 
-    private function createRecipe(string $content): Recipe
+    private function createRecipe(string $content): Recipe 
     {    
         try {
             $recipe = new Recipe();
@@ -153,14 +185,16 @@ class ImportRecipeController extends AbstractController
                     $this->entityManager->flush();
                 }
             } catch (Throwable $e) {
-                
+                $output = 'Caught exception: ' .  $e->getMessage() . "\n";
+                throw new Exception($output);
             }
+            $this->entityManager->persist($recipe);
+            $this->entityManager->flush();
+            return $recipe;
         } 
         catch (Throwable $e) {
             $output = 'Caught exception: ' .  $e->getMessage() . "\n";
+            throw new Exception($output);
         }
-        $this->entityManager->persist($recipe);
-        $this->entityManager->flush();
-        return $recipe;
     }
 }
