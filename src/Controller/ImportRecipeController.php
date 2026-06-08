@@ -168,7 +168,18 @@ class ImportRecipeController extends AbstractController
             $recipe->setName($output['name']) ?? '';
             $recipe->setDescription($output['description']) ?? '';
             $recipe->setInstructions($output['instructions']) ?? '';
-            $recipe->setImage($output['image']) ?? '';
+            $imageUrl = $output['image'] ?? '';
+            if ($imageUrl !== '') {
+                try {
+                    $this->validateUrl($imageUrl);
+                    $recipe->setImage($imageUrl);
+                } catch (Exception $e) {
+                    // Unsafe or invalid image URL — store no image rather than a malicious URL
+                    $recipe->setImage('');
+                }
+            } else {
+                $recipe->setImage('');
+            }
             $user = $this->getUser();
             $recipe->setUser($user);
             try
