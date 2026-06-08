@@ -43,7 +43,7 @@ final class InstallController extends AbstractController
             return new Response('Missing install token', 400);
         }
 
-        if ($token !== $installToken) {
+        if (!password_verify($token, $installToken)) {
             return new Response('Invalid install token', 403);
         }
 
