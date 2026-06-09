@@ -1,50 +1,68 @@
 {% extends 'base.html.twig' %}
 
+{#
+   New recipe form — editorial style.
+   All JS hooks preserved: #recipeForm, #title, #description, #image,
+   #ingredientList, .ingredient + .ingredient-name/-amount/-unit/-id,
+   .removeIngredient, #addIngredient, #createRecipe, #instructions.
+   Requires DM Serif Display + Spectral (base.html.twig) and editorial.css.
+#}
+
 {% block body %}
-<h1> Neues Rezept erstellen </h1>
-<div class="tile recipe-edit">
-    <div class="tile-header">
-        <h2>Neues Rezept</h2>
+<div class="recipe-editorial re-form">
+
+    <div class="re-top">
+        <span class="re-kicker">Neues Rezept</span>
+        <span class="re-issue">NomNom · Familienküche</span>
     </div>
-    
+    <h1 class="re-title">Rezept erstellen</h1>
+
     <form method="post" id="recipeForm" enctype="multipart/form-data">
         <input type="hidden" id="recipeId" name="id" value="">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="title" name="name" value="">
-            </div>
 
-            <div class="form-group">
-                <label for="description">Beschreibung</label>
-                <textarea class="form-control" id="description" name="description"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="image">Bild hochladen (optional)</label>
-                <input type="file" class="form-control" id="image" name="image" accept="image/jpeg,image/png,image/webp,image/gif">
-            </div>
-
-            <div class="form-group">
-                <label for="ingredients">Zutaten</label>
-                <div id="ingredientList">
-                    <div class="flex-row ingredient align-center">
-                        <input type="text" class="form-control ingredient-name"  name="ingredient-name" value="" placeholder="Zutat">
-                        <input type="number" class="form-control ingredient-amount" name="ingredient-amount" value="" placeholder="Menge">
-                        <input type="text" class="form-control ingredient-unit" name="ingredient-unit" value="" placeholder="Einheit">
-                        <input type="hidden" class="form-control ingredient-id" name="ingredient-id" value="">
-                        <button type="button" class="btn btn-minus removeIngredient">X</button>
-                    </div>
-                </div>
-                <div class="flex-row end">                   
-                    <button type="button" class="btn btn-success secondary" id="addIngredient">Zutat hinzufügen</button>
-                </div>
-                <div class="form-group">
-                    <label for="instructions">Anleitung</label>
-                    <textarea class="form-control" id="instructions" name="instructions"></textarea>
-                </div>
-                <button type="submit" class="btn btn-success" action="createRecipe" id="createRecipe">Rezept speichern</button>
-            </form>
+        <div class="form-group">
+            <label for="title">Name</label>
+            <input type="text" class="form-control" id="title" name="name" value="" placeholder="z. B. Großmutters Apfelkuchen">
         </div>
+
+        <div class="form-group">
+            <label for="description">Beschreibung</label>
+            <textarea class="form-control" id="description" name="description" placeholder="Worum geht es bei diesem Rezept?"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="image">Bild hochladen (optional)</label>
+            <input type="file" class="form-control" id="image" name="image" accept="image/jpeg,image/png,image/webp,image/gif">
+        </div>
+
+        <hr class="re-divide">
+
+        <div class="form-group">
+            <label for="ingredients">Zutaten</label>
+            <div id="ingredientList">
+                <div class="flex-row ingredient align-center">
+                    <input type="text" class="form-control ingredient-name" name="ingredient-name" value="" placeholder="Zutat">
+                    <input type="number" class="form-control ingredient-amount" name="ingredient-amount" value="" placeholder="Menge">
+                    <input type="text" class="form-control ingredient-unit" name="ingredient-unit" value="" placeholder="Einheit">
+                    <input type="hidden" class="form-control ingredient-id" name="ingredient-id" value="">
+                    <button type="button" class="btn btn-minus removeIngredient">X</button>
+                </div>
+            </div>
+            <div class="flex-row end">
+                <button type="button" class="btn btn-success secondary" id="addIngredient">Zutat hinzufügen</button>
+            </div>
+        </div>
+
+        <hr class="re-divide">
+
+        <div class="form-group">
+            <label for="instructions">Anleitung</label>
+            <textarea class="form-control xl" id="instructions" name="instructions" placeholder="Ein Schritt pro Zeile — so erscheinen sie später nummeriert."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success" action="createRecipe" id="createRecipe">Rezept speichern</button>
+    </form>
+
 </div>
 {{ encore_entry_script_tags('saveRecipe') }}
 {{ encore_entry_script_tags('newIngredient') }}

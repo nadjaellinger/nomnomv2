@@ -1,28 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <h1>Alle Rezepte</h1>
-        <div class="recipe-summary-container">
-        {% for recipe in recipes %}
-            <div class="recipe-summary-tile">
-                <div class="recipe-summary-content">
-                    <h2>{{ recipe.name }}</h2>
-                    {% if recipe.image and (recipe.image starts with '/' or remote_file_exists(recipe.image)) %}
-                        <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-summary-image">
-                    {% else %}
-                        <img src="https://cdn.midjourney.com/3991d0bf-e010-41a8-a6e0-2e37375c2914/0_1.png" alt="Platzhalter Bild" class="recipe-summary-image">
-                    {% endif %}
-                    <p class="small">Erstellt von {{ recipe.user.username | default("Unbekannt") }}</p>
+{#
+   Editorial browse grid for NomNom. Photo-free, type-led cards.
+   Requires DM Serif Display + Spectral (base.html.twig) and the
+   .recipe-index styles in editorial.css.
+#}
 
-                    {% set description = recipe.description|length > 240 ? recipe.description|slice(0, 240) ~ '...' : recipe.description %}
-                    <p>{{ description }}</p>
+{% block body %}
+    <div class="recipe-index">
+
+        <div class="re-index-top">
+            <span>Alle Rezepte</span>
+            <span class="re-issue">{{ recipes|length }} {{ recipes|length == 1 ? 'Rezept' : 'Rezepte' }}</span>
+        </div>
+
+        <h1 class="re-index-title">Unsere Familienküche</h1>
+
+        <div class="re-grid">
+            {% for recipe in recipes %}
+                {% set excerpt = recipe.description|length > 160
+                    ? recipe.description|slice(0, 160)|trim ~ '…'
+                    : recipe.description %}
+                <div class="re-card">
+                    <div class="re-card-hero-image">
+                        {% if recipe.image %}
+                            <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="re-card-image">
+                        {% else %}
+                            <div class="re-card-placeholder"></div>
+                        {% endif %}
+                    </div>
+                    <div class="re-card-kicker">
+                        <span>von {{ recipe.user.username|default('Unbekannt') }}</span>
+                        {% if recipe.ingredients|length %}
+                            <span class="re-k-dot">·</span>
+                            <span class="re-k-sub">{{ recipe.ingredients|length }} Zutaten</span>
+                        {% endif %}
+                    </div>
+                    <h2 class="re-card-title">{{ recipe.name }}</h2>
+                    <p class="re-card-excerpt">{{ excerpt }}</p>
+                    <div class="re-card-foot">
+                        <button type="button" class="re-card-link"
+                                onclick="window.location.href='/rezept/{{ recipe.id }}/'">
+                            Zum Rezept →
+                        </button>
+                        <svg class="re-card-glyph" viewBox="0 0 140 120" fill="none" stroke="currentColor"
+                             stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <ellipse cx="70" cy="58" rx="50" ry="13"/>
+                            <path d="M20 58 a50 42 0 0 0 100 0"/>
+                        </svg>
+                    </div>
                 </div>
-                <div class="recipe-summary-buttons">
-                    <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/'">Zum Rezept</button>
-                </div>
-            </div>
-        {% else %}
-            <p>Keine Rezepte gefunden.</p>
-        {% endfor %}
+            {% else %}
+                <p class="re-empty">Keine Rezepte gefunden.</p>
+            {% endfor %}
+        </div>
+
     </div>
 {% endblock %}

@@ -1,9 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Registrierung erfolgreich{% endblock %}
+{% block title %}Registrierung erfolgreich · NomNom{% endblock %}
+
+{#
+   Registration success — editorial confirmation card.
+   Requires DM Serif Display + Spectral (base.html.twig) and editorial.css.
+#}
 
 {% block body %}
-    <h1>Registrierung erfolgreich</h1>
-    <p>Deine Registrierung wurde erfolgreich eingegangen. Bitte warte auf die Freischaltung durch einen Administrator (Nadja).</p>
+<div class="recipe-editorial re-form re-auth re-confirm">
+
+    <svg class="re-auth-glyph" viewBox="0 0 140 120" fill="none" stroke="currentColor" stroke-width="2.4"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <g opacity="0.85">
+            <path d="M52 40 q-7 -9 0 -18 q7 -9 0 -18"/>
+            <path d="M70 38 q-7 -9 0 -18 q7 -9 0 -18"/>
+            <path d="M88 40 q-7 -9 0 -18 q7 -9 0 -18"/>
+        </g>
+        <ellipse cx="70" cy="58" rx="50" ry="13"/>
+        <path d="M20 58 a50 42 0 0 0 100 0"/>
+    </svg>
+    <div class="re-kicker">Geschafft</div>
+    <h1 class="re-title">Registrierung erfolgreich</h1>
+
+    <p>Deine Registrierung ist eingegangen. Bitte warte auf die Freischaltung durch einen Administrator (Nadja).</p>
     <p>Du wirst benachrichtigt, sobald dein Konto aktiviert wurde.</p>
+
+    <div class="re-switch">
+        <a href="/login">Zurück zur Anmeldung</a>
+    </div>
+
+</div>
 {% endblock %}

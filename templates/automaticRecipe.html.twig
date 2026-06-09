@@ -1,21 +1,41 @@
 {% extends 'base.html.twig' %}
 
+{#
+   Import recipe (per Link / Text / Bild) — editorial style.
+   JS hooks preserved: #ImportRecipeForm, #url, #text, #image, #addButton,
+   and encore_entry_script_tags('ImportRecipe').
+   Requires DM Serif Display + Spectral (base.html.twig) and editorial.css.
+#}
+
 {% block body %}
-    <h1>Neues Rezept per Link oder Text hinzufügen</h1>
+<div class="recipe-editorial re-form">
+
+    <div class="re-top">
+        <span class="re-kicker">Import</span>
+        <span class="re-issue">NomNom · Familienküche</span>
+    </div>
+    <h1 class="re-title">Rezept per Link oder Text hinzufügen</h1>
+    <p class="re-lede">Füge eine Adresse ein, kopiere den Text oder lade ein Foto hoch — wir machen daraus ein Rezept.</p>
+
     <form method="post" id="ImportRecipeForm" enctype="multipart/form-data">
-        <label for="url">Mittels URL</label>
-        <input type="text" name="url" id="url" placeholder="https://url.com">
-        <br>
+        <div class="form-group">
+            <label for="url">Mittels URL</label>
+            <input type="text" name="url" id="url" placeholder="https://url.com">
+        </div>
 
-        <label for="text">Oder Text</label>
-        <textarea name="text" id="text" cols="30" rows="10" placeholder="Dein Rezept"></textarea>
-        <br>
+        <div class="form-group">
+            <label for="text">Oder Text</label>
+            <textarea name="text" id="text" placeholder="Dein Rezept"></textarea>
+        </div>
 
-        <label for="Oder Bild">Oder Bild</label>
-        <input type="file" name="image" id="image" accept="image/jpg, image/png, image/jpeg">
-        <br>
+        <div class="form-group">
+            <label for="image">Oder Bild</label>
+            <input type="file" name="image" id="image" accept="image/jpg, image/png, image/jpeg">
+        </div>
 
         <button class="btn primary" id="addButton" type="submit">Rezept hinzufügen</button>
     </form>
+
+</div>
 {{ encore_entry_script_tags('ImportRecipe') }}
 {% endblock %}
