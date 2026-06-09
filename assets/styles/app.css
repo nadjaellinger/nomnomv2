@@ -8,7 +8,9 @@
 
 :root {
   --primary: rgb(160, 53, 19);
+  --primary-20: rgba(160, 53, 19, 0.2);
   --secondary: rgba(44, 51, 65);
+  --secondary-10: rgba(44, 51, 65, 0.1);
   --tertiary: rgba(255, 193, 7);
 }
 
@@ -244,6 +246,8 @@ body:has(.recipe-editorial) {
   --re-accent: var(--primary);
   font-family: "Spectral", Georgia, serif;
   color: var(--re-ink);
+  max-width: 1200px;
+margin: 0 auto;
 }
 .recipe-index .re-index-top {
   display: flex;
@@ -411,7 +415,7 @@ body:has(.recipe-editorial) {
     0 24px 60px -32px rgba(44, 51, 65, 0.28);
 }
 .re-form {
-  max-width: 780px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 .re-form .re-top {
@@ -476,6 +480,10 @@ body:has(.recipe-editorial) {
   color: var(--re-soft);
 }
 
+.re-form .re-preview {
+  margin: 12px auto;
+}
+
 /* ingredient rows */
 .re-form #ingredientList {
   display: flex;
@@ -487,6 +495,7 @@ body:has(.recipe-editorial) {
   gap: 10px;
   margin: 0;
   align-items: center;
+  display: flex;
 }
 .re-form .ingredient input {
   width: auto;
@@ -503,6 +512,23 @@ body:has(.recipe-editorial) {
 }
 .re-form .flex-row.end {
   margin-top: 14px;
+}
+
+.re-form .btn-minus {
+  background: var(--secondary);
+  color: white;
+  border: none;
+  border-radius: 32px;
+  padding: 7px 14px;
+}
+
+.re-form .btn-minus::after {
+    content: "−";
+}
+
+.re-form .btn-minus:hover {
+  box-shadow: 0 12px 26px -12px rgba(44, 51, 65, 0.65);
+  cursor: pointer;
 }
 
 /* primary submit — editorial ink button */
@@ -544,6 +570,7 @@ body:has(.recipe-editorial) {
 .re-form .recipe-image {
   border-radius: 6px;
   margin-top: 14px;
+  width: 520px;
 }
 .re-form .re-divide {
   margin: 30px 0;
@@ -654,6 +681,7 @@ body:has(.recipe-editorial) {
   border-color: var(--re-accent);
   color: var(--re-accent);
   box-shadow: none;
+  cursor: pointer;
 }
 .recipe-admin .button-area .btn[disabled] {
   border-style: dashed;
@@ -747,7 +775,7 @@ body:has(.recipe-editorial) {
    ============================================================ */
 nav {
   background-color: #fffdf6;
-  border-bottom: 1px solid rgba(44, 51, 65, 0.14);
+  /* border-bottom: 1px solid rgba(44, 51, 65, 0.14); */
 }
 nav .nav-wrapper {
   width: var(--content-width);
