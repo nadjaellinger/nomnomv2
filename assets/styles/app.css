@@ -18,6 +18,10 @@ body:has(.recipe-editorial) {
   background-image: none;
   background-color: var(--background);
 }
+
+body {
+  margin: 0px;
+}
 .content:has(.recipe-editorial) {
   background-color: #fffdf6;
   padding: 56px 64px;
@@ -33,6 +37,8 @@ body:has(.recipe-editorial) {
   --re-accent: var(--primary);
   font-family: "Spectral", Georgia, serif;
   color: var(--re-ink);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* ---- top kicker line ---- */
@@ -45,12 +51,22 @@ body:has(.recipe-editorial) {
   font-weight: 600;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: var(--re-accent);
+  color: var(--re-soft);
   padding-bottom: 18px;
   border-bottom: 1px solid var(--re-ink);
 }
 .recipe-editorial .re-top .re-issue {
   color: var(--re-soft);
+}
+
+.recipe-editorial .re-image{  
+    margin: 22px 0 0;
+    overflow: hidden;
+}
+.recipe-editorial .re-image img{
+    object-fit: cover;
+    width: 100%;
+    max-height: 320px;
 }
 
 /* ---- title + edit action ---- */
@@ -69,7 +85,7 @@ body:has(.recipe-editorial) {
   letter-spacing: -0.01em;
   color: var(--re-ink);
   margin: 0;
-  max-width: 16ch;
+  max-width: 80ch;
 }
 .recipe-editorial .re-meta {
   display: flex;
@@ -77,13 +93,21 @@ body:has(.recipe-editorial) {
   gap: 12px;
   font-size: 19px;
   color: var(--re-soft);
-  margin-top: 14px;
+  margin-top: 0px;
 }
 .recipe-editorial .re-meta em {
   font-style: italic;
 }
 .recipe-editorial .re-meta .re-dot {
   color: var(--re-accent);
+}
+
+.recipe-editorial .re-description {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--re-line);
+    padding-bottom: 22px;
 }
 
 /* edit button: quiet editorial link, reuses nothing from .btn */
@@ -98,8 +122,7 @@ body:has(.recipe-editorial) {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--re-ink);
-  border-bottom: 1px solid var(--re-accent);
+  color: var(--re-accent);
   cursor: pointer;
 }
 .recipe-editorial .re-edit:hover {
@@ -111,9 +134,9 @@ body:has(.recipe-editorial) {
 .recipe-editorial .re-lede {
   font-size: 21px;
   line-height: 1.6;
-  max-width: 58ch;
+  max-width: 80ch;
   margin: 22px 0 0;
-  color: #3a342b;
+  color: var(--re-soft);
 }
 
 /* ---- line-art figure band (the photo replacement) ---- */
@@ -198,7 +221,7 @@ body:has(.recipe-editorial) {
   margin: 0;
   font-size: 18px;
   line-height: 1.62;
-  color: #322c24;
+  color: var(--re-soft);
 }
 .recipe-editorial .re-num {
   font-family: "DM Serif Display", Georgia, serif;
@@ -210,7 +233,7 @@ body:has(.recipe-editorial) {
 .recipe-editorial .re-prep .re-block {
   font-size: 18px;
   line-height: 1.62;
-  color: #322c24;
+  color: var(--re-soft);
 }
 
 /* ---- footer rule ---- */
@@ -353,7 +376,7 @@ margin: 0 auto;
 .recipe-index .re-card-excerpt {
   font-size: 16px;
   line-height: 1.58;
-  color: #3a342b;
+  color: var(--re-soft);
   margin: 0;
   flex: 1 1 auto;
 }
@@ -532,7 +555,8 @@ margin: 0 auto;
 }
 
 /* primary submit — editorial ink button */
-.re-form button[type="submit"] {
+.re-form button[type="submit"],
+.btn.btn-success {
   background: var(--re-ink);
   color: #fffdf6;
   border: none;
@@ -546,7 +570,8 @@ margin: 0 auto;
   text-transform: uppercase;
   cursor: pointer;
 }
-.re-form button[type="submit"]:hover {
+.re-form button[type="submit"]:hover,
+.btn.btn-success:hover {
   box-shadow: 0 12px 26px -12px rgba(44, 51, 65, 0.65);
 }
 .re-form #addIngredient {
@@ -589,6 +614,8 @@ margin: 0 auto;
   --re-accent: var(--primary);
   font-family: "Spectral", Georgia, serif;
   color: var(--re-ink);
+  max-width: 1200px;
+    margin: 0 auto; 
 }
 .recipe-admin .re-top {
   display: flex;
@@ -751,7 +778,7 @@ margin: 0 auto;
   font-size: 54px;
   line-height: 1.04;
   color: var(--re-ink);
-  margin: 18px 0;
+  margin: 2px auto 8px;
   letter-spacing: -0.01em;
 }
 .re-welcome .re-lede {
@@ -773,10 +800,19 @@ margin: 0 auto;
    Site nav / menu (menu.html.twig) — editorial
    Warm paper bar, heading-font links, accent underline on hover.
    ============================================================ */
+.menu{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
 nav {
   background-color: #fffdf6;
-  /* border-bottom: 1px solid rgba(44, 51, 65, 0.14); */
+  box-shadow:
+    0 1px 12px rgba(81, 90, 107, 0.04), /*offset-x, offset-y, blur-radius, spread-radius, color*/
+    0 12px 30px -16px rgba(83, 92, 109, 0.18); /*offset-x, offset-y, blur-radius, spread-radius, color*/
 }
+
 nav .nav-wrapper {
   width: var(--content-width);
   max-width: 100%;

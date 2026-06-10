@@ -13,25 +13,25 @@ class Recipe
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: "string", length: 255)]
-    private string $name;
+    private string $name = '';
 
     #[ORM\Column(type: "text")]
-    private ?string $description;
+    private ?string $description = null;
 
     #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: "recipe", cascade: ["persist", "remove"])]
     private Collection $ingredients;
 
     #[ORM\Column(type: "string", length: 255)]
-    private ?string $image;
+    private ?string $image = null;
 
     #[ORM\Column(type: "string", length: 10000)]
-    private ?string $instructions;
+    private ?string $instructions = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "recipes")]
-    private ?User $user;
+    private ?User $user = null;
 
     public function __construct()
     {
