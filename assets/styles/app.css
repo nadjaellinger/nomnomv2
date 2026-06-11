@@ -22,6 +22,12 @@ body:has(.recipe-editorial) {
 body {
   margin: 0px;
 }
+
+.content {
+  min-height: 100vh;
+  padding: 0;
+}
+
 .content:has(.recipe-editorial) {
   background-color: #fffdf6;
   padding: 56px 64px;
