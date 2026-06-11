@@ -1,55 +1,75 @@
 {% extends 'base.html.twig' %}
 
+{#
+   Edit recipe form — editorial style.
+   All JS hooks preserved: #recipeForm, #recipeId, #title, #description,
+   #image, #ingredientList, .ingredient + .ingredient-name/-amount/-unit/-id,
+   .removeIngredient, #addIngredient, #saveRecipe, #instructions.
+   Requires DM Serif Display + Spectral (base.html.twig) and editorial.css.
+#}
+
 {% block body %}
-<h1> Rezept bearbeiten </h1>
-<div class="tile recipe-edit">
-    <div class="tile-header">
-        <h2>{{ recipe.name }}</h2>
+<div class="recipe-editorial re-form">
+
+    <div class="re-top">
+        <span class="re-kicker">Rezept bearbeiten</span>
+        <span class="re-issue">NomNom · Familienküche</span>
     </div>
-    
+    <h1 class="re-title">{{ recipe.name }}</h1>
+
     <form method="post" id="recipeForm" enctype="multipart/form-data">
         <input type="hidden" id="recipeId" name="id" value="{{ recipe.id }}">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="title" name="name" value="{{ recipe.name }}">
-            </div>
 
-            <div class="form-group">
-                <label for="description">Beschreibung</label>
-                <textarea class="form-control" id="description" name="description">{{ recipe.description }}</textarea>
-            </div>
+        <div class="form-group">
+            <label for="title">Name</label>
+            <input type="text" class="form-control" id="title" name="name" value="{{ recipe.name }}">
+        </div>
 
-            <div class="form-group">
-                <label for="image">Bild hochladen (optional)</label>
-                <input type="file" class="form-control" id="image" name="image" accept="image/jpeg,image/png,image/webp,image/gif">
-                {% if recipe.image %}
+        <div class="form-group">
+            <label for="description">Beschreibung</label>
+            <textarea class="form-control" id="description" name="description">{{ recipe.description }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="image">Bild hochladen (optional)</label>
+            <input type="file" class="form-control" id="image" name="image" accept="image/jpeg,image/png,image/webp,image/gif">
+            {% if recipe.image %}
+                <div class="re-preview">
                     <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
+        </div>
 
-            <div class="form-group">
-                <label for="ingredients">Zutaten</label>
-                <div id="ingredientList">
-                    {% for ingredient in recipe.ingredients %}
+        <hr class="re-divide">
+
+        <div class="form-group">
+            <label for="ingredients">Zutaten</label>
+            <div id="ingredientList">
+                {% for ingredient in recipe.ingredients %}
                     <div class="flex-row ingredient align-center">
-                        <input type="text" class="form-control ingredient-name"  name="ingredient-name" value="{{ ingredient.name }}">
-                        <input type="number" class="form-control ingredient-amount"  name="ingredient-amount" value="{{ ingredient.amount }}">
-                        <input type="text" class="form-control ingredient-unit" name="ingredient-unit" value="{{ ingredient.unit }}" >
+                        <input type="text" class="form-control ingredient-name" name="ingredient-name" value="{{ ingredient.name }}">
+                        <input type="number" class="form-control ingredient-amount" name="ingredient-amount" value="{{ ingredient.amount }}">
+                        <input type="text" class="form-control ingredient-unit" name="ingredient-unit" value="{{ ingredient.unit }}">
                         <input type="hidden" class="form-control ingredient-id" name="ingredient-id" value="{{ ingredient.id }}">
-                        <button type="button" class="btn btn-minus removeIngredient">X</button>
+                        <button type="button" class="btn btn-minus removeIngredient"></button>
                     </div>
                 {% endfor %}
-                </div>
-                <div class="flex-row end">                   
-                    <button type="button" class="btn btn-success secondary" id="addIngredient">Zutat hinzufügen</button>
-                </div>
-                <div class="form-group">
-                    <label for="instructions">Anleitung</label>
-                    <textarea class="form-control" id="instructions" name="instructions" class="xl">{{ recipe.instructions }}</textarea>
-                </div>
-                <button type="submit" class="btn btn-success" action="saveRecipe" id="saveRecipe">Rezept speichern</button>
-            </form>
+            </div>
+            <div class="flex-row end">
+                <button type="button" class="btn btn-success secondary" id="addIngredient">Zutat hinzufügen</button>
+            </div>
         </div>
+
+        <hr class="re-divide">
+
+        <div class="form-group">
+            <label for="instructions">Anleitung</label>
+            <textarea class="form-control xl" id="instructions" name="instructions">{{ recipe.instructions }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success" action="saveRecipe" id="saveRecipe">Rezept speichern</button>
+    </form>
+
 </div>
 {{ encore_entry_script_tags('saveRecipe') }}
 {{ encore_entry_script_tags('newIngredient') }}

@@ -1,11 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <div class="container tile landing-page-anon">
-        <h1>Willkommen bei NomNom!</h1>
-        <p>Liebe Brudis, Schwestis, Eltern und sonstige Verwandtschaft, willkommen auf unserer Rezeptplattform NomNom! Vieles funktioniert noch nicht perfekt, aber ich arbeite dran. Manchmal. Meldet euch an, ich schalte euch frei, dann könnt ihr loslegen. Gebt gerne Feedback.</p>
+{#
+   Anonymous landing / welcome page — editorial style.
+   Requires DM Serif Display + Spectral (base.html.twig) and editorial.css.
+#}
 
-        <div class="buttons">
+{% block body %}
+    <div class="recipe-editorial re-welcome">
+        <svg class="re-welcome-glyph" viewBox="0 0 140 120" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <g opacity="0.85">
+                <path d="M52 40 q-7 -9 0 -18 q7 -9 0 -18"/>
+                <path d="M70 38 q-7 -9 0 -18 q7 -9 0 -18"/>
+                <path d="M88 40 q-7 -9 0 -18 q7 -9 0 -18"/>
+            </g>
+            <ellipse cx="70" cy="58" rx="50" ry="13"/>
+            <path d="M20 58 a50 42 0 0 0 100 0"/>
+            <path d="M44 64 q26 14 52 0" opacity="0.6"/>
+        </svg>
+        <div class="re-kicker">Willkommen</div>
+        <h1 class="re-title">NomNom</h1>
+        <p class="re-lede">Liebe Brudis, Schwestis, Eltern und sonstige Verwandtschaft — willkommen auf unserer Rezeptplattform NomNom! Vieles funktioniert noch nicht perfekt, aber ich arbeite dran. Manchmal. Meldet euch an, ich schalte euch frei, dann könnt ihr loslegen. Gebt gerne Feedback.</p>
+        <div class="re-actions">
             <button class="btn primary" onclick="window.location.href='/register'">Registrieren</button>
             <button class="btn secondary ghost" onclick="window.location.href='/login'">Anmelden</button>
         </div>

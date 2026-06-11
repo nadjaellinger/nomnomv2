@@ -1,35 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Anmelden · NomNom{% endblock %}
+
+{#
+   Login — editorial style.
+   All Symfony security hooks preserved: _username, _password,
+   _csrf_token('authenticate'), _remember_me, last_username, error, app.user.
+   Requires DM Serif Display + Spectral (base.html.twig) and editorial.css.
+#}
 
 {% block body %}
+<div class="recipe-editorial re-form re-auth">
+
+    <div class="re-kicker">Willkommen zurück</div>
+    <h1 class="re-title">Bitte melde dich an</h1>
+
     <form method="post">
         {% if app.user %}
-            <div class="mb-3">
-                Du bist eingeloggt als {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            <div class="re-current">
+                Du bist eingeloggt als {{ app.user.userIdentifier }} —
+                <a href="{{ path('app_logout') }}">Logout</a>
             </div>
         {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Bitte melde dich an</h1>
-        <label for="username">Benutzername</label>
-        <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="username" required autofocus>
-        <label for="password">Passwort</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
-
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Angemeldet bleiben</label>
-            </div>
         {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            <div class="re-alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
 
-        <button class="btn btn-lg btn-primary" type="submit">
-            Anmelden
-        </button>
+        <div class="form-group">
+            <label for="username">Benutzername</label>
+            <input type="text" value="{{ last_username }}" name="_username" id="username"
+                   class="form-control" autocomplete="username" required autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Passwort</label>
+            <input type="password" name="_password" id="password"
+                   class="form-control" autocomplete="current-password" required>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <div class="re-remember">
+            <input type="checkbox" name="_remember_me" id="_remember_me">
+            <label for="_remember_me">Angemeldet bleiben</label>
+        </div>
+
+        <button class="btn btn-lg btn-primary" type="submit">Anmelden</button>
+
+        <div class="re-switch">
+            Noch kein Konto? <a href="/register">Jetzt registrieren</a>
+        </div>
     </form>
+
+</div>
 {% endblock %}

@@ -2,41 +2,43 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.0b03f9b2.js",
-        "/build/554.1da8b9a3.js",
-        "/build/app.67087bf7.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js.js",
+        "/build/app.js"
       ],
       "css": [
-        "/build/app.5b5e636e.css"
+        "/build/app.css"
       ]
     },
     "saveRecipe": {
       "js": [
-        "/build/runtime.0b03f9b2.js",
-        "/build/186.f6a085ad.js",
-        "/build/saveRecipe.8232b84c.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-1fc45e.js",
+        "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-fbe969.js",
+        "/build/saveRecipe.js"
       ]
     },
     "newIngredient": {
       "js": [
-        "/build/runtime.0b03f9b2.js",
-        "/build/186.f6a085ad.js",
-        "/build/295.f906a20e.js",
-        "/build/newIngredient.d9c5c3e4.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-1fc45e.js",
+        "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-fbe969.js",
+        "/build/vendors-node_modules_core-js_modules_es_array_reverse_js-node_modules_core-js_modules_es_arra-0ac004.js",
+        "/build/newIngredient.js"
       ]
     },
     "ImportRecipe": {
       "js": [
-        "/build/runtime.0b03f9b2.js",
-        "/build/186.f6a085ad.js",
-        "/build/ImportRecipe.c810c66c.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-1fc45e.js",
+        "/build/ImportRecipe.js"
       ]
     },
     "adminDashboard": {
       "js": [
-        "/build/runtime.0b03f9b2.js",
-        "/build/186.f6a085ad.js",
-        "/build/adminDashboard.06924b53.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-1fc45e.js",
+        "/build/adminDashboard.js"
       ]
     }
   }

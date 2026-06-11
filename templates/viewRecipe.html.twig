@@ -1,40 +1,84 @@
 {% extends 'base.html.twig' %}
 
+{#
+   Editorial recipe detail — Option C (full-bleed hero photo).
+   Requires DM Serif Display + Spectral (base.html.twig) and editorial.css.
+   - With a photo: cinematic full-bleed hero at top, header below.
+   - Without a photo: graceful fallback to the line-art band.
+   Splits recipe.instructions on line breaks into numbered steps.
+#}
+
 {% block body %}
-    <div class="recipe-container tile">
-        <div class="header-area flex-container reverse">
-            <h1>{{ recipe.name }}</h1>
-            <div class="buttons">
-                <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">Rezept bearbeiten</button>
+    <div class="recipe-editorial">
+        <div class="re-top re-top--actions">
+            <span class="re-kicker">Rezept</span>
+            <div class="re-top-actions">
+                <button type="button" class="re-edit"
+                        onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">
+                    Bearbeiten
+                </button>
             </div>
         </div>
-        <div class="flex-container reverse">
-            <div class="col-66">
-                <div class="recipe-description">
-                    <p>{{ recipe.description }}</p>
-                
-                </div>
-                {% if recipe.image %}
-                <div class="recipe-image">
-                    <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
-                </div>
-                {% endif %}        
-                <div class="recipe-instructions">
-                    <h3>Zubereitung</h3>
-                    <p>{{ recipe.instructions }}</p>
-                </div>
+
+        {% if recipe.image %}
+            <div class="re-image">
+                <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
+            </div>
+        {% endif %}
+
+        <div class="re-head re-head--solo">
+            <h1 class="re-title">{{ recipe.name }}</h1>
+            <div class="re-meta">
+                <span>von {{ recipe.user.username|default('Unbekannt') }}</span>
+                {% if recipe.ingredients|length %}
+                    <span class="re-dot">·</span>
+                    <span>{{ recipe.ingredients|length }} {{ recipe.ingredients|length == 1 ? 'Zutat' : 'Zutaten' }}</span>
+                {% endif %}
             </div>
 
-            <div class="col-33">    
-                <div class="recipe-ingredients">
-                    <h3>Zutaten</h3>
-                    <ul>
-                        {% for ingredient in recipe.ingredients %}
-                            <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.name }}</li>
+        </div>
+        <div class="re-description">
+            {% if recipe.description %}
+                <p class="re-lede">{{ recipe.description }}</p>
+            {% endif %}
+
+        </div>
+
+        <div class="re-cols">
+            <aside class="re-ing">
+                <h2 class="re-h2">Zutaten</h2>
+                <dl>
+                    {% for ingredient in recipe.ingredients %}
+                        <div class="re-ingrow">
+                            <dt>{{ ingredient.name }}</dt>
+                            <dd>{{ ingredient.amount }} {{ ingredient.unit }}</dd>
+                        </div>
+                    {% endfor %}
+                </dl>
+            </aside>
+
+            <div class="re-prep">
+                <h2 class="re-h2">Zubereitung</h2>
+                {% set steps = recipe.instructions|split('\n')|filter(s => s|trim is not empty) %}
+                {% if steps|length > 1 %}
+                    <ol>
+                        {% for step in steps %}
+                            <li>
+                                <span class="re-num">{{ '%02d'|format(loop.index) }}</span>
+                                <p>{{ step|trim }}</p>
+                            </li>
                         {% endfor %}
-                    </ul>
-                </div>
+                    </ol>
+                {% else %}
+                    <p class="re-block">{{ recipe.instructions }}</p>
+                {% endif %}
             </div>
         </div>
+
+        <div class="re-foot">
+            <span>NomNom</span>
+            <span>Guten Appetit</span>
+        </div>
+
     </div>
 {% endblock %}

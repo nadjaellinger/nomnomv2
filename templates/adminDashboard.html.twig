@@ -1,90 +1,107 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-    <h1>Admin Dashboard</h1>
-    <h2>Rezeptverwaltung</h2>
-    <div class="admin-dashboard">
-        <table class="admin-table" id="admin-table">
-            <thead>
-                <tr>
-                    <th>Rezept</th>
-                    <th>Ersteller</th>
-                    <th>Beschreibung</th>
-                    <th>Bild</th>
-                    <th>Optionen</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for recipe in recipes %}
-                    <tr>
-                        <td>{{ recipe.name }}</td>
-                        <td>{{ recipe.user.username | default("")}}</td>
-                        <td>{{ recipe.description }}</td>
-                        <td>
-                        {% if recipe.image %}
-                            <div class="recipe-image">
-                                <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" id="recipe-image">
-                            </div>
-                        {% endif %}
-                        <td>
-                            <div class="button-area">
-                                <button class="btn secondary ghost" id="showRecipe" data-id="{{ recipe.id }}">Anzeigen</button>
-                                <button class="btn secondary ghost" id="editRecipe" data-id="{{ recipe.id }}">Bearbeiten</button>
-                                <button class="btn secondary ghost" id="deleteRecipe" data-id="{{ recipe.id }}">Löschen</button>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <h2>Pending Users</h2>
-        <table class="admin-table" id="pending-users-table">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th class="button-col">Optionen</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in pendingUsers %}
-                    <tr>
-                        <td>{{ user.username }}</td>
-                        <td>
-                            <div class="button-area">
-                                <button class="btn secondary ghost" id="approveUser" data-id="{{ user.id }}">Akzeptieren</button>
-                                <button class="btn secondary ghost" id="deleteUser" data-id="{{ user.id }}">Löschen</button>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+{#
+   Admin dashboard — editorial style.
+   JS hooks preserved: table ids (#admin-table, #pending-users-table,
+   #current-users-table), button ids (#showRecipe/#editRecipe/#deleteRecipe/
+   #approveUser/#deleteUser) + data-id, and encore_entry_script_tags('adminDashboard').
+   Requires DM Serif Display + Spectral (base.html.twig) and editorial.css.
+#}
 
-        <h2>Current Users</h2>
-        <table class="admin-table" id="current-users-table">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th class="button-col">Optionen</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in currentUsers %}
-                    <tr>
-                        <td>{{ user.username }}</td>
-                        <td>
-                            <div class="button-area">
-                                {% if user not in adminUsers %}
-                                    <button class="btn secondary ghost" id="deleteUser" data-id="{{ user.id }}">Löschen</button>
-                                {% else %}
-                                    <button class="btn secondary ghost" disabled>Admin</button>
-                                {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+{% block body %}
+<div class="recipe-admin">
+
+    <div class="re-top">
+        <span>Admin</span>
+        <span class="re-issue">NomNom</span>
     </div>
-    {{ encore_entry_script_tags('adminDashboard') }}
+    <h1 class="re-index-title">Dashboard</h1>
+
+    <h2 class="re-section">Rezeptverwaltung</h2>
+    <table class="admin-table" id="admin-table">
+        <thead>
+            <tr>
+                <th>Rezept</th>
+                <th>Ersteller</th>
+                <th>Beschreibung</th>
+                <th>Bild</th>
+                <th>Optionen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for recipe in recipes %}
+                <tr>
+                    <td>{{ recipe.name }}</td>
+                    <td>{{ recipe.user.username | default("") }}</td>
+                    <td class="admin-cell-desc">{{ recipe.description }}</td>
+                    <td>
+                        {% if recipe.image %}
+                            <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image">
+                        {% else %}
+                            <span class="re-k-sub">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="button-area">
+                            <button class="btn secondary ghost" id="showRecipe" data-id="{{ recipe.id }}">Anzeigen</button>
+                            <button class="btn secondary ghost" id="editRecipe" data-id="{{ recipe.id }}">Bearbeiten</button>
+                            <button class="btn secondary ghost" id="deleteRecipe" data-id="{{ recipe.id }}">Löschen</button>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2 class="re-section">Pending Users</h2>
+    <table class="admin-table" id="pending-users-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th class="button-col">Optionen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in pendingUsers %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        <div class="button-area">
+                            <button class="btn secondary ghost" id="approveUser" data-id="{{ user.id }}">Akzeptieren</button>
+                            <button class="btn secondary ghost" id="deleteUser" data-id="{{ user.id }}">Löschen</button>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2 class="re-section">Current Users</h2>
+    <table class="admin-table" id="current-users-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th class="button-col">Optionen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in currentUsers %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        <div class="button-area">
+                            {% if user not in adminUsers %}
+                                <button class="btn secondary ghost" id="deleteUser" data-id="{{ user.id }}">Löschen</button>
+                            {% else %}
+                                <button class="btn secondary ghost" disabled>Admin</button>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{{ encore_entry_script_tags('adminDashboard') }}
 {% endblock %}

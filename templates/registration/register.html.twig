@@ -1,9 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Registrierung{% endblock %}
+{% block title %}Registrierung · NomNom{% endblock %}
+
+{#
+   Registration — editorial style.
+   Symfony form builder untouched: form_start/_row/_errors/_end and the
+   registrationForm fields (username, plainPassword, agreeTerms).
+   Styling comes from .re-auth in editorial.css (handles the raw form_row
+   markup, the checkbox row, and error lists).
+#}
 
 {% block body %}
-    <h1>Registrierung</h1>
+<div class="recipe-editorial re-form re-auth">
+
+    <svg class="re-auth-glyph" viewBox="0 0 140 120" fill="none" stroke="currentColor" stroke-width="2.4"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <g opacity="0.85">
+            <path d="M52 40 q-7 -9 0 -18 q7 -9 0 -18"/>
+            <path d="M70 38 q-7 -9 0 -18 q7 -9 0 -18"/>
+            <path d="M88 40 q-7 -9 0 -18 q7 -9 0 -18"/>
+        </g>
+        <ellipse cx="70" cy="58" rx="50" ry="13"/>
+        <path d="M20 58 a50 42 0 0 0 100 0"/>
+    </svg>
+    <div class="re-kicker">Mach mit</div>
+    <h1 class="re-title">Registrierung</h1>
 
     {{ form_errors(registrationForm) }}
 
@@ -15,5 +36,11 @@
         {{ form_row(registrationForm.agreeTerms) }}
 
         <button type="submit" class="btn">Registrieren</button>
+
+        <div class="re-switch">
+            Schon ein Konto? <a href="/login">Jetzt anmelden</a>
+        </div>
     {{ form_end(registrationForm) }}
+
+</div>
 {% endblock %}
