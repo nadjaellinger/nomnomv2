@@ -556,6 +556,7 @@ margin: 0 auto;
 
 /* primary submit — editorial ink button */
 .re-form button[type="submit"],
+.re-cta,
 .btn.btn-success {
   background: var(--re-ink);
   color: #fffdf6;
@@ -571,6 +572,7 @@ margin: 0 auto;
   cursor: pointer;
 }
 .re-form button[type="submit"]:hover,
+.re-cta:hover,
 .btn.btn-success:hover {
   box-shadow: 0 12px 26px -12px rgba(44, 51, 65, 0.65);
 }

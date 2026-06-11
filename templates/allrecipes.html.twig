@@ -33,7 +33,9 @@
                         <span>von {{ recipe.user.username|default('Unbekannt') }}</span>
                         {% if recipe.ingredients|length %}
                             <span class="re-k-dot">·</span>
-                            <span class="re-k-sub">{{ recipe.ingredients|length }} Zutaten</span>
+                            <span class="re-k-sub">{{ recipe.ingredients|length }} 
+                                {{ recipe.ingredients|length == 1 ? 'Zutat' : 'Zutaten' }}
+                            </span>
                         {% endif %}
                     </div>
                     <h2 class="re-card-title">{{ recipe.name }}</h2>
@@ -43,11 +45,6 @@
                                 onclick="window.location.href='/rezept/{{ recipe.id }}/'">
                             Zum Rezept →
                         </button>
-                        <svg class="re-card-glyph" viewBox="0 0 140 120" fill="none" stroke="currentColor"
-                             stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <ellipse cx="70" cy="58" rx="50" ry="13"/>
-                            <path d="M20 58 a50 42 0 0 0 100 0"/>
-                        </svg>
                     </div>
                 </div>
             {% else %}

@@ -1,33 +1,36 @@
 {% extends 'base.html.twig' %}
 
 {#
-   Landing page — "Rezept des Tages" in editorial style.
+   Landing page — "Rezept des Tages".
+   A teaser tile, not the full recipe: full-bleed hero photo, title,
+   meta and description only. Ingredients + preparation live on the
+   recipe page (viewRecipe), reached via the "Zum Rezept" button.
    Requires DM Serif Display + Spectral (base.html.twig) and editorial.css.
-   Splits recipe.instructions on line breaks into numbered steps.
 #}
 
 {% block body %}
-    <div class="recipe-editorial">
+    <div class="recipe-editorial recipe-editorial--landing">
 
-        <div class="re-top">
-            <span class="re-kicker">Rezept des Tages</span>
-            <span class="re-issue">NomNom · Familienküche</span>
+        <div class="re-top re-top--actions">
+            <span class="re-kicker">Rezept</span>
+            <div class="re-top-actions">
+            </div>
         </div>
 
-        <div class="re-head">
-            <div>
-                <h1 class="re-title">{{ recipe.name }}</h1>
-                <div class="re-meta">
-                    <span>von {{ recipe.user.username|default('Unbekannt') }}</span>
-                    {% if recipe.ingredients|length %}
-                        <span class="re-dot">·</span>
-                        <span>{{ recipe.ingredients|length }} Zutaten</span>
-                    {% endif %}
-                </div>
+        {% if recipe.image %}
+            <div class="re-image">
+                <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
             </div>
-            <div class="re-actions">
-                <button class="btn secondary ghost" onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">Bearbeiten</button>
-                <button class="btn primary" onclick="window.location.href='/rezept/{{ recipe.id }}/'">Zum Rezept →</button>
+        {% endif %}
+
+        <div class="re-head re-head--solo">
+            <h1 class="re-title">{{ recipe.name }}</h1>
+            <div class="re-meta">
+                <span>von {{ recipe.user.username|default('Unbekannt') }}</span>
+                {% if recipe.ingredients|length %}
+                    <span class="re-dot">·</span>
+                    <span>{{ recipe.ingredients|length }} Zutaten</span>
+                {% endif %}
             </div>
         </div>
 
@@ -35,50 +38,12 @@
             <p class="re-lede">{{ recipe.description }}</p>
         {% endif %}
 
-        {# Line-art figure — the photo replacement. Delete this block to drop it. #}
-        <div class="re-figure" aria-hidden="true">
-            <svg viewBox="0 0 140 120" fill="none" stroke="currentColor" stroke-width="1.8"
-                 stroke-linecap="round" stroke-linejoin="round">
-                <g opacity="0.85">
-                    <path d="M52 40 q-7 -9 0 -18 q7 -9 0 -18"/>
-                    <path d="M70 38 q-7 -9 0 -18 q7 -9 0 -18"/>
-                    <path d="M88 40 q-7 -9 0 -18 q7 -9 0 -18"/>
-                </g>
-                <ellipse cx="70" cy="58" rx="50" ry="13"/>
-                <path d="M20 58 a50 42 0 0 0 100 0"/>
-                <path d="M44 64 q26 14 52 0" opacity="0.6"/>
-            </svg>
-        </div>
-
-        <div class="re-cols">
-            <aside class="re-ing">
-                <h2 class="re-h2">Zutaten</h2>
-                <dl>
-                    {% for ingredient in recipe.ingredients %}
-                        <div class="re-ingrow">
-                            <dt>{{ ingredient.name }}</dt>
-                            <dd>{{ ingredient.amount }} {{ ingredient.unit }}</dd>
-                        </div>
-                    {% endfor %}
-                </dl>
-            </aside>
-
-            <div class="re-prep">
-                <h2 class="re-h2">Zubereitung</h2>
-                {% set steps = recipe.instructions|split('\n')|filter(s => s|trim is not empty) %}
-                {% if steps|length > 1 %}
-                    <ol>
-                        {% for step in steps %}
-                            <li>
-                                <span class="re-num">{{ '%02d'|format(loop.index) }}</span>
-                                <p>{{ step|trim }}</p>
-                            </li>
-                        {% endfor %}
-                    </ol>
-                {% else %}
-                    <p class="re-block">{{ recipe.instructions }}</p>
-                {% endif %}
-            </div>
+        <div class="re-readmore">
+            <p class="re-readmore-note">Zutaten &amp; Zubereitung im vollständigen Rezept</p>
+            <button type="button" class="re-cta"
+                    onclick="window.location.href='/rezept/{{ recipe.id }}/'">
+                Zum Rezept →
+            </button>
         </div>
 
         <div class="re-foot">

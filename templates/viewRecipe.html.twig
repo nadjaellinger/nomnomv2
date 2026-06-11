@@ -32,7 +32,7 @@
                 <span>von {{ recipe.user.username|default('Unbekannt') }}</span>
                 {% if recipe.ingredients|length %}
                     <span class="re-dot">·</span>
-                    <span>{{ recipe.ingredients|length }} Zutaten</span>
+                    <span>{{ recipe.ingredients|length }} {{ recipe.ingredients|length == 1 ? 'Zutat' : 'Zutaten' }}</span>
                 {% endif %}
             </div>
 
