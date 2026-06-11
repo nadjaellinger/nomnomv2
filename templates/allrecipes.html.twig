@@ -23,7 +23,7 @@
                     : recipe.description %}
                 <div class="re-card">
                     <div class="re-card-hero-image">
-                        {% if recipe.image %}
+                        {% if recipe.image and (recipe.image starts with '/' or remote_file_exists(recipe.image)) %}
                             <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="re-card-image">
                         {% else %}
                             <div class="re-card-placeholder"></div>
