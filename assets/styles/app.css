@@ -7,11 +7,18 @@
    ============================================================ */
 
 :root {
+  /* brand colors */
   --primary: rgb(160, 53, 19);
   --primary-20: rgba(160, 53, 19, 0.2);
-  --secondary: rgba(44, 51, 65);
+  --secondary: rgb(44, 51, 65);
   --secondary-10: rgba(44, 51, 65, 0.1);
-  --tertiary: rgba(255, 193, 7);
+  --tertiary: rgb(255, 193, 7);
+
+  /* shared app tokens used throughout the stylesheet */
+  --background: #f6f4e4;
+  --headingfont: 'Montserrat', sans-serif;
+  --bodyfont: 'Nunito', sans-serif;
+  --content-width: 1200px;
 }
 
 body:has(.recipe-editorial) {
