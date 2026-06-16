@@ -13,10 +13,12 @@
         <div class="re-top re-top--actions">
             <span class="re-kicker">Rezept</span>
             <div class="re-top-actions">
-                <button type="button" class="re-edit"
-                        onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">
-                    Bearbeiten
-                </button>
+                {% if app.user and recipe.user and app.user.id == recipe.user.id %}
+                    <button type="button" class="re-edit"
+                            onclick="window.location.href='/rezept/{{ recipe.id }}/bearbeiten'">
+                        Bearbeiten
+                    </button>
+                {% endif %}
             </div>
         </div>
 

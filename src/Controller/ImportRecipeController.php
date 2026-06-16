@@ -50,7 +50,7 @@ class ImportRecipeController extends AbstractController
             $text_input = $this->getDataFromText($strings['text']);
         }
         $files = $request->files->all();
-        if (file_exists($files['image'])) {
+        if (isset($files['image']) && $files['image'] instanceof UploadedFile && $files['image']->isValid()) {
             $image_name = $this->uploadService->upload($files['image']);
             $image_input = new UploadedFile($this->uploadService->getTargetDirectory() . '/' . $image_name, $image_name);
         }

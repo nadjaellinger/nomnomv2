@@ -164,16 +164,17 @@ function checkField(field) {
       break;
     case 'recipeId':
       // Ignore recipeId field
+      break;
     case 'ingredient-amount':
-      if (field.value.trim() !== '' || isNaN(field.value)) 
+      if (field.value.trim() !== '' && isNaN(field.value))
         field.classList.add('is-invalid');
       else
         field.classList.remove('is-invalid');
-
+      break;
     case 'ingredient-unit':
       // can be empty, so no validation needed
       field.classList.remove('is-invalid');
-    break;
+      break;
   }
 }
 
