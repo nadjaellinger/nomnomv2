@@ -269,6 +269,6 @@ class EditRecipeController extends AbstractController
     private function isUserOwner(Recipe $recipe): bool
     {
         $user = $this->getUser();
-        return $user && $recipe->getUser();
+        return $user !== null && $recipe->getUser() !== null && $user->getId() === $recipe->getUser()->getId();
     }
 }
