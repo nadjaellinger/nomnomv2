@@ -59,7 +59,7 @@ class Recipe
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
         return $this;
@@ -99,7 +99,7 @@ class Recipe
         return $this->image;
     }
 
-    public function setImage(string $image): self
+    public function setImage(?string $image): self
     {
         $this->image = $image;
         return $this;
@@ -110,7 +110,7 @@ class Recipe
         return $this->instructions;
     }
 
-    public function setInstructions(string $instructions): self
+    public function setInstructions(?string $instructions): self
     {
         $this->instructions = $instructions;
         return $this;
