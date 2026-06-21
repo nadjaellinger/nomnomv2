@@ -24,7 +24,11 @@
 
         {% if recipe.image %}
             <div class="re-image">
-                <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
+                <img src="{{ recipe.image }}" alt="{{ recipe.name }}" onerror="this.onerror=null;this.src='{{ asset('img/404.png') }}';">
+            </div>
+        {% else %}
+            <div class="re-image">
+                <img src="{{ asset('img/404.png') }}" alt="Kein Bild verfügbar">
             </div>
         {% endif %}
 

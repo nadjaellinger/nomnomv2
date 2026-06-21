@@ -13,14 +13,14 @@ use Symfony\Component\HttpFoundation\Request;
 class viewRecipe extends AbstractController
 {
     
-        private $entityManager;
+        private EntityManagerInterface $entityManager;
         public function __construct(EntityManagerInterface $entityManager)
         {
             $this->entityManager = $entityManager;
         }
     
         #[Route('/rezept/{id}')]
-        public function viewRecipe($id): Response
+        public function viewRecipe(int $id): Response
         {
             $this->denyAccessUnlessGranted('ROLE_USER');
             $recipe = $this->entityManager->getRepository(Recipe::class)
