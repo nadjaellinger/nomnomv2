@@ -11,7 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 let formData = new FormData(form);
                 formData.append('text', textField.value);
                 formData.append('url', urlField.value);
-                formData.append('image', imageField.files[0]);
+                if (imageField.files.length > 0 && imageField.files[0] !== undefined && imageField.files[0] !== null) {
+                    formData.append('image', imageField.files[0]);
+                }
                 importRecipe(formData);
             });
         }
