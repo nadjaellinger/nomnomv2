@@ -443,6 +443,127 @@ margin: 0 auto;
    ============================================================ */
 .content:has(.re-form),
 .content:has(.recipe-admin),
+.content:has(.re-welcome){
+    background-color:#fffdf6;padding:56px 64px;
+    box-shadow:0 1px 0 rgba(44,51,65,.04),0 24px 60px -32px rgba(44,51,65,.28);
+}
+.re-form{max-width:780px;}
+.re-form .re-top{margin-bottom:0;}
+.re-form .re-title{font-size:44px;margin:26px 0 8px;}
+.re-form .re-lede{margin:0 0 8px;}
+
+.re-form .form-group{margin:22px 0;}
+.re-form label{
+    font-family:var(--headingfont);font-size:12px;font-weight:600;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--re-accent);margin:0 0 8px;display:block;
+}
+.re-form input[type="text"],
+.re-form input[type="number"],
+.re-form input[type="password"],
+.re-form input[type="email"],
+.re-form input[type="file"],
+.re-form input:not([type]),
+.re-form textarea{
+    width:100%;margin:0;background:#fffdf6;border:1px solid var(--re-line);border-radius:6px;
+    padding:12px 14px;font-family:'Spectral',Georgia,serif;font-size:16px;color:var(--re-ink);
+}
+.re-form textarea{min-height:150px;resize:vertical;line-height:1.55;}
+.re-form textarea.xl{min-height:230px;}
+.re-form input:focus,
+.re-form textarea:focus{outline:none;border:1px solid var(--re-accent);box-shadow:0 0 0 3px var(--primary-20);}
+.re-form input[type="file"]{padding:10px 14px;font-family:var(--headingfont);font-size:13px;color:var(--re-soft);}
+
+/* ingredient rows */
+.re-form #ingredientList{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+.re-form .ingredient{gap:10px;margin:0;align-items:center;}
+.re-form .ingredient input{width:auto;min-width:0;}
+.re-form .ingredient .ingredient-name{flex:3;}
+.re-form .ingredient .ingredient-amount{flex:1;}
+.re-form .ingredient .ingredient-unit{flex:1;}
+.re-form .flex-row.end{margin-top:14px;}
+
+/* primary submit — editorial ink button */
+.re-form button[type="submit"]{
+    background:var(--re-ink);color:#fffdf6;border:none;border-radius:6px;margin:8px 0 0;
+    padding:14px 28px;font-family:var(--headingfont);font-size:13px;font-weight:600;
+    letter-spacing:.16em;text-transform:uppercase;cursor:pointer;
+}
+.re-form button[type="submit"]:hover{box-shadow:0 12px 26px -12px rgba(44,51,65,.65);}
+.re-form #addIngredient{
+    background:none;color:var(--re-ink);border:1px solid var(--re-ink);border-radius:6px;margin:0;
+    padding:9px 18px;font-family:var(--headingfont);font-size:12px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;
+}
+.re-form #addIngredient:hover{background:var(--secondary-10);box-shadow:none;}
+.re-form .recipe-image{border-radius:6px;margin-top:14px;}
+.re-form .re-divide{margin:30px 0;border:0;border-top:1px solid var(--re-line);}
+
+/* ============================================================
+   Import — tabbed method selector (.re-import)
+   Three method cards act as tabs; only the active .re-panel shows.
+   ============================================================ */
+.re-import .re-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:30px 0 0;}
+.re-import .re-method{
+    display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;cursor:pointer;
+    background:#fffdf6;border:1px solid var(--re-line);border-radius:10px;padding:18px 18px 16px;
+    font-family:var(--bodyfont);position:relative;
+    transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease;
+}
+.re-import .re-method:hover{border-color:var(--re-soft);transform:translateY(-2px);}
+.re-import .re-method.is-active{
+    border-color:var(--re-accent);
+    box-shadow:0 0 0 1px var(--re-accent),0 14px 30px -20px rgba(215,120,43,.7);
+}
+.re-import .re-method-ico{width:30px;height:30px;color:var(--re-soft);}
+.re-import .re-method.is-active .re-method-ico{color:var(--re-accent);}
+.re-import .re-method-name{
+    font-family:var(--headingfont);font-size:13px;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--re-ink);
+}
+.re-import .re-method-desc{font-family:'Spectral',Georgia,serif;font-size:15px;line-height:1.4;color:var(--re-soft);}
+.re-import .re-method-step{
+    position:absolute;top:14px;right:16px;font-family:var(--headingfont);font-size:11px;
+    font-weight:700;letter-spacing:.1em;color:var(--re-line);
+}
+.re-import .re-method.is-active .re-method-step{color:var(--re-accent);}
+
+.re-import .re-panel{display:none;margin-top:26px;animation:reFade .22s ease;}
+.re-import .re-panel.is-active{display:block;}
+@keyframes reFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.re-import .re-panel-hint{
+    display:flex;align-items:flex-start;gap:8px;font-family:'Spectral',Georgia,serif;
+    font-size:15px;line-height:1.5;color:var(--re-soft);margin:12px 0 0;
+}
+.re-import .re-panel-hint svg{width:17px;height:17px;flex:none;margin-top:2px;color:var(--re-accent);}
+
+/* image drop zone */
+.re-import .re-drop{
+    position:relative;border:1.5px dashed var(--re-line);border-radius:10px;background:#fffdf6;
+    padding:38px 24px;text-align:center;cursor:pointer;transition:border-color .16s ease,background .16s ease;
+}
+.re-import .re-drop:hover,.re-import .re-drop.is-drag{border-color:var(--re-accent);background:var(--primary-20);}
+.re-import .re-drop input[type="file"]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;padding:0;}
+.re-import .re-drop-ico{width:42px;height:42px;color:var(--re-accent);margin:0 auto 12px;}
+.re-import .re-drop-title{
+    font-family:var(--headingfont);font-size:14px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--re-ink);
+}
+.re-import .re-drop-sub{font-family:'Spectral',Georgia,serif;font-size:15px;color:var(--re-soft);margin-top:6px;}
+.re-import .re-drop-file{display:none;font-family:'Spectral',Georgia,serif;font-size:16px;color:var(--re-accent);margin-top:10px;font-style:italic;}
+.re-import .re-drop.has-file .re-drop-file{display:block;}
+
+.re-import .re-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:30px;padding-top:24px;border-top:1px solid var(--re-line);}
+.re-import .re-actions-note{font-family:'Spectral',Georgia,serif;font-size:15px;color:var(--re-soft);}
+
+
+/* ============================================================
+   Forms — new / edit / import recipe
+   Wrapper: .recipe-editorial.re-form. Keeps all JS hooks:
+   .form-control, .ingredient, .ingredient-name/-amount/-unit,
+   .btn-minus, #addIngredient, #createRecipe, #saveRecipe, etc.
+   ============================================================ */
+.content:has(.re-form),
+.content:has(.recipe-admin),
 .content:has(.re-welcome) {
   background-color: #fffdf6;
   padding: 56px 64px;

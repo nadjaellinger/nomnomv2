@@ -1,41 +1,107 @@
 {% extends 'base.html.twig' %}
 
 {#
-   Import recipe (per Link / Text / Bild) — editorial style.
+   Import recipe — editorial style, tabbed method selector.
+   Three mutually-exclusive methods (Link / Text / Foto) presented as
+   selectable cards; only the chosen panel's input is shown.
    JS hooks preserved: #ImportRecipeForm, #url, #text, #image, #addButton,
    and encore_entry_script_tags('ImportRecipe').
+   All three fields stay in the DOM (inactive panels are display:none) so
+   the existing submit handler keeps working — the backend reads whichever
+   field is filled.
    Requires DM Serif Display + Spectral (base.html.twig) and editorial.css.
 #}
 
 {% block body %}
-<div class="recipe-editorial re-form">
+<div class="recipe-editorial re-form re-import">
 
     <div class="re-top">
         <span class="re-kicker">Import</span>
         <span class="re-issue">NomNom · Familienküche</span>
     </div>
-    <h1 class="re-title">Rezept per Link oder Text hinzufügen</h1>
-    <p class="re-lede">Füge eine Adresse ein, kopiere den Text oder lade ein Foto hoch — wir machen daraus ein Rezept.</p>
+    <h1 class="re-title">Rezept importieren</h1>
+    <p class="re-lede">Wähle eine Methode — füge eine Adresse ein, kopiere den Text oder lade ein Foto hoch. Wir machen daraus ein fertiges Rezept.</p>
 
     <form method="post" id="ImportRecipeForm" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="url">Mittels URL</label>
-            <input type="text" name="url" id="url" placeholder="https://url.com">
+
+        {# method selector (tabs) #}
+        <div class="re-methods" role="tablist" aria-label="Importmethode">
+            <button type="button" class="re-method is-active" role="tab" aria-selected="true" data-method="url">
+                <span class="re-method-step">01</span>
+                <svg class="re-method-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+                <span class="re-method-name">Link</span>
+                <span class="re-method-desc">Von einer Rezept-Website</span>
+            </button>
+            <button type="button" class="re-method" role="tab" aria-selected="false" data-method="text">
+                <span class="re-method-step">02</span>
+                <svg class="re-method-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5z"/><path d="M15 3v4h4"/><path d="M9 12h6M9 16h6"/></svg>
+                <span class="re-method-name">Text</span>
+                <span class="re-method-desc">Aus Nachricht, E-Mail oder PDF</span>
+            </button>
+            <button type="button" class="re-method" role="tab" aria-selected="false" data-method="image">
+                <span class="re-method-step">03</span>
+                <svg class="re-method-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5L5 20"/></svg>
+                <span class="re-method-name">Foto</span>
+                <span class="re-method-desc">Buchseite oder Handschrift</span>
+            </button>
         </div>
 
-        <div class="form-group">
-            <label for="text">Oder Text</label>
-            <textarea name="text" id="text" placeholder="Dein Rezept"></textarea>
+        {# URL panel #}
+        <div class="re-panel is-active" data-panel="url">
+            <label for="url">Adresse des Rezepts</label>
+            <input type="text" name="url" id="url" placeholder="https://www.beispiel.de/rezept">
+            <p class="re-panel-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>Funktioniert mit den meisten Rezept-Websites und Food-Blogs.</p>
         </div>
 
-        <div class="form-group">
-            <label for="image">Oder Bild</label>
-            <input type="file" name="image" id="image" accept="image/jpg, image/png, image/jpeg">
+        {# Text panel #}
+        <div class="re-panel" data-panel="text">
+            <label for="text">Rezepttext einfügen</label>
+            <textarea name="text" id="text" placeholder="Zutaten und Zubereitung hier einfügen …"></textarea>
+            <p class="re-panel-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>Kopiere ein Rezept aus einer Nachricht, E-Mail oder einem PDF — Reihenfolge egal.</p>
         </div>
 
-        <button class="btn primary" id="addButton" type="submit">Rezept hinzufügen</button>
+        {# Image panel #}
+        <div class="re-panel" data-panel="image">
+            <label for="image">Foto des Rezepts</label>
+            <div class="re-drop" id="reDrop">
+                <svg class="re-drop-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L8 8m4-4l4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+                <div class="re-drop-title">Foto auswählen</div>
+                <div class="re-drop-sub">oder hierher ziehen · JPG oder PNG</div>
+                <div class="re-drop-file" id="reDropFile"></div>
+                <input type="file" name="image" id="image" accept="image/jpg, image/png, image/jpeg">
+            </div>
+        </div>
+
+        <div class="re-actions">
+            <button class="btn primary" id="addButton" type="submit">Rezept hinzufügen</button>
+            <span class="re-actions-note">Du kannst es danach noch bearbeiten.</span>
+        </div>
     </form>
 
 </div>
+
+<script>
+(function(){
+    var methods = document.querySelectorAll('.re-import .re-method');
+    var panels  = document.querySelectorAll('.re-import .re-panel');
+    methods.forEach(function(m){
+        m.addEventListener('click', function(){
+            var key = m.getAttribute('data-method');
+            methods.forEach(function(x){var on=x===m;x.classList.toggle('is-active',on);x.setAttribute('aria-selected',on);});
+            panels.forEach(function(p){p.classList.toggle('is-active', p.getAttribute('data-panel')===key);});
+        });
+    });
+    var drop = document.getElementById('reDrop'),
+        file = document.getElementById('image'),
+        name = document.getElementById('reDropFile');
+    if (drop && file) {
+        function show(){ if(file.files && file.files.length){ drop.classList.add('has-file'); name.textContent = '✓ ' + file.files[0].name; } }
+        file.addEventListener('change', show);
+        ['dragenter','dragover'].forEach(function(e){ drop.addEventListener(e, function(ev){ ev.preventDefault(); drop.classList.add('is-drag'); }); });
+        ['dragleave','drop'].forEach(function(e){ drop.addEventListener(e, function(ev){ ev.preventDefault(); drop.classList.remove('is-drag'); }); });
+        drop.addEventListener('drop', function(ev){ if(ev.dataTransfer.files.length){ file.files = ev.dataTransfer.files; show(); } });
+    }
+})();
+</script>
 {{ encore_entry_script_tags('ImportRecipe') }}
 {% endblock %}
