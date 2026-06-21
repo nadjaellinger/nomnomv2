@@ -22,9 +22,9 @@
             </div>
         </div>
 
-        {% if recipe.image and (recipe.image starts with '/' or remote_file_exists(recipe.image)) %}
+        {% if recipe.image %}
             <div class="re-image">
-                <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
+                <img src="{{ recipe.image }}" alt="{{ recipe.name }}" onerror="this.onerror=null;this.src='{{ asset('img/404.png') }}';">
             </div>
         {% else %}
             <div class="re-image">
