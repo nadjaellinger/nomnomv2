@@ -22,9 +22,13 @@
             </div>
         </div>
 
-        {% if recipe.image %}
+        {% if recipe.image and (recipe.image starts with '/' or remote_file_exists(recipe.image)) %}
             <div class="re-image">
                 <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
+            </div>
+        {% else %}
+            <div class="re-image">
+                <img src="{{ asset('img/404.png') }}" alt="Kein Bild verfügbar">
             </div>
         {% endif %}
 

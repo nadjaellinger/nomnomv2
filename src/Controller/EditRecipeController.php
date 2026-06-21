@@ -178,10 +178,6 @@ class EditRecipeController extends AbstractController
             return $imageErrorResponse;
         }
 
-        if (!$recipe->getImage()) {
-            $recipe->setImage('https://cdn.midjourney.com/3991d0bf-e010-41a8-a6e0-2e37375c2914/0_1.png');
-        }
-
         $this->setCoreAttributes($recipe, $data);
         $this->setIngredients($recipe, $data);
 
@@ -269,6 +265,6 @@ class EditRecipeController extends AbstractController
     private function isUserOwner(Recipe $recipe): bool
     {
         $user = $this->getUser();
-        return $user !== null && $recipe->getUser() !== null && $user->getId() === $recipe->getUser()->getId();
+        return $user !== null && $recipe->getUser() !== null && $user === $recipe->getUser();
     }
 }
