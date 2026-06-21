@@ -178,6 +178,10 @@ class EditRecipeController extends AbstractController
             return $imageErrorResponse;
         }
 
+        if ($recipe->getImage() === null) {
+            $recipe->setImage('');
+        }
+
         $this->setCoreAttributes($recipe, $data);
         $this->setIngredients($recipe, $data);
 
