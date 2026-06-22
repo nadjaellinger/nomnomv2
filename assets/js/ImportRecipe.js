@@ -1,20 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
     var form = document.getElementById('ImportRecipeForm');
     if (form) {
-        var saveButton = document.getElementById('addButton');
         var textField = document.getElementById('text');
         var urlField = document.getElementById('url');
         var imageField = document.getElementById('image');
-        if (saveButton) {
-            saveButton.addEventListener('click', function (event) {
-                event.preventDefault();
-                let formData = new FormData(form);
-                formData.append('text', textField.value);
-                formData.append('url', urlField.value);
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            let formData = new FormData(form);
+            formData.append('text', textField.value);
+            formData.append('url', urlField.value);
+            if (imageField.files.length > 0) {
                 formData.append('image', imageField.files[0]);
-                importRecipe(formData);
-            });
-        }
+            }
+            importRecipe(formData);
+        });
     }
 });
 

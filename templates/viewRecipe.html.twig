@@ -22,7 +22,9 @@
             </div>
         </div>
 
-        {% if recipe.image %}
+        {% set has_valid_image = recipe.image and (recipe.image starts with '/' or remote_file_exists(recipe.image)) %}
+
+        {% if has_valid_image %}
             <div class="re-image">
                 <img src="{{ recipe.image }}" alt="{{ recipe.name }}" onerror="this.onerror=null;this.src='{{ asset('img/404.png') }}';">
             </div>
