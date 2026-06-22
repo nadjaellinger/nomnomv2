@@ -5,8 +5,10 @@
   "build/newIngredient.js": "/build/newIngredient.js",
   "build/ImportRecipe.js": "/build/ImportRecipe.js",
   "build/adminDashboard.js": "/build/adminDashboard.js",
+  "build/automaticRecipeTabBar.js": "/build/automaticRecipeTabBar.js",
   "build/runtime.js": "/build/runtime.js",
-  "build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-1fc45e.js": "/build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-1fc45e.js",
+  "build/vendors-node_modules_core-js_internals_define-built-in-accessor_js-node_modules_core-js_inter-585772.js": "/build/vendors-node_modules_core-js_internals_define-built-in-accessor_js-node_modules_core-js_inter-585772.js",
+  "build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-7f907f.js": "/build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-7f907f.js",
   "build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-fbe969.js": "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-fbe969.js",
   "build/vendors-node_modules_core-js_modules_es_array_reverse_js-node_modules_core-js_modules_es_arra-0ac004.js": "/build/vendors-node_modules_core-js_modules_es_array_reverse_js-node_modules_core-js_modules_es_arra-0ac004.js",
   "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js.js"
