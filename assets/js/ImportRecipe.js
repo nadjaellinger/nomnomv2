@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let formData = new FormData(form);
             formData.append('text', textField.value);
             formData.append('url', urlField.value);
-            if (imageField.files.length > 0 && imageField.files[0] !== undefined && imageField.files[0] !== null) {
+            if (imageField.files.length > 0) {
                 formData.append('image', imageField.files[0]);
             }
             importRecipe(formData);
