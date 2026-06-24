@@ -35,10 +35,11 @@
                     <td>{{ recipe.user.username | default("") }}</td>
                     <td class="admin-cell-desc">{{ recipe.description }}</td>
                     <td>
-                        {% if recipe.image %}
-                            <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image">
+                        {% set has_valid_image = recipe.image and (recipe.image starts with '/' or remote_file_exists(recipe.image)) %}
+                        {% if has_valid_image %}
+                            <img src="{{ recipe.image }}" alt="Bild des Rezepts" class="recipe-image" onerror="this.onerror=null;this.src='{{ asset('img/404.png') }}';">
                         {% else %}
-                            <span class="re-k-sub">—</span>
+                            <img src="{{ asset('img/404.png') }}" alt="Kein Bild verfügbar" class="recipe-image">
                         {% endif %}
                     </td>
                     <td>

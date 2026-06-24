@@ -17,11 +17,14 @@
             </div>
         </div>
 
-        {% if recipe.image %}
-            <div class="re-image">
-                <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
-            </div>
-        {% endif %}
+        <div class="re-image">
+            {% set has_valid_image = recipe.image and (recipe.image starts with '/' or remote_file_exists(recipe.image)) %}
+            {% if has_valid_image %}
+                <img src="{{ recipe.image }}" alt="{{ recipe.name }}" onerror="this.onerror=null;this.src='{{ asset('img/404.png') }}';">
+            {% else %}
+                <img src="{{ asset('img/404.png') }}" alt="Kein Bild verfügbar" class="recipe-image">
+            {% endif %}
+        </div>
 
         <div class="re-head re-head--solo">
             <h1 class="re-title">{{ recipe.name }}</h1>

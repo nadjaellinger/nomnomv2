@@ -1,15 +1,14 @@
 {
-  "build/app.css": "/build/app.css",
-  "build/app.js": "/build/app.js",
-  "build/saveRecipe.js": "/build/saveRecipe.js",
-  "build/newIngredient.js": "/build/newIngredient.js",
-  "build/ImportRecipe.js": "/build/ImportRecipe.js",
-  "build/adminDashboard.js": "/build/adminDashboard.js",
-  "build/automaticRecipeTabBar.js": "/build/automaticRecipeTabBar.js",
-  "build/runtime.js": "/build/runtime.js",
-  "build/vendors-node_modules_core-js_internals_define-built-in-accessor_js-node_modules_core-js_inter-585772.js": "/build/vendors-node_modules_core-js_internals_define-built-in-accessor_js-node_modules_core-js_inter-585772.js",
-  "build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-7f907f.js": "/build/vendors-node_modules_core-js_modules_es_error_cause_js-node_modules_core-js_modules_es_error_-7f907f.js",
-  "build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-fbe969.js": "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-fbe969.js",
-  "build/vendors-node_modules_core-js_modules_es_array_reverse_js-node_modules_core-js_modules_es_arra-0ac004.js": "/build/vendors-node_modules_core-js_modules_es_array_reverse_js-node_modules_core-js_modules_es_arra-0ac004.js",
-  "build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js.js": "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js.js"
+  "build/app.css": "/build/app.51f233df.css",
+  "build/app.js": "/build/app.11a2a754.js",
+  "build/saveRecipe.js": "/build/saveRecipe.a69dc86b.js",
+  "build/newIngredient.js": "/build/newIngredient.fa3e026c.js",
+  "build/ImportRecipe.js": "/build/ImportRecipe.ac8a3bae.js",
+  "build/adminDashboard.js": "/build/adminDashboard.504cb3e1.js",
+  "build/automaticRecipeTabBar.js": "/build/automaticRecipeTabBar.c18047f8.js",
+  "build/runtime.js": "/build/runtime.f71839df.js",
+  "build/424.39672c94.js": "/build/424.39672c94.js",
+  "build/560.cae9b74e.js": "/build/560.cae9b74e.js",
+  "build/197.72754592.js": "/build/197.72754592.js",
+  "build/554.5af12214.js": "/build/554.5af12214.js"
 }
