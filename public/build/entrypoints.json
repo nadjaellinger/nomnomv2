@@ -2,52 +2,42 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/build/runtime.f71839df.js",
-        "/build/554.5af12214.js",
-        "/build/app.11a2a754.js"
+        "/build/runtime.js",
+        "/build/vendors-node_modules_symfony_stimulus-bridge_dist_index_js.js",
+        "/build/app.js"
       ],
       "css": [
-        "/build/app.51f233df.css"
+        "/build/app.css"
       ]
     },
     "saveRecipe": {
       "js": [
-        "/build/runtime.f71839df.js",
-        "/build/424.39672c94.js",
-        "/build/560.cae9b74e.js",
-        "/build/saveRecipe.a69dc86b.js"
+        "/build/runtime.js",
+        "/build/saveRecipe.js"
       ]
     },
     "newIngredient": {
       "js": [
-        "/build/runtime.f71839df.js",
-        "/build/424.39672c94.js",
-        "/build/560.cae9b74e.js",
-        "/build/197.72754592.js",
-        "/build/newIngredient.fa3e026c.js"
+        "/build/runtime.js",
+        "/build/newIngredient.js"
       ]
     },
     "ImportRecipe": {
       "js": [
-        "/build/runtime.f71839df.js",
-        "/build/424.39672c94.js",
-        "/build/560.cae9b74e.js",
-        "/build/ImportRecipe.ac8a3bae.js"
+        "/build/runtime.js",
+        "/build/ImportRecipe.js"
       ]
     },
     "adminDashboard": {
       "js": [
-        "/build/runtime.f71839df.js",
-        "/build/424.39672c94.js",
-        "/build/560.cae9b74e.js",
-        "/build/adminDashboard.504cb3e1.js"
+        "/build/runtime.js",
+        "/build/adminDashboard.js"
       ]
     },
     "automaticRecipeTabBar": {
       "js": [
-        "/build/runtime.f71839df.js",
-        "/build/424.39672c94.js",
-        "/build/automaticRecipeTabBar.c18047f8.js"
+        "/build/runtime.js",
+        "/build/automaticRecipeTabBar.js"
       ]
     }
   }

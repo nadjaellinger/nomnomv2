@@ -126,4 +126,32 @@ class Recipe
         $this->user = $user;
         return $this;
     }
+
+    public static function getJsonSchema(): array
+    {
+        return [
+            'type' => 'object',
+            'properties' => [
+                'name' => ['type' => 'string'],
+                'description' => ['type' => 'string'],
+                'instructions' => ['type' => 'string'],
+                'image' => ['type' => 'string'],
+                'ingredients' => [
+                    'type' => 'array',
+                    'items' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'name' => ['type' => 'string'],
+                            'amount' => ['type' => 'integer'],
+                            'unit' => ['type' => 'string'],
+                        ],
+                        'required' => ['name', 'amount', 'unit'],
+                        'additionalProperties' => false,
+                    ],
+                ],
+            ],
+            'required' => ['name', 'description', 'instructions', 'image', 'ingredients'],
+            'additionalProperties' => false,
+        ];
+    }
 }

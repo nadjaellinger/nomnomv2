@@ -4,6 +4,11 @@ namespace App\Twig\Extension;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use function curl_init;
+use function curl_exec;
+use function curl_getinfo;
+use function curl_setopt;
+use function curl_setopt_array;
 
 final class fileExist extends AbstractExtension
 {
@@ -30,7 +35,6 @@ final class fileExist extends AbstractExtension
         ]);
         $ok = curl_exec($ch);
         $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        unset($ch);
 
         $exists = ($ok !== false) && ($http >= 200 && $http < 400);
 

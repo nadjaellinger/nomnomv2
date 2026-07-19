@@ -4,14 +4,14 @@
 namespace App\Service;
 
 use OpenAI;
-use Symfony\Component\HttpFoundation\Response;
+use OpenAI\Client;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Entity\Recipe;
 
 class OpenAIService
 {
-    private $client;
-    private $entityManager;
+    private Client $client;
 
     public function __construct(string $apiKey)
     {
@@ -33,23 +33,29 @@ class OpenAIService
     private function createJsonFromText(string $text_input): string
     {
         $instructions = $this->getInstructions();
-        $result = $this->client->chat()->create([
+        $schema = Recipe::getJsonSchema();
+        $result = $this->client->responses()->create([
             'model' => 'gpt-4o',
-            'response_format' => [
-                'type' => 'json_object',
-            ],
-            'messages' => [
+            'input' => [
                 [
-                    'role' => 'system', 
+                    'role' => 'system',
                     'content' => $instructions
                 ],
                 [
-                    'role' => 'user', 
+                    'role' => 'user',
                     'content' => $text_input
                 ],
             ],
+            'text' => [
+                'format' => [
+                    'type' => 'json_schema',
+                    'name' => 'recipe',
+                    'schema' => $schema,
+                    'strict' => true
+                ]
+            ]
         ]);
-        return $result['choices'][0]['message']['content'];
+        return $result->output[0]->content[0]->text;
     }
 
     private function createJsonFromImage(UploadedFile $image_input) 
@@ -86,7 +92,7 @@ class OpenAIService
                 'assistant_id' => $assistant_id,
             ],
         );
-
+        $run = null;
         do{
             foreach($stream as $response){
                 switch($response->event){
@@ -106,6 +112,10 @@ class OpenAIService
                         break;
                 }
             }
+            if ($run === null) {
+                $this->client->files()->delete($uploadedFile->id);
+                throw new Exception('Run failed: no run created');
+            }
         } 
         while ($run->status != "completed");
 
@@ -113,7 +123,8 @@ class OpenAIService
         $firstMessageId = $this->client->threads()->messages()->list($thread->id)->firstId;
         $firstMessage = $this->client->threads()->messages()->retrieve($thread->id, $firstMessageId)->content;
 
-        $json = $firstMessage[0]['text']['value'];
+        #$json = $firstMessage[0]['text']['value'];
+        $json = $firstMessage[0]->text->value;
         return $json;
     }
 
@@ -122,7 +133,7 @@ class OpenAIService
         $assistants = $this->client->assistants()->list()->data;
         $image_assistant = null;
         foreach ($assistants as $assistant) {
-            if ($assistant['name'] === 'image_assistant') {
+            if ($assistant->name === 'image_assistant') {
                 $image_assistant = $assistant;
                 return $image_assistant;
             }
@@ -143,11 +154,11 @@ class OpenAIService
 
     private function getInstructions(): string
     {
-        return 'You will recieve the content of a website containing a cooking recipe. Please identify the name, the description, the ingredients and the instructions and create a JSON with these keys. If you can\'t find the name, please guess it. If there is no description, invent a short one. Keep the description short and only about the meal itself, not about the website. If there are no ingredients or instructions, please leave the value empty. Please have the instructions as a string. Please keep everything in German, if the recipe is in German.  For the ingredients, please use the following format: "ingredients": ["ingredient1" ["name": "ingredient2", "quantity": "quantity, "unit": "unit"], ...]. If you cant find the value, set it to 0, if you cant find the unit, set it to "Stück". For the image, please use the URL of the image. If there is no image, set it to ""';
+        return 'You will recieve the content of a website containing a cooking recipe. Please identify the name, the description, the ingredients and the instructions and create a JSON with these keys. If you can\'t find the name, please guess it. If there is no description, invent a short one. Keep the description short and only about the meal itself, not about the website. If there are no ingredients or instructions, please leave the value empty. Please have the instructions as a string. Please keep everything in German, if the recipe is in German.  For the ingredients, please use the following format: "ingredients": ["ingredient1" ["name": "ingredient2", "quantity": "quantity, "unit": "unit"], ...]. If you cant find the value, set it to 0, if you cant find the unit, set it to "Stück". For the image, please use the URL of the image. If there is no image, set it to "" For the instructions, include line breaks after each step. ';
     }
 
     private function getImageInstructions(): string
     {
-        return 'You will recieve an image of a cooking recipe. Please identify the name, the description, the ingredients and the instructions and create a JSON with these keys. If you can\'t find the name, please guess it. If there is no description, invent a short one. If there are no ingredients or instructions, please leave the value empty. Please have the instructions as a string. Please keep everything in German, if the recipe is in German.  For the ingredients, please use the following format: "ingredients": ["ingredient1" ["name": "ingredient2", "quantity": "quantity, "unit": "unit"], ...]. If you cant find the value, set it to 0, if you cant find the unit, set it to "". For the image, please use the URL of the image. If there is no image, set it to ""';
+        return 'You will recieve an image of a cooking recipe. Please identify the name, the description, the ingredients and the instructions and create a JSON with these keys. If you can\'t find the name, please guess it. If there is no description, invent a short one. If there are no ingredients or instructions, please leave the value empty. Please have the instructions as a string. Please keep everything in German, if the recipe is in German.  For the ingredients, please use the following format: "ingredients": ["ingredient1" ["name": "ingredient2", "quantity": "quantity, "unit": "unit"], ...]. If you cant find the value, set it to 0, if you cant find the unit, set it to "". For the image, please use the URL of the image. If there is no image, set it to "" For the instructions, include line breaks after each step. ';
     }
 }
