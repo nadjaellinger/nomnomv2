@@ -56,21 +56,30 @@ class ImportRecipeController extends AbstractController
         }
 
         if ($text_input || $image_input) {
-            try{
-                //we use the OpenAI API to create a json
-                $json = $this->openAIService->createJSON($text_input, $image_input);
-                //we create a recipe from the json 
-                $recipe = $this->createRecipe($json);
-                $this->entityManager->flush();
+            // 3 max attempts to create a recipe from the input
+            $attempts = 0;
+            for ($attempts = 0; $attempts < 3; $attempts++) {
+                try {
+                    $json = $this->openAIService->createJSON($text_input, $image_input);
+                    $recipe = $this->createRecipe($json);
+                    $this->entityManager->persist($recipe); 
+                    $this->entityManager->flush();
+                    return new JsonResponse(
+                        [
+                            'message' => 'Recipe created', 
+                            'redirect' => '/rezept/'.$recipe->getId() . '/bearbeiten'
+                        ], 
+                        200);
+                } catch (Throwable $e) {
+                    return new JsonResponse(['error' => 'Failed to create recipe: ' . $e->getMessage()], 500);
+                }
             }
-            catch (Throwable $e) {
-                return new JsonResponse(['error' => 'Error creating recipe', 'message' => $e->getMessage()], 400);
-            }
+            return new JsonResponse(['error' => 'Failed to create recipe after multiple attempts'], 500);
         }
-        else 
+        else {
             return new JsonResponse(['error' => 'No input provided'], 400);
+        }
 
-        return new JsonResponse(['message' => 'Recipe created', 'redirect' => '/rezept/'.$recipe->getId() . '/bearbeiten'], 200);
     }
 
     private function getDataFromText(string $text): string
