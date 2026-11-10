@@ -1229,3 +1229,10 @@ nav a:hover::after {
     border-bottom: 1px solid var(--re-line);
   }
 }
+/* Recipe import feedback */
+.re-import-status:not([hidden]) { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
+.re-import-error { padding: 14px 18px; margin: 20px 0; border: 1px solid #b84235; border-radius: 8px; color: #8c251d; background: #fff1ee; overflow-wrap: anywhere; }
+.re-import-spinner { width: 22px; height: 22px; flex-shrink: 0; border: 3px solid #ddd; border-top-color: currentColor; border-radius: 50%; animation: import-spin .8s linear infinite; }
+.re-import [aria-busy="true"] button { cursor: wait; opacity: .65; }
+@keyframes import-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .re-import-spinner { animation: none; } }
