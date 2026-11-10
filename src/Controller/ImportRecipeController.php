@@ -40,46 +40,52 @@ class ImportRecipeController extends AbstractController
     #[Route('/importRecipe', methods: ['POST'])]
     public function ImportRecipe(Request $request): Response
     {
-        $text_input = null;
-        $image_input = null;
-        $strings = $request->request->all();
-        if (array_key_exists('url', $strings) && $strings['url'] !== '') {
-            $text_input = $this->extractSchemaFromWebsite($strings['url']);
-        }
-        elseif (array_key_exists('text', $strings) && $strings['text'] !== '') {
-            $text_input = $this->getDataFromText($strings['text']);
-        }
-        $files = $request->files->all();
-        if (isset($files['image']) && $files['image'] instanceof UploadedFile && $files['image']->isValid()) {
-            $image_name = $this->uploadService->upload($files['image']);
-            $image_input = new UploadedFile($this->uploadService->getTargetDirectory() . '/' . $image_name, $image_name);
-        }
-
-        if ($text_input || $image_input) {
-            // 3 max attempts to create a recipe from the input
-            $attempts = 0;
-            for ($attempts = 0; $attempts < 3; $attempts++) {
-                try {
-                    $json = $this->openAIService->createJSON($text_input, $image_input);
-                    $recipe = $this->createRecipe($json);
-                    $this->entityManager->persist($recipe); 
-                    $this->entityManager->flush();
-                    return new JsonResponse(
-                        [
-                            'message' => 'Recipe created', 
-                            'redirect' => '/rezept/'.$recipe->getId() . '/bearbeiten'
-                        ], 
-                        200);
-                } catch (Throwable $e) {
-                    return new JsonResponse(['error' => 'Failed to create recipe: ' . $e->getMessage()], 500);
-                }
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        try {
+            $text_input = null;
+            $image_input = null;
+            $strings = $request->request->all();
+            if (array_key_exists('url', $strings) && $strings['url'] !== '') {
+                $text_input = $this->extractSchemaFromWebsite($strings['url']);
             }
-            return new JsonResponse(['error' => 'Failed to create recipe after multiple attempts'], 500);
-        }
-        else {
-            return new JsonResponse(['error' => 'No input provided'], 400);
-        }
+            elseif (array_key_exists('text', $strings) && $strings['text'] !== '') {
+                $text_input = $this->getDataFromText($strings['text']);
+            }
+            $files = $request->files->all();
+            if (isset($files['image']) && $files['image'] instanceof UploadedFile && $files['image']->isValid()) {
+                $image_name = $this->uploadService->upload($files['image']);
+                $image_input = new UploadedFile($this->uploadService->getTargetDirectory() . '/' . $image_name, $image_name);
+            }
 
+            if ($text_input || $image_input) {
+                // Retry generation only: persistence must never be repeated.
+                for ($attempts = 0; $attempts < 3; $attempts++) {
+                    try {
+                        $json = $this->openAIService->createJSON($text_input, $image_input);
+                        break;
+                    } catch (Throwable $e) {
+                        if ($attempts === 2) {
+                            return new JsonResponse([
+                                'error' => 'Das Rezept konnte nach 3 Versuchen nicht importiert werden. Bitte versuche es später erneut. Details: ' . $e->getMessage(),
+                            ], 502);
+                        }
+                        sleep(1 << $attempts);
+                    }
+                }
+                $recipe = $this->createRecipe($json);
+                $this->entityManager->persist($recipe);
+                $this->entityManager->flush();
+                return new JsonResponse([
+                    'message' => 'Recipe created',
+                    'redirect' => '/rezept/'.$recipe->getId() . '/bearbeiten',
+                ]);
+            }
+            else {
+                return new JsonResponse(['error' => 'Bitte gib einen Link, Rezepttext oder ein Foto an.'], 400);
+            }
+        } catch (Throwable $e) {
+            return new JsonResponse(['error' => 'Das Rezept konnte nicht importiert werden: ' . $e->getMessage()], 500);
+        }
     }
 
     private function getDataFromText(string $text): string
@@ -173,10 +179,10 @@ class ImportRecipeController extends AbstractController
     {    
         try {
             $recipe = new Recipe();
-            $output = json_decode($content, true);
-            $recipe->setName($output['name']) ?? '';
-            $recipe->setDescription($output['description']) ?? '';
-            $recipe->setInstructions($output['instructions']) ?? '';
+            $output = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+            $recipe->setName($output['name']);
+            $recipe->setDescription($output['description']);
+            $recipe->setInstructions($output['instructions']);
             $imageUrl = $output['image'] ?? '';
             if ($imageUrl !== '') {
                 try {
@@ -195,9 +201,9 @@ class ImportRecipeController extends AbstractController
             {
                 foreach ($output['ingredients'] as $ingredient) {
                     $newIngredient = new Ingredient();
-                    $newIngredient->setName($ingredient['name']) ?? '';
-                    $newIngredient->setAmount($ingredient['quantity']) ?? 0;
-                    $newIngredient->setUnit($ingredient['unit']) ?? '';
+                    $newIngredient->setName($ingredient['name']);
+                    $newIngredient->setAmount($ingredient['amount']);
+                    $newIngredient->setUnit($ingredient['unit']);
                     $newIngredient->setRecipe($recipe);
                     $recipe->addIngredient($newIngredient);
                     $this->entityManager->persist($newIngredient);
