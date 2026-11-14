@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use App\Entity\UserGroup;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -16,6 +17,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    public function __construct()
+    {
+        $this->userGroups = new ArrayCollection();
+        $this->recipes = new ArrayCollection();
+        $this->cookRequests = new ArrayCollection();
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -45,6 +53,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(targetEntity: Recipe::class, mappedBy: "user")]
     private Collection $recipes;
+
+    #[ORM\OneToMany(targetEntity: CookRequest::class, mappedBy: "owner", cascade: ["remove"], orphanRemoval: true)]
+    private Collection $cookRequests;
 
     public function getId(): ?int
     {
@@ -164,6 +175,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $recipe->setUser(null);
             }
         }
+        return $this;
+    }
+
+    public function getCookRequests(): Collection
+    {
+        return $this->cookRequests;
+    }
+
+    public function addCookRequest(CookRequest $cookRequest): self
+    {
+        if (!$this->cookRequests->contains($cookRequest)) {
+            $this->cookRequests->add($cookRequest);
+            $cookRequest->setOwner($this);
+        }
+        return $this;
+    }
+
+    public function removeCookRequest(CookRequest $cookRequest): self
+    {
+        $this->cookRequests->removeElement($cookRequest);
         return $this;
     }
 

@@ -50,4 +50,24 @@ class RecipeRepository extends ServiceEntityRepository
         # get a random recipe
         return $recipes[array_rand($recipes)];
     }
+
+    /**
+     * @return Recipe[]
+     */
+    public function searchForPlan(string $query, int $limit = 8): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->leftJoin('r.user', 'u')
+            ->addSelect('u')
+            ->orderBy('r.name', 'ASC')
+            ->addOrderBy('r.id', 'ASC')
+            ->setMaxResults($limit + 1);
+
+        if ($query !== '') {
+            $qb->andWhere('LOWER(r.name) LIKE :query')
+                ->setParameter('query', '%'.mb_strtolower($query).'%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

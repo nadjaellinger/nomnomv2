@@ -1,0 +1,223 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kochplan · Nomnom{% endblock %}
+
+{% block body %}
+    <div class="plan-page">
+        <header class="plan-head">
+            <p class="plan-kicker">Familienküche</p>
+            <h1 class="plan-title">Kochplan</h1>
+            <p class="plan-lede">
+                Einmal kochen, mehrere Rezepte bündeln. Abgehakte Pläne wandern in die Historie
+                und lassen sich jederzeit wieder öffnen.
+            </p>
+        </header>
+
+        {% for message in app.flashes('success') %}
+            <div class="plan-flash plan-flash--ok">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="plan-flash plan-flash--err">{{ message }}</div>
+        {% endfor %}
+
+        <div class="plan-columns">
+            <section class="plan-panel">
+                <h2 class="plan-h2">Neuer Kochplan</h2>
+
+                <form method="post" action="{{ path('app_plan_create') }}" class="plan-form">
+                    <input type="hidden" name="_token" value="{{ csrf_token('plan_create') }}">
+
+                    <label class="plan-label" for="plan-title">Titel</label>
+                    <input
+                        id="plan-title"
+                        class="plan-input"
+                        type="text"
+                        name="title"
+                        maxlength="255"
+                        required
+                        placeholder="z. B. Sonntag mit der Familie"
+                    >
+
+                    <fieldset class="plan-fieldset">
+                        <legend class="plan-label">Rezepte</legend>
+                        <p class="plan-hint" id="plan-recipes-hint">
+                            Suche nach Rezepten und füge sie als Chips hinzu. Die Reihenfolge der Chips ist die Kochreihenfolge.
+                            Ohne JavaScript nutze die Liste darunter.
+                        </p>
+
+                        <div
+                            class="plan-recipe-picker"
+                            data-plan-recipe-picker
+                            data-search-url="{{ path('app_plan_recipe_search') }}"
+                            hidden
+                        >
+                            <div class="plan-search-wrap">
+                                <input
+                                    id="plan-recipe-search"
+                                    class="plan-input plan-search"
+                                    type="search"
+                                    placeholder="Rezept suchen …"
+                                    autocomplete="off"
+                                    role="combobox"
+                                    aria-expanded="false"
+                                    aria-controls="plan-recipe-results"
+                                    aria-autocomplete="list"
+                                    aria-describedby="plan-recipes-hint plan-recipe-status"
+                                    data-plan-recipe-search
+                                >
+                                <div
+                                    id="plan-recipe-results"
+                                    class="plan-results"
+                                    role="listbox"
+                                    hidden
+                                    data-plan-recipe-results
+                                ></div>
+                            </div>
+
+                            <p class="plan-picker-more" data-plan-recipe-more hidden>
+                                Weitere Treffer vorhanden – bitte Suche verfeinern.
+                            </p>
+
+                            <div class="plan-chips" data-plan-recipe-chips></div>
+                            <p class="plan-chips-empty" data-plan-recipe-chips-empty>
+                                Noch keine Rezepte ausgewählt.
+                            </p>
+                            <p
+                                id="plan-recipe-status"
+                                class="plan-sr-only"
+                                aria-live="polite"
+                                data-plan-recipe-status
+                            ></p>
+                        </div>
+
+                        <div class="plan-recipe-fallback-wrap" data-plan-recipe-fallback-wrap>
+                            <label class="plan-label" for="plan-recipe-fallback">
+                                Rezepte (ohne JavaScript)
+                            </label>
+                            <select
+                                id="plan-recipe-fallback"
+                                class="plan-recipe-fallback"
+                                name="recipeIds[]"
+                                multiple
+                                size="8"
+                                aria-describedby="plan-recipes-hint"
+                                data-plan-recipe-fallback
+                            >
+                                {% for recipe in recipes %}
+                                    <option value="{{ recipe.id }}">
+                                        {{ recipe.name }}{% if recipe.user %} — {{ recipe.user.username }}{% endif %}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        {% if recipes is empty %}
+                            <p class="plan-empty">
+                                Noch keine Rezepte vorhanden.
+                                <a href="{{ path('app_editrecipe_newrecipe') }}">Lege zuerst eines an.</a>
+                            </p>
+                        {% endif %}
+                    </fieldset>
+
+                    <button type="submit" class="plan-btn plan-btn--primary" {% if recipes is empty %}disabled{% endif %}>
+                        In die Warteschlange
+                    </button>
+                </form>
+            </section>
+
+            <section class="plan-panel">
+                <h2 class="plan-h2">Warteschlange <span class="plan-count">{{ queue|length }}</span></h2>
+
+                {% for plan in queue %}
+                    {% set isFirstQueueItem = loop.first %}
+                    {% set isLastQueueItem = loop.last %}
+                    <article class="plan-card">
+                        <div class="plan-card-head">
+                            <span class="plan-position">{{ '%02d'|format(loop.index) }}</span>
+                            <h3 class="plan-card-title">{{ plan.title }}</h3>
+                        </div>
+
+                        <ul class="plan-recipes">
+                            {% for entry in plan.entries %}
+                                <li>
+                                    <a href="{{ path('app_viewrecipe_viewrecipe', {id: entry.recipe.id}) }}">
+                                        {{ entry.recipe.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        <div class="plan-card-foot">
+                            <span class="plan-meta">angelegt {{ plan.createdAt|date('d.m.Y') }}</span>
+                            <div class="plan-card-actions">
+                                <div class="plan-reorder" role="group" aria-label="Reihenfolge ändern">
+                                    <form method="post" action="{{ path('app_plan_move', {id: plan.id, direction: 'up'}) }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('plan_move_' ~ plan.id) }}">
+                                        <button
+                                            type="submit"
+                                            class="plan-icon-btn"
+                                            title="Nach oben"
+                                            aria-label="{{ plan.title }} nach oben verschieben"
+                                            {% if isFirstQueueItem %}disabled{% endif %}
+                                        >&uarr;</button>
+                                    </form>
+                                    <form method="post" action="{{ path('app_plan_move', {id: plan.id, direction: 'down'}) }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('plan_move_' ~ plan.id) }}">
+                                        <button
+                                            type="submit"
+                                            class="plan-icon-btn"
+                                            title="Nach unten"
+                                            aria-label="{{ plan.title }} nach unten verschieben"
+                                            {% if isLastQueueItem %}disabled{% endif %}
+                                        >&darr;</button>
+                                    </form>
+                                </div>
+                                <form method="post" action="{{ path('app_plan_done', {id: plan.id}) }}">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('plan_done_' ~ plan.id) }}">
+                                    <button type="submit" class="plan-btn">Abhaken</button>
+                                </form>
+                            </div>
+                        </div>
+                    </article>
+                {% else %}
+                    <p class="plan-empty">Die Warteschlange ist leer.</p>
+                {% endfor %}
+            </section>
+        </div>
+
+        <section class="plan-panel plan-history">
+            <h2 class="plan-h2">Historie <span class="plan-count">{{ history|length }}</span></h2>
+
+            {% for plan in history %}
+                <article class="plan-card plan-card--done">
+                    <div class="plan-card-head">
+                        <span class="plan-position">✓</span>
+                        <h3 class="plan-card-title">{{ plan.title }}</h3>
+                    </div>
+
+                    <ul class="plan-recipes">
+                        {% for entry in plan.entries %}
+                            <li>
+                                <a href="{{ path('app_viewrecipe_viewrecipe', {id: entry.recipe.id}) }}">
+                                    {{ entry.recipe.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="plan-card-foot">
+                        <span class="plan-meta">
+                            abgehakt {{ plan.completedAt ? plan.completedAt|date('d.m.Y') : '–' }}
+                        </span>
+                        <form method="post" action="{{ path('app_plan_reopen', {id: plan.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('plan_reopen_' ~ plan.id) }}">
+                            <button type="submit" class="plan-btn">Wieder öffnen</button>
+                        </form>
+                    </div>
+                </article>
+            {% else %}
+                <p class="plan-empty">Noch nichts abgehakt.</p>
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}
