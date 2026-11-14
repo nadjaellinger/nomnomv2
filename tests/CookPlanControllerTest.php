@@ -51,10 +51,12 @@ class CookPlanControllerTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/plan');
         self::assertResponseIsSuccessful();
+        self::assertSelectorExists('[data-plan-recipe-picker]');
+        self::assertSelectorExists('select[name="recipeIds[]"] option[value="'.$this->recipe->getId().'"]');
 
         $form = $crawler->selectButton('In die Warteschlange')->form();
         $form['title'] = 'Sonntag mit der Familie';
-        $form['recipeIds[0]']->tick();
+        $form['recipeIds']->select((string) $this->recipe->getId());
         $this->client->submit($form);
 
         self::assertResponseRedirects('/plan');
@@ -127,6 +129,76 @@ class CookPlanControllerTest extends WebTestCase
         $this->client->request('POST', '/plan/'.$plan->getId().'/done');
 
         self::assertResponseStatusCodeSame(400);
+    }
+
+    public function testRecipeSearchFiltersAndCapsResults(): void
+    {
+        for ($i = 1; $i <= 10; ++$i) {
+            $recipe = (new Recipe())
+                ->setName('Suchrezept '.$i)
+                ->setDescription('')
+                ->setImage('')
+                ->setInstructions('')
+                ->setUser($this->user);
+
+            $this->entityManager->persist($recipe);
+        }
+        $this->entityManager->flush();
+
+        $this->client->request('GET', '/plan/recipes', ['q' => 'suchrezept']);
+
+        self::assertResponseIsSuccessful();
+        self::assertStringContainsString('application/json', (string) $this->client->getResponse()->headers->get('content-type'));
+
+        $payload = json_decode((string) $this->client->getResponse()->getContent(), true);
+        self::assertIsArray($payload);
+        self::assertCount(8, $payload['recipes']);
+        self::assertTrue($payload['hasMore']);
+        self::assertSame('Suchrezept 1', $payload['recipes'][0]['name']);
+        self::assertSame($this->user->getUsername(), $payload['recipes'][0]['owner']);
+
+        $this->client->request('GET', '/plan/recipes', ['q' => 'Testrezept']);
+
+        $payload = json_decode((string) $this->client->getResponse()->getContent(), true);
+        self::assertCount(1, $payload['recipes']);
+        self::assertFalse($payload['hasMore']);
+        self::assertSame('Testrezept', $payload['recipes'][0]['name']);
+    }
+
+    public function testQueueOrderCanBeMoved(): void
+    {
+        $plans = [];
+        foreach (['Erster', 'Zweiter', 'Dritter'] as $index => $title) {
+            $plan = (new CookRequest())
+                ->setTitle($title)
+                ->setOwner($this->user)
+                ->setPosition($index + 1);
+            $this->entityManager->persist($plan);
+            $plans[] = $plan;
+        }
+        $this->entityManager->flush();
+
+        $crawler = $this->client->request('GET', '/plan');
+        self::assertSame(['Erster', 'Zweiter', 'Dritter'], $this->queueTitles($crawler));
+        self::assertSelectorExists('form[action="/plan/'.$plans[0]->getId().'/move/up"] button[disabled]');
+
+        $this->client->submit($crawler->filter('form[action="/plan/'.$plans[0]->getId().'/move/down"]')->form());
+        self::assertResponseRedirects('/plan');
+        $crawler = $this->client->followRedirect();
+        self::assertSelectorTextContains('.plan-flash--ok', 'Reihenfolge angepasst.');
+        self::assertSame(['Zweiter', 'Erster', 'Dritter'], $this->queueTitles($crawler));
+
+        $this->client->submit($crawler->filter('form[action="/plan/'.$plans[2]->getId().'/move/up"]')->form());
+        self::assertResponseRedirects('/plan');
+        $crawler = $this->client->followRedirect();
+        self::assertSame(['Zweiter', 'Dritter', 'Erster'], $this->queueTitles($crawler));
+    }
+
+    private function queueTitles($crawler): array
+    {
+        return $crawler->filter('.plan-columns .plan-card-title')->each(
+            static fn ($node): string => trim($node->text())
+        );
     }
 
     private function clearDatabase(): void

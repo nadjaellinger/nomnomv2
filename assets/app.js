@@ -6,5 +6,6 @@ import './bootstrap.js';
  */
 import './styles/app.css';
 import './styles/plan.css';
+import './js/planRecipePicker.js';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
