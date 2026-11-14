@@ -1,0 +1,135 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kochplan · Nomnom{% endblock %}
+
+{% block body %}
+    <div class="plan-page">
+        <header class="plan-head">
+            <p class="plan-kicker">Familienküche</p>
+            <h1 class="plan-title">Kochplan</h1>
+            <p class="plan-lede">
+                Einmal kochen, mehrere Rezepte bündeln. Abgehakte Pläne wandern in die Historie
+                und lassen sich jederzeit wieder öffnen.
+            </p>
+        </header>
+
+        {% for message in app.flashes('success') %}
+            <div class="plan-flash plan-flash--ok">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="plan-flash plan-flash--err">{{ message }}</div>
+        {% endfor %}
+
+        <div class="plan-columns">
+            <section class="plan-panel">
+                <h2 class="plan-h2">Neuer Kochplan</h2>
+
+                <form method="post" action="{{ path('app_plan_create') }}" class="plan-form">
+                    <input type="hidden" name="_token" value="{{ csrf_token('plan_create') }}">
+
+                    <label class="plan-label" for="plan-title">Titel</label>
+                    <input
+                        id="plan-title"
+                        class="plan-input"
+                        type="text"
+                        name="title"
+                        maxlength="255"
+                        required
+                        placeholder="z. B. Sonntag mit der Familie"
+                    >
+
+                    <fieldset class="plan-fieldset">
+                        <legend class="plan-label">Rezepte</legend>
+
+                        {% for recipe in recipes %}
+                            <label class="plan-recipe-option">
+                                <input type="checkbox" name="recipeIds[]" value="{{ recipe.id }}">
+                                <span class="plan-recipe-name">{{ recipe.name }}</span>
+                                {% if recipe.user %}
+                                    <small class="plan-recipe-owner">von {{ recipe.user.username }}</small>
+                                {% endif %}
+                            </label>
+                        {% else %}
+                            <p class="plan-empty">
+                                Noch keine Rezepte vorhanden.
+                                <a href="{{ path('app_editrecipe_newrecipe') }}">Lege zuerst eines an.</a>
+                            </p>
+                        {% endfor %}
+                    </fieldset>
+
+                    <button type="submit" class="plan-btn plan-btn--primary" {% if recipes is empty %}disabled{% endif %}>
+                        In die Warteschlange
+                    </button>
+                </form>
+            </section>
+
+            <section class="plan-panel">
+                <h2 class="plan-h2">Warteschlange <span class="plan-count">{{ queue|length }}</span></h2>
+
+                {% for plan in queue %}
+                    <article class="plan-card">
+                        <div class="plan-card-head">
+                            <span class="plan-position">{{ '%02d'|format(loop.index) }}</span>
+                            <h3 class="plan-card-title">{{ plan.title }}</h3>
+                        </div>
+
+                        <ul class="plan-recipes">
+                            {% for entry in plan.entries %}
+                                <li>
+                                    <a href="{{ path('app_viewrecipe_viewrecipe', {id: entry.recipe.id}) }}">
+                                        {{ entry.recipe.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        <div class="plan-card-foot">
+                            <span class="plan-meta">angelegt {{ plan.createdAt|date('d.m.Y') }}</span>
+                            <form method="post" action="{{ path('app_plan_done', {id: plan.id}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('plan_done_' ~ plan.id) }}">
+                                <button type="submit" class="plan-btn">Abhaken</button>
+                            </form>
+                        </div>
+                    </article>
+                {% else %}
+                    <p class="plan-empty">Die Warteschlange ist leer.</p>
+                {% endfor %}
+            </section>
+        </div>
+
+        <section class="plan-panel plan-history">
+            <h2 class="plan-h2">Historie <span class="plan-count">{{ history|length }}</span></h2>
+
+            {% for plan in history %}
+                <article class="plan-card plan-card--done">
+                    <div class="plan-card-head">
+                        <span class="plan-position">✓</span>
+                        <h3 class="plan-card-title">{{ plan.title }}</h3>
+                    </div>
+
+                    <ul class="plan-recipes">
+                        {% for entry in plan.entries %}
+                            <li>
+                                <a href="{{ path('app_viewrecipe_viewrecipe', {id: entry.recipe.id}) }}">
+                                    {{ entry.recipe.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="plan-card-foot">
+                        <span class="plan-meta">
+                            abgehakt {{ plan.completedAt ? plan.completedAt|date('d.m.Y') : '–' }}
+                        </span>
+                        <form method="post" action="{{ path('app_plan_reopen', {id: plan.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('plan_reopen_' ~ plan.id) }}">
+                            <button type="submit" class="plan-btn">Wieder öffnen</button>
+                        </form>
+                    </div>
+                </article>
+            {% else %}
+                <p class="plan-empty">Noch nichts abgehakt.</p>
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}

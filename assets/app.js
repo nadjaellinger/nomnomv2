@@ -5,5 +5,6 @@ import './bootstrap.js';
  * Webpack Encore builds this entry; base.html.twig loads the compiled assets.
  */
 import './styles/app.css';
+import './styles/plan.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
